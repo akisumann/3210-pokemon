@@ -7,11 +7,12 @@
 | 001 | [source/001_第1話.txt](source/001_第1話.txt) | 第1話（AA意味文変換版） |
 | 002 | [source/002_第02話「ガッシュ、ゲットだぜ！」.txt](<source/002_第02話「ガッシュ、ゲットだぜ！」.txt>) | 第02話「ガッシュ、ゲットだぜ！」 |
 | 003 | [source/003_第03話「ジムリーダーはお化けが怖い」.txt](<source/003_第03話「ジムリーダーはお化けが怖い」.txt>) | 第03話「ジムリーダーはお化けが怖い」 |
+| 004 | [source/004_第04話「森の洋館の魔女」.txt](<source/004_第04話「森の洋館の魔女」.txt>) | 第04話「森の洋館の魔女」 |
 
 ## 設定資料
 - 世界観: [概要](world/overview.md) / [地名](world/places.md) / [ポケモン](world/pokemon.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度](world/pro-trainer.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
-- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
-- 物語: [あらすじ](story/episodes.md) / [ダイス記録](story/dice.md)
+- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
+- 物語: [あらすじ](story/episodes.md) / [時系列](story/timeline.md) / [ダイス記録](story/dice.md)
 
 ## 解決済み
 - カズマを転生させた神の正体 → アルセウス（000）
@@ -33,7 +34,9 @@
 - 古代と現代の境目になった「新種が爆発的に見つかった時代」に何があったのか。「始祖」はほかに誰がいるのか。
 - 八大地方のうち、シンオウとカントー以外の六つ（ガラルは含まれるのか）。
 - ゴーストタイプのジムの場所とジムリーダー。
-- 森の洋館に何があるのか（次の話）。
+- 森の洋館を誰が建てたのか。
+- アカネとゼットンは、カズマがルサルカを手持ちにしたことにどう反応するか。
+- 「深度」の具体的な段階。「異界」との関係。
 - ティファニアは何のポケモンとのハーフなのか。凜との関係（同居しているのか）。
 - カズマが知らない「見覚えのないタイプ」は何か。
 - ゼットンの「嫌な予感」の中身。
