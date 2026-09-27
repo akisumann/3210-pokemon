@@ -15,11 +15,12 @@
 | 009 | [source/009_第09話「旅立ちとたんけんセット」.txt](<source/009_第09話「旅立ちとたんけんセット」.txt>) | 第09話「旅立ちとたんけんセット」 |
 | 010 | [source/010_第10話「ポフィン泥棒とさすらいの先輩」.txt](<source/010_第10話「ポフィン泥棒とさすらいの先輩」.txt>) | 第10話「ポフィン泥棒とさすらいの先輩」 |
 | 011 | [source/011_第11話「先輩の教え」.txt](<source/011_第11話「先輩の教え」.txt>) | 第11話「先輩の教え」 |
+| 012 | [source/012_第12話「初バトルの準備」.txt](<source/012_第12話「初バトルの準備」.txt>) | 第12話「初バトルの準備」 |
 
 ## 設定資料
 - 世界観: [概要](world/overview.md) / [地名](world/places.md) / [ポケモン](world/pokemon.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度・ポケモンリーグ](world/pro-trainer.md) / [ポケモン図鑑](world/pokedex.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
 - 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [メリュジーヌ](characters/melusine.md) / [ライザ](characters/ryza.md) / [エール・モフス](characters/ail.md) / [メジロマックイーン](characters/mcqueen.md) / [先輩](characters/senpai.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
-- 物語: [あらすじ](story/episodes.md) / [時系列](story/timeline.md) / [ダイス記録](story/dice.md)
+- 物語: [あらすじ](story/episodes.md) / [時系列](story/timeline.md) / [バトル記録](story/battles.md) / [ダイス記録](story/dice.md)
 
 ## 解決済み
 - カズマを転生させた神の正体 → アルセウス（000）
@@ -50,7 +51,7 @@
 - 賭けの結果（1ヶ月以内にバッジ3つとスポンサーを手に入れられるか）。ライザの家がスポンサーになるのか。
 - エールとカズマがいつ、どう出会うか。エールのハクタイジム戦の結果。
 - 地下大洞窟に何があるのか。
-- 先輩の「指導」の中身と、先輩の本名・手持ち。
+- 先輩の本名。模擬戦で使うもう1体のポケモン。模擬戦の結果。
 - カズマが出ていったあとのアカネの家事事情。
 - 森の洋館を誰が建てたのか。
 - アカネが図鑑で見たガッシュとルサルカのデータの中身。
