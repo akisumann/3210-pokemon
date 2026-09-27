@@ -1,6 +1,6 @@
 # ポケモンの基本
 
-関連: [種族・系統](species.md) / [ポテンシャル](potentials.md) / [図鑑](pokedex.md)
+関連: [種族・系統](species.md) / [ポテンシャル](potentials.md) / [ポテンシャル一覧](potential-list.md) / [図鑑](pokedex.md)
 
 ## 存在
 - 種類は151匹よりずっと多い。「151匹」は「どれだけ昔の話だ」と言われるほど古い知識扱いになっている。（出典: 001）

@@ -127,7 +127,7 @@
 | 超古代の力 | 食蜂操祈のスピアーが持つとされる珍しい力 | 028 |
 
 ## ポテンシャル・バトル
-→ [potentials.md](potentials.md) / [pokemon.md](pokemon.md)
+→ [potentials.md](potentials.md) / [potential-list.md](potential-list.md) / [pokemon.md](pokemon.md)
 
 | 用語 | 意味 | 出典 |
 | --- | --- | --- |
