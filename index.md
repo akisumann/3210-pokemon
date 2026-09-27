@@ -26,10 +26,15 @@
 | 020 | [source/020_第20話「ポテンシャルと直哉」.txt](<source/020_第20話「ポテンシャルと直哉」.txt>) | 第20話「ポテンシャルと直哉」 |
 | 021 | [source/021_第21話「禪院直哉戦」.txt](<source/021_第21話「禪院直哉戦」.txt>) | 第21話「禪院直哉戦」 |
 | 022 | [source/022_第22話「クズとクズは惹かれ合う」.txt](<source/022_第22話「クズとクズは惹かれ合う」.txt>) | 第22話「クズとクズは惹かれ合う」 |
+| 023 | [source/023_第23話「ポケモンコンテストとメアリ」.txt](<source/023_第23話「ポケモンコンテストとメアリ」.txt>) | 第23話「ポケモンコンテストとメアリ」 |
+| 024 | [source/024_第24話「ヨスガジム戦」.txt](<source/024_第24話「ヨスガジム戦」.txt>) | 第24話「ヨスガジム戦」 |
+| 025 | [source/025_第25話「メアリとポテンシャル談義」.txt](<source/025_第25話「メアリとポテンシャル談義」.txt>) | 第25話「メアリとポテンシャル談義」 |
+| 026 | [source/026_第26話「六令とマルフォイ」.txt](<source/026_第26話「六令とマルフォイ」.txt>) | 第26話「六令とマルフォイ」 |
+| 027 | [source/027_第27話「ドラコ・マルフォイ戦」.txt](<source/027_第27話「ドラコ・マルフォイ戦」.txt>) | 第27話「ドラコ・マルフォイ戦」 |
 
 ## 設定資料
 - 世界観: [概要](world/overview.md) / [地名](world/places.md) / [ポケモン](world/pokemon.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度・ポケモンリーグ](world/pro-trainer.md) / [ポケモン図鑑](world/pokedex.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
-- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [メリュジーヌ](characters/melusine.md) / [ライザ](characters/ryza.md) / [エール・モフス](characters/ail.md) / [メジロマックイーン](characters/mcqueen.md) / [先輩](characters/senpai.md) / [潮田渚](characters/nagisa.md) / [スペランカー](characters/spelunker.md) / [ライナー・ブラウン](characters/liner.md) / [禪院直哉](characters/naoya.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
+- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [メリュジーヌ](characters/melusine.md) / [ライザ](characters/ryza.md) / [エール・モフス](characters/ail.md) / [メジロマックイーン](characters/mcqueen.md) / [先輩](characters/senpai.md) / [潮田渚](characters/nagisa.md) / [スペランカー](characters/spelunker.md) / [ライナー・ブラウン](characters/liner.md) / [禪院直哉](characters/naoya.md) / [メアリ](characters/mary.md) / [ドラコ・マルフォイ](characters/malfoy.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
 - 物語: [あらすじ](story/episodes.md) / [時系列](story/timeline.md) / [バトル記録](story/battles.md) / [ダイス記録](story/dice.md)
 
 ## 解決済み
@@ -59,8 +64,11 @@
 - 『エース』以外のポジションの種類。
 - 古代と現代の境目になった「新種が爆発的に見つかった時代」に何があったのか。「始祖」はほかに誰がいるのか。
 - 八大地方のうち、シンオウとカントー以外の六つ（ガラルは含まれるのか）。
-- ヨスガジムのメアリ・クラリッサ・クリスティの手持ちと十八竜。ノモセジム（みず）のジムリーダー。
-- 第22話の最後で「何か忘れている」ことの中身。
+- ノモセジム（みず）のジムリーダーと十八竜。
+- メアリが言いかけた「統率型のカズマに一番向いていそうな『役割』」は何か。
+- 六令以外の『指令』の種類。
+- 第22話の最後で「何か忘れている」ことの中身（第23話冒頭の食料不足のことか）。
+- アカネの独り言が増えている理由。
 - マンハッタンカフェは直哉の仲間になるのか。
 - アカネの言う「ボス」（ギンガ団の首領？）。
 - 賭けの結果（1ヶ月以内にバッジ3つとスポンサーを手に入れられるか）。ライザの家がスポンサーになるのか。
