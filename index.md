@@ -21,10 +21,15 @@
 | 015 | [source/015_第15話「クロガネジム攻略会議」.txt](<source/015_第15話「クロガネジム攻略会議」.txt>) | 第15話「クロガネジム攻略会議」 |
 | 016 | [source/016_第16話「じてんしゃとたんけんセット」.txt](<source/016_第16話「じてんしゃとたんけんセット」.txt>) | 第16話「じてんしゃとたんけんセット」 |
 | 017 | [source/017_第17話「クロガネジム戦」.txt](<source/017_第17話「クロガネジム戦」.txt>) | 第17話「クロガネジム戦」 |
+| 018 | [source/018_第18話「祝勝会とたんけんセット」.txt](<source/018_第18話「祝勝会とたんけんセット」.txt>) | 第18話「祝勝会とたんけんセット」 |
+| 019 | [source/019_第19話「よろいのかせきとライナー」.txt](<source/019_第19話「よろいのかせきとライナー」.txt>) | 第19話「よろいのかせきとライナー」 |
+| 020 | [source/020_第20話「ポテンシャルと直哉」.txt](<source/020_第20話「ポテンシャルと直哉」.txt>) | 第20話「ポテンシャルと直哉」 |
+| 021 | [source/021_第21話「禪院直哉戦」.txt](<source/021_第21話「禪院直哉戦」.txt>) | 第21話「禪院直哉戦」 |
+| 022 | [source/022_第22話「クズとクズは惹かれ合う」.txt](<source/022_第22話「クズとクズは惹かれ合う」.txt>) | 第22話「クズとクズは惹かれ合う」 |
 
 ## 設定資料
 - 世界観: [概要](world/overview.md) / [地名](world/places.md) / [ポケモン](world/pokemon.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度・ポケモンリーグ](world/pro-trainer.md) / [ポケモン図鑑](world/pokedex.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
-- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [メリュジーヌ](characters/melusine.md) / [ライザ](characters/ryza.md) / [エール・モフス](characters/ail.md) / [メジロマックイーン](characters/mcqueen.md) / [先輩](characters/senpai.md) / [潮田渚](characters/nagisa.md) / [スペランカー](characters/spelunker.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
+- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [メリュジーヌ](characters/melusine.md) / [ライザ](characters/ryza.md) / [エール・モフス](characters/ail.md) / [メジロマックイーン](characters/mcqueen.md) / [先輩](characters/senpai.md) / [潮田渚](characters/nagisa.md) / [スペランカー](characters/spelunker.md) / [ライナー・ブラウン](characters/liner.md) / [禪院直哉](characters/naoya.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
 - 物語: [あらすじ](story/episodes.md) / [時系列](story/timeline.md) / [バトル記録](story/battles.md) / [ダイス記録](story/dice.md)
 
 ## 解決済み
@@ -32,7 +37,8 @@
 - 「異界」とは → ダンジョンの深いエリア。カズマが落ちたのはテンガン山の深度4（000, 006）
 - 「深度」とは → ダンジョンの層（1層〜5層）の深さ（006）
 - 古代種とは → 実機（実際のゲーム）に出てくるポケモン（007）
-- ゴーストタイプのジムの場所 → ヨスガシティ（008）
+- ゴーストタイプのジムの場所 → ヨスガシティ（008）。ジムリーダーはメアリ・クラリッサ・クリスティ（018）
+- ポテンシャルが目覚める時期 → ジムバッジを取ってから数日以内（018, 020）
 - メリュジーヌがカズマに感じた「匂い」 → 異世界人の気配と、邪神（アルセウス）のエネルギーの匂い（007）
 - アカネの姓 → 新条（002）
 - カズマの本名 → 佐藤和真（002）
@@ -53,21 +59,22 @@
 - 『エース』以外のポジションの種類。
 - 古代と現代の境目になった「新種が爆発的に見つかった時代」に何があったのか。「始祖」はほかに誰がいるのか。
 - 八大地方のうち、シンオウとカントー以外の六つ（ガラルは含まれるのか）。
-- ヨスガジム（ゴースト）とノモセジム（みず）のジムリーダー。
+- ヨスガジムのメアリ・クラリッサ・クリスティの手持ちと十八竜。ノモセジム（みず）のジムリーダー。
+- 第22話の最後で「何か忘れている」ことの中身。
+- マンハッタンカフェは直哉の仲間になるのか。
+- アカネの言う「ボス」（ギンガ団の首領？）。
 - 賭けの結果（1ヶ月以内にバッジ3つとスポンサーを手に入れられるか）。ライザの家がスポンサーになるのか。
 - エールとカズマがいつ、どう出会うか。エールのハクタイジム戦の結果。
 - 地下大洞窟に何があるのか。
 - 先輩の本名。
 - 地下おじさんの「準備」の中身（カズマのスポンサーになるのか）。
 - 「十八竜」の全体像（18体いるのか）。ハクタイジムの凜の十八竜は何か。
-- ヨスガジム（3vs3）の対策。
 - カズマが出ていったあとのアカネの家事事情。
 - 森の洋館を誰が建てたのか。
 - アカネが図鑑で見たガッシュとルサルカのデータの中身。
 - カズマのスポンサー探し（弱小スポンサーは見つかるか）。
 - ヌシの「代」の交代のしかた。
 - メリュジーヌの詳しいデータ（レベル、技、ほかのポテンシャル）。
-- ガッシュ、ルサルカ、マックイーンのポテンシャル（バッジを取るころに目覚める？）。
 - 「統率：A」より上のランク（AA？）でできること。
 - テンガン山の深度5には何がいるのか。
 - 「街」がスポンサーだった元チャンプは誰か。
