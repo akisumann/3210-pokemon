@@ -88,7 +88,7 @@
 | 082 | [source/082_第82話「異界のヌシと『統率』型」.txt](<source/082_第82話「異界のヌシと『統率』型」.txt>) | 第82話「異界のヌシと『統率』型」 |
 
 ## 設定資料
-- 世界観: [概要](world/overview.md) / [地名](world/places.md) / [ポケモンの基本](world/pokemon.md) / [種族・系統](world/species.md) / [ポテンシャルの仕組み](world/potentials.md) / [ポテンシャル一覧](world/potential-list.md) / [バトルの細かい仕様](world/battle-rules.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度・ポケモンリーグ](world/pro-trainer.md) / [ポケモン図鑑](world/pokedex.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
+- 世界観: [概要](world/overview.md) / [地名](world/places.md) / [ポケモンの基本](world/pokemon.md) / [種族・系統](world/species.md) / [ポテンシャルの仕組み](world/potentials.md) / [ポテンシャル一覧](world/potential-list.md) / [バトルの細かい仕様](world/battle-rules.md) / [相手チームの体力の推測](world/hp-estimates.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度・ポケモンリーグ](world/pro-trainer.md) / [ポケモン図鑑](world/pokedex.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
 - 人物: **[登場人物一覧](characters/README.md)**（トレーナー／ポケモン／民間人） / **[人間関係](characters/relationships.md)**
 - 物語: [あらすじ](story/episodes.md) / [時系列](story/timeline.md) / [バトル記録](story/battles.md) / [ダイス記録](story/dice.md)
 
