@@ -16,10 +16,15 @@
 | 010 | [source/010_第10話「ポフィン泥棒とさすらいの先輩」.txt](<source/010_第10話「ポフィン泥棒とさすらいの先輩」.txt>) | 第10話「ポフィン泥棒とさすらいの先輩」 |
 | 011 | [source/011_第11話「先輩の教え」.txt](<source/011_第11話「先輩の教え」.txt>) | 第11話「先輩の教え」 |
 | 012 | [source/012_第12話「初バトルの準備」.txt](<source/012_第12話「初バトルの準備」.txt>) | 第12話「初バトルの準備」 |
+| 013 | [source/013_第13話「先輩戦」.txt](<source/013_第13話「先輩戦」.txt>) | 第13話「先輩戦」 |
+| 014 | [source/014_第14話「潮田渚戦」.txt](<source/014_第14話「潮田渚戦」.txt>) | 第14話「潮田渚戦」 |
+| 015 | [source/015_第15話「クロガネジム攻略会議」.txt](<source/015_第15話「クロガネジム攻略会議」.txt>) | 第15話「クロガネジム攻略会議」 |
+| 016 | [source/016_第16話「じてんしゃとたんけんセット」.txt](<source/016_第16話「じてんしゃとたんけんセット」.txt>) | 第16話「じてんしゃとたんけんセット」 |
+| 017 | [source/017_第17話「クロガネジム戦」.txt](<source/017_第17話「クロガネジム戦」.txt>) | 第17話「クロガネジム戦」 |
 
 ## 設定資料
 - 世界観: [概要](world/overview.md) / [地名](world/places.md) / [ポケモン](world/pokemon.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度・ポケモンリーグ](world/pro-trainer.md) / [ポケモン図鑑](world/pokedex.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
-- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [メリュジーヌ](characters/melusine.md) / [ライザ](characters/ryza.md) / [エール・モフス](characters/ail.md) / [メジロマックイーン](characters/mcqueen.md) / [先輩](characters/senpai.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
+- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [メリュジーヌ](characters/melusine.md) / [ライザ](characters/ryza.md) / [エール・モフス](characters/ail.md) / [メジロマックイーン](characters/mcqueen.md) / [先輩](characters/senpai.md) / [潮田渚](characters/nagisa.md) / [スペランカー](characters/spelunker.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
 - 物語: [あらすじ](story/episodes.md) / [時系列](story/timeline.md) / [バトル記録](story/battles.md) / [ダイス記録](story/dice.md)
 
 ## 解決済み
@@ -47,11 +52,15 @@
 - 『エース』以外のポジションの種類。
 - 古代と現代の境目になった「新種が爆発的に見つかった時代」に何があったのか。「始祖」はほかに誰がいるのか。
 - 八大地方のうち、シンオウとカントー以外の六つ（ガラルは含まれるのか）。
-- ヨスガジム（ゴースト）とノモセジム（みず）のジムリーダー。クロガネジムのスペランカーの詳細。
+- ヨスガジム（ゴースト）とノモセジム（みず）のジムリーダー。
 - 賭けの結果（1ヶ月以内にバッジ3つとスポンサーを手に入れられるか）。ライザの家がスポンサーになるのか。
 - エールとカズマがいつ、どう出会うか。エールのハクタイジム戦の結果。
 - 地下大洞窟に何があるのか。
-- 先輩の本名。模擬戦で使うもう1体のポケモン。模擬戦の結果。
+- 先輩の本名。
+- 地下おじさんの「準備」の中身（カズマのスポンサーになるのか）。
+- 「十八竜」の全体像（18体いるのか）。ハクタイジムの凜の十八竜は何か。
+- ヨスガジム（3vs3）の対策。
+- 008でアカネが言った「今年のポケモンリーグ」がいつを指すのか。005と015では、今年のリーグはすでに終わったように書かれている（「今年で3連覇」「今年のポケモンリーグにも出場した」）。次のシーズンのリーグのことを「今年」と言った可能性がある。
 - カズマが出ていったあとのアカネの家事事情。
 - 森の洋館を誰が建てたのか。
 - アカネが図鑑で見たガッシュとルサルカのデータの中身。
