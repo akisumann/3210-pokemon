@@ -12,10 +12,11 @@
 | 006 | [source/006_第06話「プロへの道とテンガン山」.txt](<source/006_第06話「プロへの道とテンガン山」.txt>) | 第06話「プロへの道とテンガン山」 |
 | 007 | [source/007_第07話「テンガンのヌシ」.txt](<source/007_第07話「テンガンのヌシ」.txt>) | 第07話「テンガンのヌシ」 |
 | 008 | [source/008_第08話「一ヶ月の賭け」.txt](<source/008_第08話「一ヶ月の賭け」.txt>) | 第08話「一ヶ月の賭け」 |
+| 009 | [source/009_第09話「旅立ちとたんけんセット」.txt](<source/009_第09話「旅立ちとたんけんセット」.txt>) | 第09話「旅立ちとたんけんセット」 |
 
 ## 設定資料
 - 世界観: [概要](world/overview.md) / [地名](world/places.md) / [ポケモン](world/pokemon.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度・ポケモンリーグ](world/pro-trainer.md) / [ポケモン図鑑](world/pokedex.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
-- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [メリュジーヌ](characters/melusine.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
+- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [メリュジーヌ](characters/melusine.md) / [ライザ](characters/ryza.md) / [エール・モフス](characters/ail.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
 - 物語: [あらすじ](story/episodes.md) / [時系列](story/timeline.md) / [ダイス記録](story/dice.md)
 
 ## 解決済み
@@ -43,7 +44,9 @@
 - 古代と現代の境目になった「新種が爆発的に見つかった時代」に何があったのか。「始祖」はほかに誰がいるのか。
 - 八大地方のうち、シンオウとカントー以外の六つ（ガラルは含まれるのか）。
 - ヨスガジム（ゴースト）とノモセジム（みず）のジムリーダー。クロガネジムのスペランカーの詳細。
-- 賭けの結果（1ヶ月以内にバッジ3つとスポンサーを手に入れられるか）。
+- 賭けの結果（1ヶ月以内にバッジ3つとスポンサーを手に入れられるか）。ライザの家がスポンサーになるのか。
+- エールとカズマがいつ、どう出会うか。エールのハクタイジム戦の結果。
+- 地下大洞窟に何があるのか。
 - カズマが出ていったあとのアカネの家事事情。
 - 森の洋館を誰が建てたのか。
 - アカネが図鑑で見たガッシュとルサルカのデータの中身。
