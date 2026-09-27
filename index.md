@@ -31,10 +31,15 @@
 | 025 | [source/025_第25話「メアリとポテンシャル談義」.txt](<source/025_第25話「メアリとポテンシャル談義」.txt>) | 第25話「メアリとポテンシャル談義」 |
 | 026 | [source/026_第26話「六令とマルフォイ」.txt](<source/026_第26話「六令とマルフォイ」.txt>) | 第26話「六令とマルフォイ」 |
 | 027 | [source/027_第27話「ドラコ・マルフォイ戦」.txt](<source/027_第27話「ドラコ・マルフォイ戦」.txt>) | 第27話「ドラコ・マルフォイ戦」 |
+| 028 | [source/028_第28話「じまんのうらにわ」.txt](<source/028_第28話「じまんのうらにわ」.txt>) | 第28話「じまんのうらにわ」 |
+| 029 | [source/029_第29話「フカマルとダージリン」.txt](<source/029_第29話「フカマルとダージリン」.txt>) | 第29話「フカマルとダージリン」 |
+| 030 | [source/030_第30話「ダージリン戦」.txt](<source/030_第30話「ダージリン戦」.txt>) | 第30話「ダージリン戦」 |
+| 031 | [source/031_第31話「ダンジョンアタック」.txt](<source/031_第31話「ダンジョンアタック」.txt>) | 第31話「ダンジョンアタック」 |
+| 032 | [source/032_第32話「ノモセジム戦」.txt](<source/032_第32話「ノモセジム戦」.txt>) | 第32話「ノモセジム戦」 |
 
 ## 設定資料
 - 世界観: [概要](world/overview.md) / [地名](world/places.md) / [ポケモン](world/pokemon.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度・ポケモンリーグ](world/pro-trainer.md) / [ポケモン図鑑](world/pokedex.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
-- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [メリュジーヌ](characters/melusine.md) / [ライザ](characters/ryza.md) / [エール・モフス](characters/ail.md) / [メジロマックイーン](characters/mcqueen.md) / [先輩](characters/senpai.md) / [潮田渚](characters/nagisa.md) / [スペランカー](characters/spelunker.md) / [ライナー・ブラウン](characters/liner.md) / [禪院直哉](characters/naoya.md) / [メアリ](characters/mary.md) / [ドラコ・マルフォイ](characters/malfoy.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
+- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [メリュジーヌ](characters/melusine.md) / [ライザ](characters/ryza.md) / [エール・モフス](characters/ail.md) / [メジロマックイーン](characters/mcqueen.md) / [先輩](characters/senpai.md) / [潮田渚](characters/nagisa.md) / [スペランカー](characters/spelunker.md) / [ライナー・ブラウン](characters/liner.md) / [禪院直哉](characters/naoya.md) / [メアリ](characters/mary.md) / [ドラコ・マルフォイ](characters/malfoy.md) / [ダージリン](characters/darjeeling.md) / [フカマル](characters/fukamaru.md) / [ロビンマスク](characters/robin-mask.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
 - 物語: [あらすじ](story/episodes.md) / [時系列](story/timeline.md) / [バトル記録](story/battles.md) / [ダイス記録](story/dice.md)
 
 ## 解決済み
@@ -42,6 +47,7 @@
 - 「異界」とは → ダンジョンの深いエリア。カズマが落ちたのはテンガン山の深度4（000, 006）
 - 「深度」とは → ダンジョンの層（1層〜5層）の深さ（006）
 - 古代種とは → 実機（実際のゲーム）に出てくるポケモン（007）
+- ノモセジムのジムリーダー → ロビンマスク（031, 032）
 - ゴーストタイプのジムの場所 → ヨスガシティ（008）。ジムリーダーはメアリ・クラリッサ・クリスティ（018）
 - ポテンシャルが目覚める時期 → ジムバッジを取ってから数日以内（018, 020）
 - メリュジーヌがカズマに感じた「匂い」 → 異世界人の気配と、邪神（アルセウス）のエネルギーの匂い（007）
@@ -64,7 +70,11 @@
 - 『エース』以外のポジションの種類。
 - 古代と現代の境目になった「新種が爆発的に見つかった時代」に何があったのか。「始祖」はほかに誰がいるのか。
 - 八大地方のうち、シンオウとカントー以外の六つ（ガラルは含まれるのか）。
-- ノモセジム（みず）のジムリーダーと十八竜。
+- カズマの「●●ポテンシャル」の正式な名前と効果（「きょううん」を相手に広げる能力？）。
+- エールが使う「技」と、会いたいおとぎ話のポケモン（アルセウスか）。
+- ノモセだいしつげんへのダンジョンアタックの結果。2層のヌシは何か。
+- ノモセジムのバッジの名前（第32話では出ていない）。
+- 6体目の仲間。
 - メアリが言いかけた「統率型のカズマに一番向いていそうな『役割』」は何か。
 - 六令以外の『指令』の種類。
 - 第22話の最後で「何か忘れている」ことの中身（第23話冒頭の食料不足のことか）。
