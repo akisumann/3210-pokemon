@@ -9,15 +9,17 @@
 | 003 | [source/003_第03話「ジムリーダーはお化けが怖い」.txt](<source/003_第03話「ジムリーダーはお化けが怖い」.txt>) | 第03話「ジムリーダーはお化けが怖い」 |
 | 004 | [source/004_第04話「森の洋館の魔女」.txt](<source/004_第04話「森の洋館の魔女」.txt>) | 第04話「森の洋館の魔女」 |
 | 005 | [source/005_第05話「目指せ、プロトレーナー！」.txt](<source/005_第05話「目指せ、プロトレーナー！」.txt>) | 第05話「目指せ、プロトレーナー！」 |
+| 006 | [source/006_第06話「プロへの道とテンガン山」.txt](<source/006_第06話「プロへの道とテンガン山」.txt>) | 第06話「プロへの道とテンガン山」 |
 
 ## 設定資料
 - 世界観: [概要](world/overview.md) / [地名](world/places.md) / [ポケモン](world/pokemon.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度・ポケモンリーグ](world/pro-trainer.md) / [ポケモン図鑑](world/pokedex.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
-- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
+- 人物: [カズマ](characters/kazuma.md) / [アカネ（マーズ）](characters/akane-mars.md) / [ゼットン](characters/zetton.md) / [ディオスクリア](characters/diosclear.md) / [ガッシュ](characters/gash.md) / [渋谷凜](characters/shibuya-rin.md) / [ティファニア](characters/tiffania.md) / [ルサルカ](characters/rusalka.md) / [メリュジーヌ](characters/melusine.md) / [アルセウス](characters/arceus.md) / [その他](characters/others.md)
 - 物語: [あらすじ](story/episodes.md) / [時系列](story/timeline.md) / [ダイス記録](story/dice.md)
 
 ## 解決済み
 - カズマを転生させた神の正体 → アルセウス（000）
-- 「異界」とは → テンガン山ダンジョンの深いエリア（000）
+- 「異界」とは → ダンジョンの深いエリア。カズマが落ちたのはテンガン山の深度4（000, 006）
+- 「深度」とは → ダンジョンの層（1層〜5層）の深さ（006）
 - アカネの姓 → 新条（002）
 - カズマの本名 → 佐藤和真（002）
 - 『エース』とは → チーム内のポジション（002）
@@ -26,7 +28,7 @@
 - 渋谷凜の使うタイプ → くさ（003）
 
 ## 未確定事項
-- 「異界」以外にどんなダンジョンのクラスがあるか。
+- 「異界」と呼ばれるのは何層からか（深度4以上か）。
 - シンオウチャンピオン「女王／女帝」の名前（シロナか）。
 - ギンガ団の首領の名前（アカギか）。首領は先代チャンピオンだったのか。三将星の残りの一人（リーグに出た「もう1人」。サターンか）。
 - 四天王のメンバー（ほのお使い以外の3人）。
@@ -38,8 +40,10 @@
 - ゴーストタイプのジムの場所とジムリーダー。
 - 森の洋館を誰が建てたのか。
 - アカネが図鑑で見たガッシュとルサルカのデータの中身。
-- カズマがプロになるための具体的な道のり（プロリーグのCランクに入る方法など）。
-- 「深度」の具体的な段階。「異界」との関係。
+- カズマのスポンサー探し（弱小スポンサーは見つかるか）。
+- メリュジーヌがカズマに感じた「この場所の匂い」の正体。1層でカズマたちと出会うとどうなるか。
+- テンガン山の深度5には何がいるのか。
+- 「街」がスポンサーだった元チャンプは誰か。
 - ティファニアは何のポケモンとのハーフなのか。凜との関係（同居しているのか）。
 - カズマが知らない「見覚えのないタイプ」は何か。
 - ゼットンの「嫌な予感」の中身。
