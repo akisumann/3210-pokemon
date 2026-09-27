@@ -58,4 +58,4 @@
 
 ## 伝説のポケモン
 - **アルセウス**: 神話で語られる、シンオウ地方の創造神とされるポケモン。今の時代にその姿を見た人間は一人もいないと言われている。（出典: 003）
-  - 実際にはカズマが会っている。→ [characters/arceus.md](../characters/arceus.md)
+  - 実際にはカズマが会っている。→ [characters/arceus.md](../characters/pokemon/arceus.md)

@@ -19,8 +19,8 @@
 | 名前 | 立場 | 詳細 |
 | --- | --- | --- |
 | 首領 | トップ | 女帝に負けた |
-| マーズ（アカネ） | 三将星 | [characters/akane-mars.md](../characters/akane-mars.md) |
+| マーズ（アカネ） | 三将星 | [characters/akane-mars.md](../characters/trainers/akane-mars.md) |
 | ジュピター（本名コーネリア） | 三将星。組織のNo.2で、企業の筆頭トレーナー | 部下思いで人気があるらしい。先日のリーグで3位。チャンピオンに負けて、アカネに当たっている |
 | もう1人 | 三将星と思われる | 先日のリーグの予選で、ほのお使いの四天王に負けた |
 | プルート博士 | 研究者と思われる | 「モルモットにされる」と恐れられている |
-| 社員A・B | 一般社員 | [characters/others.md](../characters/others.md) |
+| 社員A・B | 一般社員 | [その他の民間人](../characters/civilians/others.md) |
