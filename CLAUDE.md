@@ -10,7 +10,7 @@
 | `world/` | 世界観（地理・社会・プロリーグ・ポケモンの仕組み・用語など）。テーマ別 |
 | `characters/` | 登場人物の設定。`trainers/`（トレーナー）、`pokemon/`（ポケモン）、`civilians/`（民間人）に分け、1人1ファイル。脇役は各フォルダの `others.md` にまとめる。一覧は `characters/README.md`、関係図は `characters/relationships.md` |
 | `story/` | 各話あらすじ（`story/episodes/` に章ごとのファイル。`story/episodes.md` は目次）・時系列・バトル記録・ダイス判定記録 |
-| `index.md` | 索引（原典一覧）・未確定事項・矛盾メモ |
+| `index.md` | 索引（章ごとのあらすじへの案内）・未確定事項・矛盾メモ。原典のファイル名はあらすじの各話の見出しにある |
 | `notes/` | 作業の記録。`source-edits.md`（原典の修正記録・作り直した版への差し替え）、`resolved.md`（解決済みの疑問）など |
 
 ## 原典のルール
