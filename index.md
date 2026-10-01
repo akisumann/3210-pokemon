@@ -15,7 +15,7 @@
 | 第一節編 前半（051〜099） | 49話 | [07_第一節編（前半）.md](story/episodes/07_第一節編（前半）.md) |
 | 第一節編 後半（100〜159） | 60話 | [07_第一節編（後半）.md](story/episodes/07_第一節編（後半）.md) |
 | オフシーズン編（160〜183） | 24話 | [08_オフシーズン編.md](story/episodes/08_オフシーズン編.md) |
-| 第二節編（184〜） | 45話 | [09_第二節編.md](story/episodes/09_第二節編.md) |
+| 第二節編（184〜） | 46話 | [09_第二節編.md](story/episodes/09_第二節編.md) |
 
 ## 設定資料
 - 世界観: [概要](world/overview.md) / [地名](world/places.md) / [ポケモンの基本](world/pokemon.md) / [種族・系統](world/species.md) / [ポテンシャルの仕組み](world/potentials.md) / [ポテンシャル一覧](world/potential-list.md) / [バトルの細かい仕様](world/battle-rules.md) / [相手チームの体力の推測](world/hp-estimates.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度・ポケモンリーグ](world/pro-trainer.md) / [ポケモン図鑑](world/pokedex.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
