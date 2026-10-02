@@ -312,7 +312,7 @@ function sideHTML(i){const s=B.sides[i],m=cur(s),me=i===0;
  return `<h2><span class="who">${me?"自陣":"敵陣"}：${s.name}</span><span class="meta">指令 ${ord}/6 使用　四式 ${shk}/4 使用</span></h2>
  <div class="active">${m.fainted?"（倒れている）":m.name}</div><div class="meta">${st||"能力変化なし"}</div>
  <div class="chips">${chips}</div><div class="dexbox">${dex}</div><div class="bench">${bench}</div>`}
-function render(){$("meSide").innerHTML=sideHTML(0);$("foeSide").innerHTML=sideHTML(1);
+function render(keep=true){const prev=keep?{sw:$("sw").value,order:$("order").value,shiki:$("shiki").value}:{};$("meSide").innerHTML=sideHTML(0);$("foeSide").innerHTML=sideHTML(1);
  const lg=$("log");lg.innerHTML=B.log.map(e=>e.cls==="t"?`<p class="t">${e.txt}</p>`:e.spk?`<p><span class="spk">【${e.spk}】</span>${e.txt}</p>`:`<p class="${e.cls}">${e.txt}</p>`).join("");lg.scrollTop=lg.scrollHeight;
  const s=B.sides[0],m=cur(s);$("cmd").hidden=B.over;if(B.over)return;
  const need=m.fainted;$("cmdTitle").textContent=need?`${m.name}が倒れた。次に出すポケモンを選ぶ`:`T${B.turn+1}の指示`;
@@ -324,6 +324,7 @@ function render(){$("meSide").innerHTML=sideHTML(0);$("foeSide").innerHTML=sideH
  ["a","b","c","d","s","h"].forEach(k=>{if(s.used[k])return;const modes=s.mode==="mix"?["jk","zk"]:[s.mode];modes.forEach(md=>od.add(new Option(`${md==="zk"?"全開":"熟達"}${NM[k]}指令`,`${k}:${md}`)))});
  const sk=$("shiki");sk.innerHTML='<option value="">使わない</option>';sk.disabled=need;
  [["kawase","かわせ！（物理を1回回避）"],["yokero","よけろ！（特殊を1回回避）"],["taero","たえろ！（半減して必ず耐える）"],["modore","もどれ！（相手の行動後に交代）"]].forEach(([k,t])=>{if(!s.shikiUsed[k])sk.add(new Option(t,k))});
+ for(const k of ["sw","order","shiki"]){const el=$(k);if(prev[k]&&[...el.options].some(o=>o.value===prev[k]))el.value=prev[k]}
  $("dex").disabled=need||s.dex<=0||cur(B.sides[1]).dexed;
  $("hint").textContent=need?"":"技か交代を選んでください。";}
 function start(){
@@ -331,18 +332,18 @@ function start(){
  if(mo==="C")mode="jk";if(mo==="B"&&mode==="mix")mode="zk";
  B=newBattle({sides:[{trainer:mt.trainer,team:mt,order:mo,mode,ikusei:"C"},{trainer:ft.trainer,team:ft,order:$("foeOrder").value,mode:$("foeOrder").value==="C"?"jk":"jk",ikusei:"C",ai:true}]});
  B.log.push({cls:"sys",txt:`◎―――――${ft.trainer}が勝負を仕掛けて来た！（3vs3）`});
- onEnter(B,0,cur(B.sides[0]));onEnter(B,1,cur(B.sides[1]));cur(B.sides[1]).seen=true;updKokozo(B);sel=null;render();}
+ onEnter(B,0,cur(B.sides[0]));onEnter(B,1,cur(B.sides[1]));cur(B.sides[1]).seen=true;updKokozo(B);sel=null;render(false);}
 $("start").onclick=start;
 $("dex").onclick=()=>{const s=B.sides[0];if(s.dex<=0)return;s.dex--;cur(B.sides[1]).dexed=true;B.log.push({cls:"sys",txt:`◎${s.name}は「ポケモン図鑑」を使用し、相手のデータを解析した！`});render()};
 $("exec").onclick=()=>{
  const s=B.sides[0],m=cur(s);
- if(m.fainted){const v=$("sw").value;if(v==="")return;s.act=+v;onEnter(B,0,cur(s));afterReplace();render();return}
+ if(m.fainted){const v=$("sw").value;if(v==="")return;s.act=+v;onEnter(B,0,cur(s));afterReplace();render(false);return}
  const sw=$("sw").value;const a={};if(sw!==""){a.switchTo=+sw}else{if(!sel){$("hint").textContent="技を選ぶか、交代先を選んでください。";return}a.move=sel}
  if($("order").value)a.order=$("order").value;if($("shiki").value){a.shiki=$("shiki").value;if(a.shiki==="modore"&&a.switchTo==null){$("hint").textContent="『もどれ！』は交代先と一緒に選んでください。";return}}
  const f=aiAct(B,1);runTurn(B,[a,f]);
  [1].forEach(i=>{if(!B.over&&cur(B.sides[i]).fainted){const to=aiReplace(B,i);B.sides[i].act=to;onEnter(B,1,cur(B.sides[1]));cur(B.sides[1]).seen=true;updKokozo(B)}});
  B.sides[1].team.forEach(x=>{if(B.sides[1].team.indexOf(x)===B.sides[1].act)x.seen=true});
- sel=null;render();};
+ sel=null;render(false);};
 function afterReplace(){updKokozo(B)}
 start();
 </script>
