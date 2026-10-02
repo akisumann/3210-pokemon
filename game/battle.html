@@ -371,7 +371,43 @@ const ROLES={
  "エースアシストα":"場を離れる時、味方『エース』が最初に繰り出す技の威力を2倍にする。",
  "エースキラーα":"『エース』に与えるダメージを強化（1.5倍）する。『エース』の「防/特防」の上昇（強化）を無視する。",
  "鬼人":"先発で場に出ると、「こうげき」が上がる。","魔術師":"先発で場に出ると、「特攻」が上がる。","狂走":"先発で場に出ると、「すばやさ」が上がる。","":"なし"};
-const ITEMS=["なし","いのちのたま","こだわりハチマキ","こだわりメガネ","きあいのタスキ","オボンのみ","たべのこし","ノーマルジュエル"];
+// 持ち物（「もちものセット」から。効果は実機どおり。原典での仕様は world/battle-rules.md の「持ち物」）
+const PLATE={"ノ":"まっさらプレート","炎":"ひのたまプレート","水":"しずくプレート","電":"いかずちプレート","草":"みどりのプレート","氷":"つららのプレート","闘":"こぶしのプレート","毒":"もうどくプレート","地":"だいちのプレート","飛":"あおぞらプレート","超":"ふしぎのプレート","虫":"たまむしプレート","岩":"がんせきプレート","霊":"もののけプレート","龍":"りゅうのプレート","悪":"こわもてプレート","鋼":"こうてつプレート","妖":"せいれいプレート"};
+const RBERRY={"ノ":"ホズのみ","炎":"オッカのみ","水":"イトケのみ","電":"ソクノのみ","草":"リンドのみ","氷":"ヤチェのみ","闘":"ヨプのみ","毒":"ビアーのみ","地":"シュカのみ","飛":"バコウのみ","超":"ウタンのみ","虫":"タンガのみ","岩":"ヨロギのみ","霊":"カシブのみ","龍":"ハバンのみ","悪":"ナモのみ","鋼":"リリバのみ","妖":"ロゼルのみ"};
+const ITEMD={
+ "なし":["","持ち物なし"],
+ "いのちのたま":["攻め","技の威力1.3倍。攻撃技を当てるたびに体力1/10を失う"],
+ "こだわりハチマキ":["攻め","物理技の威力1.5倍。最初に出した技しか出せなくなる"],
+ "こだわりメガネ":["攻め","特殊技の威力1.5倍。最初に出した技しか出せなくなる"],
+ "こだわりスカーフ":["攻め","「速」1.5倍。最初に出した技しか出せなくなる"],
+ "たつじんのおび":["攻め","「ばつぐん」の技の威力1.2倍"],
+ "ピントレンズ":["攻め","急所ランク+1"],
+ "ノーマルジュエル":["攻め","最初に出す「ノ」技の威力1.3倍（1回きり）"],
+ "いかさまダイス":["攻め","2〜5回攻撃の技が、必ず4〜5回当たる"],
+ "じゃくてんほけん":["攻め","「ばつぐん」の技を受けると、攻撃と特攻+2（1回きり）"],
+ "きあいのタスキ":["受け","体力満タンから倒れる攻撃を、体力1で耐える（1回きり）"],
+ "とつげきチョッキ":["受け","「特防」1.5倍。変化技が出せない。急所では無視される"],
+ "ゴツゴツメット":["受け","直接攻撃してきた相手の体力を1/6減らす"],
+ "ふうせん":["受け","「地」技が当たらない。攻撃を受けると割れる"],
+ "クリアチャーム":["受け","相手に能力を下げられない"],
+ "おんみつマント":["受け","相手の技の追加効果を受けない"],
+ "しろいハーブ":["受け","下がった能力を元に戻す（1回きり）"],
+ "ものまねハーブ":["受け","相手の能力が上がった時、同じだけ自分も上げる（1回きり）"],
+ "たべのこし":["回復","T終了時に体力1/16を回復"],
+ "くろいヘドロ":["回復","T終了時、「毒」タイプなら体力1/16回復、それ以外は1/8を失う"],
+ "オボンのみ":["きのみ","体力が半分以下になると1/4回復（1回きり）"],
+ "ラムのみ":["きのみ","状態異常か「混乱」になるとすぐ治す（1回きり）"],
+ "イバンのみ":["きのみ","体力1/4以下のT、同じ優先度の中で先に動ける（1回きり）"],
+ "ボコのみ":["きのみ","体力満タンの時、物理技のダメージを半減（1回きり）"],
+ "マジュのみ":["きのみ","体力満タンの時、特殊技のダメージを半減（1回きり）"],
+ "レッドカード":["交代","攻撃を受けると、相手を控えと強制的に入れ替える（1回きり）"],
+ "だっしゅつボタン":["交代","攻撃を受けると、控えと入れ替わる（1回きり）"],
+ "だっしゅつパック":["交代","能力が下がると、控えと入れ替わる（1回きり）"],
+ "かえんだま":["そのほか","T終了時に自分が「火傷」になる（「からげんき」向け）"],
+ "どくどくだま":["そのほか","T終了時に自分が「猛毒」になる"]};
+TYPES.forEach(t=>{ITEMD[RBERRY[t]]=["半減きのみ",t==="ノ"?"「ノ」技のダメージを半減（1回きり）":`「ばつぐん」の「${TN[t]}」技のダメージを半減（1回きり）`];
+ ITEMD[PLATE[t]]=["プレート",`「${TN[t]}」技の威力1.2倍${t==="ノ"?"（正式な数値は未表示。推測）":""}`]});
+const ITEMS=Object.keys(ITEMD);
 // 例のチーム（第一節の終わりごろの目安）
 const TEAMS={
  "ミラクルズ（例）":{trainer:"カズマ",mons:[
@@ -414,8 +450,8 @@ function snap(B){return B.sides.map(s=>{const m=cur(s);return {name:s.name,order
  m:s.out?{name:m.name,lv:m.lv,types:m.types,status:m.status,cnf:!!(m.vol&&m.vol.cnf),stg:{...m.stg},f:m.fainted,last:m.lastHit||null}:null}})}
 function L(B,cls,txt,spk){B.log.push({cls,txt,spk,snap:snap(B)})}
 function stage(B,si,m,k){let n=m.stg[k];const s=B.sides[si];if(isAce(m)&&s.kokozo&&m===cur(s))n+=1;return clamp(n,-6,6)}
-function boost(B,si,m,k){let x=1;if(m.role==="二枚看板")x*=1.33;const z=B.sides[si].zk;if(z[k]&&m===cur(B.sides[si]))x*=2;return x}
-function critStage(B,si,m,mv){let c=0;const s=B.sides[si],o=B.sides[1-si];if(m.role==="二枚看板")c++;if(isAce(m)&&s.kokozo)c++;if(hasFx(mv,"crit1"))c++;const d=ORD[s.order]-ORD[o.order];if(d>0)c+=d;return clamp(c,0,4)}
+function boost(B,si,m,k){let x=1;if(m.role==="二枚看板")x*=1.33;if(k==="d"&&m.item==="とつげきチョッキ")x*=1.5;const z=B.sides[si].zk;if(z[k]&&m===cur(B.sides[si]))x*=2;return x}
+function critStage(B,si,m,mv){let c=0;const s=B.sides[si],o=B.sides[1-si];if(m.role==="二枚看板")c++;if(isAce(m)&&s.kokozo)c++;if(hasFx(mv,"crit1"))c++;if(m.item==="ピントレンズ")c++;const d=ORD[s.order]-ORD[o.order];if(d>0)c+=d;return clamp(c,0,4)}
 function calcDmg(B,ai,di,mv,opt={}){ // opt: crit,rand,assist
  const A=cur(B.sides[ai]),D=cur(B.sides[di]);const ph=mv.cat==="ph";const ak=ph?"a":"c",dk=ph||hasFx(mv,"psyshock")?"b":"d";
  const foul=hasFx(mv,"foulplay"),AS=foul?D:A,asi=foul?di:ai; // イカサマは相手の攻撃で計算
@@ -427,6 +463,10 @@ function calcDmg(B,ai,di,mv,opt={}){ // opt: crit,rand,assist
  if(hasFx(mv,"facade")&&A.status)pow*=2;if(hasFx(mv,"hex")&&D.status)pow*=2;if(hasFx(mv,"knockoff")&&D.item&&D.item!=="なし")pow=Math.floor(pow*1.5);
  let d=Math.floor(Math.floor(Math.floor(2*A.lv/5+2)*pow*At/Dt)/50)+2;
  let mod=(opt.crit?2:1)*(A.types.includes(mv.type)?1.5:1)*eff(mv.type,D.types);
+ if(A.item===PLATE[mv.type])mod*=1.2;if(A.item==="たつじんのおび"&&eff(mv.type,D.types)>1)mod*=1.2;
+ if(mv.type==="地"&&D.item==="ふうせん")mod=0;
+ if(D.item===RBERRY[mv.type]&&(mv.type==="ノ"||eff(mv.type,D.types)>1))mod*=.5;
+ if(D.hp===D.maxhp&&((ph&&D.item==="ボコのみ")||(!ph&&D.item==="マジュのみ")))mod*=.5;
  if(A.item==="いのちのたま")mod*=1.3;if(A.item==="こだわりハチマキ"&&ph)mod*=1.5;if(A.item==="こだわりメガネ"&&!ph)mod*=1.5;
  if(A.role==="エースキラーα"&&isAce(D))mod*=1.5;
  if(ph&&A.status==="brn"&&!hasFx(mv,"facade"))mod*=.5; // 火傷で物理半減
@@ -440,7 +480,8 @@ function updKokozo(B){const a=cur(B.sides[0]),b=cur(B.sides[1]);const face=a&&b&
  B.sides.forEach((s,i)=>{const on=alive(s).length===1||face;if(on&&!s.kokozo){s.kokozo=true;L(B,"sys",`◎${s.name}の陣営が「ここぞ！」という場面になった！`);const m=cur(s);if(isAce(m)&&!m.fainted)L(B,"sys",`◎${m.name}の『不動のエース』が発動！　全能力値が上昇し、技のクリティカル率が上がった！`)}
   else if(!on&&s.kokozo&&alive(s).length>0){s.kokozo=false;L(B,"sys",`◎${s.name}の陣営が「ここぞ！」という場面でなくなった！`)}})}
 function onEnter(B,si,m){const s=B.sides[si];s.out=true;m.enteredTurn=B.turn;m.vol={};L(B,"sys",`◎${s.name}は「${m.name}」を繰り出した！`);
- if(m.firstOut&&B.turn===0){const k={"鬼人":"a","魔術師":"c","狂走":"s"}[m.role];if(k){m.stg[k]=clamp(m.stg[k]+1,-6,6);L(B,"sys",`◎${m.name}の『${m.role}』！　先発で場に出て「${{a:"こうげき",c:"とくこう",s:"すばやさ"}[k]}」が上がった！`)}}
+ if(m.firstOut&&B.turn===0){const k={"鬼人":"a","魔術師":"c","狂走":"s"}[m.role];if(k){m.stg[k]=clamp(m.stg[k]+1,-6,6);L(B,"sys",`◎${m.name}の『${m.role}』！　先発で場に出て「${{a:"こうげき",c:"とくこう",s:"すばやさ"}[k]}」が上がった！`);mimic(B,si,[[k,1]])}}
+ if(m.item==="ふうせん")L(B,"sys",`${m.name}は「ふうせん」で浮いている！`);
  m.firstOut=false;if(s.kokozo&&isAce(m))L(B,"sys",`◎${m.name}の『不動のエース』が発動！　全能力値が上昇し、技のクリティカル率が上がった！`);}
 function doSwitch(B,si,to,silent){const s=B.sides[si];const old=cur(s);if(old&&!old.fainted){old.lock=null;old.stg={a:0,b:0,c:0,d:0,s:0};old.vol={};if(old.status==="tox")old.toxN=1;if(old.role==="エースアシストα"){s.assist=true;L(B,"sys",`◎${old.name}の『エースアシストα』！　味方『エース』が最初に繰り出す技の威力が2倍になる！`)}
   if(!silent)L(B,"me",`${old.name}、戻れ！`,s.name)}
@@ -448,8 +489,9 @@ function doSwitch(B,si,to,silent){const s=B.sides[si];const old=cur(s);if(old&&!
 function applyOrder(B,si,o){const s=B.sides[si],m=cur(s);if(!o)return;const [kind,mode]=o.split(":");s.used[kind]=true;
  const nm={a:"攻撃",b:"防御",c:"特攻",d:"特防",s:"敏捷",h:"回復"}[kind];
  if(mode==="zk"){if(kind==="h"){m.tag.skip=true;const h=Math.floor(m.maxhp/2);m.hp=Math.min(m.maxhp,m.hp+h);L(B,"sys",`◎${s.name}の『全開${nm}指令』！　${m.name}は行動をスキップして体力を回復した！`)}else{s.zk[kind]=true;L(B,"sys",`◎${s.name}の『全開${nm}指令』！　1Tの間、${m.name}の能力が2倍になった！`)}}
- else{if(kind==="h"){m.hp=Math.min(m.maxhp,m.hp+Math.floor(m.maxhp/4));L(B,"sys",`◎${s.name}の『熟達回復指令』！　${m.name}の体力が回復した！`)}else{m.stg[kind]=clamp(m.stg[kind]+1,-6,6);L(B,"sys",`◎${s.name}の『熟達${nm}指令』！　${m.name}の能力が上がった！`)}}}
+ else{if(kind==="h"){m.hp=Math.min(m.maxhp,m.hp+Math.floor(m.maxhp/4));L(B,"sys",`◎${s.name}の『熟達回復指令』！　${m.name}の体力が回復した！`)}else{m.stg[kind]=clamp(m.stg[kind]+1,-6,6);L(B,"sys",`◎${s.name}の『熟達${nm}指令』！　${m.name}の能力が上がった！`);mimic(B,si,[[kind,1]])}}}
 // "up:a1s1" のような効果の文字列から、能力ランクを上げ下げする
+function upList(mv){const o=[];fxs(mv).filter(t=>t.startsWith("up:")).forEach(t=>t.slice(3).replace(/([abcds])(\d)/g,(_,k,n)=>o.push([k,+n])));return o}
 function fxStg(A,mv,pre,sign){fxs(mv).filter(t=>t.startsWith(pre)).forEach(t=>t.slice(pre.length).replace(/([abcds])(\d)/g,(_,k,n)=>{A.stg[k]=clamp(A.stg[k]+sign*n,-6,6)}))}
 const SK1={a:"攻",b:"防",c:"特攻",d:"特防",s:"速"};
 // 技の効果の短い説明（画面用）
@@ -466,8 +508,17 @@ function lockOf(m){return (m.vol&&m.vol.rageMove)||m.lock}
 function canStatus(m,st){if(!m||m.fainted||m.status)return false;
  if(st==="brn"&&m.types.includes("炎"))return false;if((st==="psn"||st==="tox")&&(m.types.includes("毒")||m.types.includes("鋼")))return false;
  if(st==="frz"&&m.types.includes("氷"))return false;return true}
-function inflict(B,m,st){m.status=st;if(st==="slp")m.slp=1+Math.floor(RNG()*3);if(st==="tox")m.toxN=1;L(B,"sys",`${m.name}は「${STN[st]}」状態になった！`)}
-function confuse(B,m){if(m.vol.cnf)return false;m.vol.cnf=2+Math.floor(RNG()*4);L(B,"sys",`${m.name}は「混乱」した！`);return true}
+function inflict(B,m,st){m.status=st;if(st==="slp")m.slp=1+Math.floor(RNG()*3);if(st==="tox")m.toxN=1;L(B,"sys",`${m.name}は「${STN[st]}」状態になった！`);lum(B,m)}
+function useItem(m){const it=m.item;m.item="なし";m.lock=null;return it}
+function lum(B,m){if(m.item!=="ラムのみ"||m.fainted||(!m.status&&!m.vol.cnf))return;useItem(m);m.status=null;m.vol.cnf=0;L(B,"sys",`◎${m.name}は「ラムのみ」で状態異常を治した！`)}
+// 相手の能力が上がった時の「ものまねハーブ」
+function mimic(B,si,ch){const o=cur(B.sides[1-si]);if(!B.sides[1-si].out||o.fainted||o.item!=="ものまねハーブ")return;useItem(o);
+ ch.forEach(([k,n])=>{if(n>0)o.stg[k]=clamp(o.stg[k]+n,-6,6)});L(B,"sys",`◎${o.name}は「ものまねハーブ」で相手の能力の上昇をまねた！`)}
+// 能力が下がった時の「しろいハーブ」「だっしゅつパック」
+function afterDrop(B,si,m){if(m.fainted)return;
+ if(m.item==="しろいハーブ"){useItem(m);for(const k in m.stg)if(m.stg[k]<0)m.stg[k]=0;L(B,"sys",`◎${m.name}は「しろいハーブ」で下がった能力を元に戻した！`)}
+ else if(m.item==="だっしゅつパック"&&cur(B.sides[si])===m){const to=pickBench(B,si);if(to>=0){useItem(m);L(B,"sys",`◎${m.name}は「だっしゅつパック」で控えに戻る！`);doSwitch(B,si,to,true)}}}
+function confuse(B,m){if(m.vol.cnf)return false;m.vol.cnf=2+Math.floor(RNG()*4);L(B,"sys",`${m.name}は「混乱」した！`);lum(B,m);return true}
 // 技を出す直前の、行動できるかの判定（反動・眠り・凍り・怯み・混乱・麻痺の順）
 function canAct(B,si,mv){const m=cur(B.sides[si]),v=m.vol;
  if(v.recharge){v.recharge=false;L(B,"sys",`${m.name}は攻撃の反動で動けない！`);return false}
@@ -486,36 +537,42 @@ function canAct(B,si,mv){const m=cur(B.sides[si]),v=m.vol;
 function pickBench(B,si){const s=B.sides[si],keep=s.act;let best=-1,bv=-1;
  s.team.forEach((x,i)=>{if(x.fainted||i===keep)return;s.act=i;const v=Math.max(...x.moves.map(n=>expPct(B,si,1-si,MV[n])));if(v>bv){bv=v;best=i}});s.act=keep;return best}
 // 攻撃が当たったあとの追加効果
-function secondary(B,A,D,mv,dFirst){const ch=p=>RNG()*100<+p;
- fxs(mv).forEach(t=>{const [k,a,b]=t.split(":");if(D.fainted)return;
+function secondary(B,ai,di,A,D,mv,dFirst){const ch=p=>RNG()*100<+p;let dropped=false;
+ fxs(mv).forEach(t=>{const [k,a,b]=t.split(":");if(D.fainted||D.item==="おんみつマント")return;
   if(STN[k]){if(ch(a)&&canStatus(D,k))inflict(B,D,k)}
   else if(k==="cnf"){if(ch(a))confuse(B,D)}
   else if(k==="fln"){if(dFirst&&ch(a))D.vol.fln=true}
-  else if(k==="td"){if(ch(b)){D.stg[a[0]]=clamp(D.stg[a[0]]-(+a[1]),-6,6);L(B,"sys",`${D.name}の「${STATN[a[0]]}」が下がった！`)}}});
- fxs(mv).forEach(t=>{const [k,a,b]=t.split(":");if(k==="su"&&A.hp>0&&ch(b)){A.stg[a[0]]=clamp(A.stg[a[0]]+(+a[1]),-6,6);L(B,"sys",`${A.name}の「${STATN[a[0]]}」が上がった！`)}})}
+  else if(k==="td"){if(ch(b)){if(D.item==="クリアチャーム"){L(B,"sys",`${D.name}は「クリアチャーム」で能力が下がらない！`);return}
+   D.stg[a[0]]=clamp(D.stg[a[0]]-(+a[1]),-6,6);L(B,"sys",`${D.name}の「${STATN[a[0]]}」が下がった！`);dropped=true}}});
+ if(dropped)afterDrop(B,di,D);
+ fxs(mv).forEach(t=>{const [k,a,b]=t.split(":");if(k==="su"&&A.hp>0&&ch(b)){A.stg[a[0]]=clamp(A.stg[a[0]]+(+a[1]),-6,6);L(B,"sys",`${A.name}の「${STATN[a[0]]}」が上がった！`);mimic(B,ai,[[a[0],+a[1]]])}})}
 function hit(B,ai,di,mv,ctx){const A=cur(B.sides[ai]),D=cur(B.sides[di]),sA=B.sides[ai],sD=B.sides[di];
  L(B,"sys",`◎${A.name}の「${mv.name}」！`);
  const fail=()=>L(B,"sys","しかし、うまく決まらなかった！");
  const self=mv.cat==="st"&&(hasFx(mv,"protect")||hasFx(mv,"heal")||fxs(mv).some(t=>t.startsWith("up:")));
+ if(mv.cat==="st"&&A.item==="とつげきチョッキ"){L(B,"sys",`${A.name}は「とつげきチョッキ」で変化技が出せない！`);return}
  if(self){if(hasFx(mv,"protect")){A.protectN++;if(A.protectN>1&&RNG()>1/Math.pow(3,A.protectN-1)){fail();A.protectN=0;return}A.tag.protect=true;L(B,"sys",`${A.name}は守りの体勢に入った！`);return}
   A.protectN=0;
   if(hasFx(mv,"heal")){if(A.hp>=A.maxhp){L(B,"sys","しかし、体力は満タンだった！");return}A.hp=Math.min(A.maxhp,A.hp+Math.floor(A.maxhp/2));L(B,"sys",`${A.name}は体力を回復した！`);return}
-  fxStg(A,mv,"up:",1);fxStg(A,mv,"drop:",-1);L(B,"sys",`${A.name}の能力が上がった！`);return}
+  fxStg(A,mv,"up:",1);fxStg(A,mv,"drop:",-1);L(B,"sys",`${A.name}の能力が上がった！`);mimic(B,ai,upList(mv));if(fxs(mv).some(t=>t.startsWith("drop:")))afterDrop(B,ai,A);return}
  A.protectN=0;
  if(ctx.modoreSkip){L(B,"sys","しかし、相手は『もどれ！』で入れ替わっていた！");return}
  if(hasFx(mv,"fakeout")&&B.turn-A.enteredTurn!==1){fail();return}
  if(hasFx(mv,"sucker")&&(ctx.foeMoved||!ctx.foeAct||!ctx.foeAct.move||MV[ctx.foeAct.move].cat==="st")){fail();return}
  if(hasFx(mv,"poltergeist")&&(!D.item||D.item==="なし")){fail();return}
  if(D.tag.protect){L(B,"sys",`${D.name}は攻撃から身を守った！`);return}
+ if(mv.type==="地"&&mv.cat!=="st"&&D.item==="ふうせん"){L(B,"sys",`${D.name}は「ふうせん」で浮いているので当たらない！`);return}
  const e=mv.cat==="st"?(mv.type==="電"&&D.types.includes("地")?0:1):eff(mv.type,D.types);if(e===0){L(B,"sys",`${D.name}には効果がないようだ……`);return}
  if(ctx.evade&&((ctx.evade==="ph"&&mv.cat==="ph")||(ctx.evade==="sp"&&mv.cat==="sp"))){L(B,"sys",`◎${sD.name}の『${ctx.evade==="ph"?"かわせ！":"よけろ！"}』！　${D.name}は攻撃を回避した！`);return}
  if(mv.acc<=100&&RNG()*100>=mv.acc){L(B,"sys",`しかし、${D.name}には当たらなかった！`);return}
  // 状態異常にする技
  if(mv.cat==="st"){const st=STK.find(k=>fxArg(mv,k));if(st){if(!canStatus(D,st)){fail();return}inflict(B,D,st);return}
   if(fxArg(mv,"cnf")){if(!confuse(B,D))fail();return}return}
- let hits=1;if(hasFx(mv,"multi2"))hits=2;if(hasFx(mv,"multi25")){const r=RNG();hits=r<1/3?2:r<2/3?3:r<5/6?4:5}
+ let hits=1;if(hasFx(mv,"multi2"))hits=2;if(hasFx(mv,"multi25")){const r=RNG();hits=A.item==="いかさまダイス"?(r<.5?4:5):r<1/3?2:r<2/3?3:r<5/6?4:5}
  const assist=isAce(A)&&sA.assist;if(assist)sA.assist=false;
- let dmg=0,crit=false;for(let h=0;h<hits;h++){const c=RNG()<CRIT[critStage(B,ai,A,mv)];if(c)crit=true;dmg+=calcDmg(B,ai,di,mv,{crit:c,rand:0.85+RNG()*0.15,assist})}
+ const ph=mv.cat==="ph",berry=(D.item===RBERRY[mv.type]&&(mv.type==="ノ"||e>1))||(D.hp===D.maxhp&&((ph&&D.item==="ボコのみ")||(!ph&&D.item==="マジュのみ")));
+ let dmg=0,crit=false;for(let h=0;h<hits;h++){const c=RNG()<CRIT[critStage(B,ai,A,mv)];if(c)crit=true;dmg+=calcDmg(B,ai,di,mv,{crit:c,rand:0.85+RNG()*0.15,assist});
+  if(h===0&&berry){const it=useItem(D);L(B,"sys",`◎${D.name}は「${it}」で、${RBERRY[mv.type]===it?`「${TN[mv.type]}」技`:ph?"物理技":"特殊技"}のダメージを半減した！`)}}
  if(A.item==="ノーマルジュエル"&&mv.type==="ノ"&&!A.tag.jewel){A.tag.jewel=true;L(B,"sys",`◎${A.name}は「ノーマルジュエル」を使用し、「ノ」技の威力を強化（1.3倍）した！`)}
  if(crit)L(B,"sys","きゅうしょにあたった！");if(e>1)L(B,"sys","こうかはばつぐんだ！");if(e<1)L(B,"sys","こうかはいまひとつのようだ……");
  const before=D.hp;
@@ -527,20 +584,31 @@ function hit(B,ai,di,mv,ctx){const A=cur(B.sides[ai]),D=cur(B.sides[di]),sA=B.si
  if(D.hp<=0){D.lastHit={w,at:0};L(B,"sys",`${D.name}に「${w}」！`);L(B,"sys",`◎―――――${D.name}は倒れた！`);D.fainted=true}
  else{const at=Math.ceil(D.hp/Math.max(1,dmg));D.lastHit={w,at};L(B,"sys",`${D.name}に「${w}」！＠${at}`)}
  if(mv.type==="炎"&&D.status==="frz"&&!D.fainted){D.status=null;L(B,"sys",`${D.name}の「凍り」が解けた！`)}
- secondary(B,A,D,mv,!ctx.foeMoved);
+ secondary(B,ai,di,A,D,mv,!ctx.foeMoved);
+ if(D.item==="ふうせん"&&dmg>0){useItem(D);L(B,"sys",`${D.name}の「ふうせん」が割れた！`)}
+ if(D.item==="じゃくてんほけん"&&e>1&&!D.fainted&&dmg>0){useItem(D);D.stg.a=clamp(D.stg.a+2,-6,6);D.stg.c=clamp(D.stg.c+2,-6,6);L(B,"sys",`◎${D.name}は「じゃくてんほけん」で「こうげき」と「とくこう」がぐーんと上がった！`);mimic(B,di,[["a",2],["c",2]])}
  if(D.item==="オボンのみ"&&!D.fainted&&!D.tag.berry&&D.hp<=D.maxhp/2){D.tag.berry=true;D.hp=Math.min(D.maxhp,D.hp+Math.floor(D.maxhp/4));L(B,"sys",`◎${D.name}は「オボンのみ」を使い、体力を1/4回復した！`)}
  if(hasFx(mv,"knockoff")&&D.item&&D.item!=="なし"){L(B,"sys",`${A.name}は${D.name}の「${D.item}」をはたき落とした！`);D.item="なし";D.lock=null}
  const rc=fxs(mv).find(t=>/^recoil\d$/.test(t));if(rc){const r=Math.max(1,Math.floor(dmg/+rc.slice(6)));A.hp=Math.max(0,A.hp-r);L(B,"sys",`${A.name}は反動のダメージを受けた！`)}
  if(A.item==="いのちのたま"&&dmg>0){A.hp=Math.max(0,A.hp-Math.floor(A.maxhp/10));}
+ if(D.item==="ゴツゴツメット"&&mv.contact&&dmg>0&&A.hp>0){A.hp=Math.max(0,A.hp-Math.floor(A.maxhp/6));L(B,"sys",`${A.name}は「ゴツゴツメット」でダメージを受けた！`)}
  if(hasFx(mv,"drain")&&dmg>0&&A.hp>0){A.hp=Math.min(A.maxhp,A.hp+Math.max(1,Math.floor(dmg/2)));L(B,"sys",`${D.name}から体力を吸い取った！`)}
- fxStg(A,mv,"drop:",-1);if(fxs(mv).some(t=>t.startsWith("up:"))&&A.hp>0){fxStg(A,mv,"up:",1);L(B,"sys",`${A.name}の能力が上がった！`)}
+ fxStg(A,mv,"drop:",-1);if(fxs(mv).some(t=>t.startsWith("up:"))&&A.hp>0){fxStg(A,mv,"up:",1);L(B,"sys",`${A.name}の能力が上がった！`);mimic(B,ai,upList(mv))}
  if(A.hp<=0&&!A.fainted){L(B,"sys",`◎―――――${A.name}は倒れた！`);A.fainted=true}
  if((A.item||"").startsWith("こだわり"))A.lock=mv.name;
  if(hasFx(mv,"recharge")&&!A.fainted)A.vol.recharge=true;
+ if(A.hp<=0&&!A.fainted){L(B,"sys",`◎―――――${A.name}は倒れた！`);A.fainted=true}
+ if(fxs(mv).some(t=>t.startsWith("drop:"))&&!A.fainted)afterDrop(B,ai,A);
+ // 攻撃を受けた側の「レッドカード」「だっしゅつボタン」
+ if(dmg>0&&!D.fainted&&cur(B.sides[di])===D){
+  if(D.item==="レッドカード"&&!A.fainted&&cur(sA)===A){const c=sA.team.map((x,i)=>i).filter(i=>!sA.team[i].fainted&&i!==sA.act);
+   if(c.length){useItem(D);L(B,"sys",`◎${D.name}は${A.name}に「レッドカード」を突きつけた！`);doSwitch(B,ai,c[Math.floor(RNG()*c.length)],true);return}}
+  if(D.item==="だっしゅつボタン"){const to=pickBench(B,di);if(to>=0){useItem(D);L(B,"sys",`◎${D.name}は「だっしゅつボタン」で控えに戻る！`);doSwitch(B,di,to,true);}}}
+ if(cur(sA)!==A)return;
  if(hasFx(mv,"uturn")&&!A.fainted){const s=B.sides[ai];let to=ctx.uturnTo;if(to==null||!s.team[to]||s.team[to].fainted||to===s.act)to=pickBench(B,ai);
   if(to>=0){L(B,"sys",`${A.name}は${s.name}のもとへ戻っていく！`);doSwitch(B,ai,to,true)}}
 }
-function speed(B,si){const s=B.sides[si],m=cur(s);let v=m.st.s*stMul(stage(B,si,m,"s"))*boost(B,si,m,"s");if(m.status==="par")v*=.25;return v}
+function speed(B,si){const s=B.sides[si],m=cur(s);let v=m.st.s*stMul(stage(B,si,m,"s"))*boost(B,si,m,"s");if(m.item==="こだわりスカーフ")v*=1.5;if(m.status==="par")v*=.25;return v}
 /* 指示: {move, switchTo, order:"a:jk", shiki:"kawase|yokero|taero|modore"} */
 function runTurn(B,acts){
  B.turn++;L(B,"t",`―― T${B.turn} ――`);
@@ -556,8 +624,12 @@ function runTurn(B,acts){
  order.sort((x,y)=>speed(B,y)-speed(B,x)).forEach(i=>doSwitch(B,i,acts[i].switchTo));
  // 技
  let movers=[0,1].filter(i=>acts[i].switchTo==null&&acts[i].move&&!cur(S[i]).tag.skip);
- movers.sort((x,y)=>{const px=MV[acts[x].move].pri,py=MV[acts[y].move].pri;if(px!==py)return py-px;const sx=speed(B,x),sy=speed(B,y);if(sx!==sy)return sy-sx;return RNG()<.5?-1:1});
- for(const i of movers){if(B.over)break;const m=cur(S[i]);if(m.fainted)continue;const o=1-i;if(cur(S[o]).fainted)continue;
+ const ivan=[0,1].map(i=>{const m=cur(S[i]);return movers.includes(i)&&m.item==="イバンのみ"&&m.hp<=m.maxhp/4});
+ ivan.forEach((v,i)=>{if(v){const m=cur(S[i]);useItem(m);L(B,"sys",`◎${m.name}は「イバンのみ」で行動が早くなった！`)}});
+ movers.sort((x,y)=>{const px=MV[acts[x].move].pri,py=MV[acts[y].move].pri;if(px!==py)return py-px;if(ivan[x]!==ivan[y])return ivan[x]?-1:1;const sx=speed(B,x),sy=speed(B,y);if(sx!==sy)return sy-sx;return RNG()<.5?-1:1});
+ const actNow=[S[0].act,S[1].act];
+ for(const i of movers){if(B.over)break;if(S[i].act!==actNow[i])continue; // 途中で入れ替わった子は動けない
+  const m=cur(S[i]);if(m.fainted)continue;const o=1-i;if(cur(S[o]).fainted)continue;
   const mv=MV[acts[i].move];moved[i]=true;
   if(!canAct(B,i,mv)){m.vol.rageMove=null;m.vol.rage=0;checkEnd(B);continue}
   const c={evade:ctx[i].evade,taero:ctx[i].taero,modoreSkip:acts[o].shiki==="modore"&&acts[o].switchTo!=null,foeAct:acts[o],foeMoved:moved[o],uturnTo:acts[i].uturnTo};
@@ -569,17 +641,21 @@ function runTurn(B,acts){
  [0,1].forEach(i=>{if(acts[i].shiki==="modore"&&acts[i].switchTo!=null&&!cur(S[i]).fainted){L(B,"sys",`◎${S[i].name}の『もどれ！』！`);doSwitch(B,i,acts[i].switchTo)}});
  // T終了時
  S.forEach((s,i)=>{const m=cur(s);if(!m.fainted&&m.item==="たべのこし"&&m.hp<m.maxhp){m.hp=Math.min(m.maxhp,m.hp+Math.floor(m.maxhp/16));L(B,"sys",`${m.name}は「たべのこし」で少し回復した。`)}});
+ S.forEach((s,i)=>{const m=cur(s);if(m.fainted||m.item!=="くろいヘドロ")return;
+  if(m.types.includes("毒")){if(m.hp<m.maxhp){m.hp=Math.min(m.maxhp,m.hp+Math.floor(m.maxhp/16));L(B,"sys",`${m.name}は「くろいヘドロ」で少し回復した。`)}}
+  else{const d=Math.max(1,Math.floor(m.maxhp/8));m.hp=Math.max(0,m.hp-d);m.lastHit={w:word(d/m.maxhp),at:m.hp>0?Math.ceil(m.hp/d):0};L(B,"sys",`${m.name}は「くろいヘドロ」でダメージを受けた！`);if(m.hp<=0){L(B,"sys",`◎―――――${m.name}は倒れた！`);m.fainted=true}}});
  S.forEach((s,i)=>{const m=cur(s);if(m.fainted||!["brn","psn","tox"].includes(m.status))return;
   const d=Math.max(1,m.status==="tox"?Math.floor(m.maxhp*m.toxN/16):Math.floor(m.maxhp/8));if(m.status==="tox")m.toxN=Math.min(15,m.toxN+1);
   m.hp=Math.max(0,m.hp-d);m.lastHit={w:word(d/m.maxhp),at:m.hp>0?Math.ceil(m.hp/d):0};L(B,"sys",`${m.name}は「${STN[m.status]}」のダメージを受けている！　「${word(d/m.maxhp)}」`);
   if(m.hp<=0){L(B,"sys",`◎―――――${m.name}は倒れた！`);m.fainted=true}});
+ S.forEach((s,i)=>{const m=cur(s);const st={"かえんだま":"brn","どくどくだま":"tox"}[m.item];if(!m.fainted&&st&&canStatus(m,st)){L(B,"sys",`${m.name}は「${m.item}」で……`);inflict(B,m,st)}});
  updKokozo(B);checkEnd(B);
 }
 function checkEnd(B){B.sides.forEach((s,i)=>{if(!B.over&&alive(s).length===0){B.over=true;B.winner=1-i;L(B,"sys",`◎―――――${B.sides[1-i].name}は${s.name}とのバトルに勝利した！`)}})}
 /* ===== 相手の動き（型を持つAI） ===== */
 const SLIP={C:.2,B:.1,A:.04};
 function aiAct(B,si){const s=B.sides[si],o=B.sides[1-si],m=cur(s),e=cur(o);const a={};
- const lk=lockOf(m);let opts=m.moves.filter(n=>!lk||n===lk).map(n=>({n,v:expPct(B,si,1-si,MV[n])}));
+ const lk=lockOf(m);let opts=m.moves.filter(n=>(!lk||n===lk)&&!(m.item==="とつげきチョッキ"&&MV[n].cat==="st")).map(n=>({n,v:expPct(B,si,1-si,MV[n])}));
  // 倒せるなら先制技を優先
  const meFaster=speed(B,si)>=speed(B,1-si);
  opts.forEach(x=>{const mv=MV[x.n];if(mv.cat==="st"){const r=m.hp/m.maxhp,st=STK.find(k=>fxArg(mv,k));
@@ -606,7 +682,7 @@ function aiAct(B,si){const s=B.sides[si],o=B.sides[1-si],m=cur(s),e=cur(o);const
  return a}
 function aiReplace(B,si){const s=B.sides[si],e=cur(B.sides[1-si]);const c=s.team.map((x,i)=>({x,i})).filter(o=>!o.x.fainted);
  c.forEach(o=>{s.act=o.i;o.v=Math.max(...o.x.moves.map(n=>expPct(B,si,1-si,MV[n])))});c.sort((p,q)=>q.v-p.v);return c[0].i}
-if(typeof module!=="undefined")module.exports={newBattle,runTurn,aiAct,aiReplace,cur,alive,TEAMS,MV,setRNG:f=>RNG=f,doSwitch,onEnter,updKokozo,STN};
+if(typeof module!=="undefined")module.exports={newBattle,runTurn,aiAct,aiReplace,cur,alive,TEAMS,MV,setRNG:f=>RNG=f,doSwitch,onEnter,updKokozo,STN,ITEMS};
 </script>
 
 <script>
@@ -684,7 +760,7 @@ function drawMenu(){const s=B.sides[0],m=cur(s),need=m.fainted;$("menu").hidden=
  const p=$("pane");
  if(tab==="fight"){const lk=lockOf(m);p.innerHTML=m.moves.map(n=>{const x=MV[n];
    const info=`${ty(x.type)}<span>${CATN[x.cat]}</span>${x.pow?`<span>威力${x.pow}</span>`:""}${x.acc>100?"<span>必中</span>":x.acc<100?`<span>命中${x.acc}</span>`:""}${x.pri?`<span>優先${x.pri>0?"+":""}${x.pri}</span>`:""}`;
-   return `<button class="mv" data-mv="${n}" style="--c:${TC[x.type]}"${lk&&lk!==n?" disabled":""}><span class="mn">${n}</span><span class="mi">${info}</span><span class="mf">${fxNote(x)}</span></button>`}).join("")}
+   return `<button class="mv" data-mv="${n}" style="--c:${TC[x.type]}"${(lk&&lk!==n)||(m.item==="とつげきチョッキ"&&x.cat==="st")?" disabled":""}><span class="mn">${n}</span><span class="mi">${info}</span><span class="mf">${fxNote(x)}</span></button>`}).join("")}
  if(tab==="party"){p.innerHTML=s.team.map((x,j)=>{const on=j===s.act&&!x.fainted;const dis=x.fainted||j===s.act;
    const sub=x.fainted?"ひんし":on?"場に出ている":[x.status?STN[x.status]:"",x.lastHit?`${x.lastHit.w}＠${x.lastHit.at}`:"ダメージなし"].filter(Boolean).join("　");
    return `<button class="card${on?" on":""}" data-sw="${j}"${dis?" disabled":""}><span class="dot" style="--c:${TC[x.types[0]]};width:30px;height:30px"></span><span class="t"><b>${x.name}</b><small>${x.types.map(t=>TN[t]).join("・")}${x.role?"　『"+x.role+"』":""}　${x.item}</small><small>${sub}</small></span></button>`}).join("")
@@ -755,6 +831,7 @@ function moveGroups(types){const all=Object.values(MV),own=types.filter(Boolean)
   ["積み技",all.filter(v=>v.cat==="st"&&fxs(v).some(t=>t.startsWith("up:")))],["状態異常にする技",all.filter(v=>v.cat==="st"&&(STK.some(k=>fxArg(v,k))||fxArg(v,"cnf")))],["守り・回復",all.filter(v=>hasFx(v,"protect")||hasFx(v,"heal"))]];
  TYPES.filter(t=>!own.includes(t)).forEach(t=>g.push([`そのほかの攻撃（${TN[t]}）`,atk.filter(v=>v.type===t&&v.pri<=0)]));
  return g.filter(x=>x[1].length).map(([k,v])=>[k,v.map(x=>x.name)])}
+function itemGroups(){const g={};ITEMS.forEach(x=>{(g[ITEMD[x][0]]=g[ITEMD[x][0]]||[]).push(x)});return Object.entries(g)}
 function drawB(){const sh=CT.shi;$("shi").innerHTML=sh?Object.entries(sh).map(([k,v])=>`<span>${k}：${v}</span>`).join(""):"<span>まだ振っていません</span>";
  if(sh){const type={指示:"指示型",育成:"育成型",統率:"統率型",能力:"能力型"}[Object.keys(sh).find(k=>sh[k]==="A")];
   $("derived").textContent=`${type}。レベルは全員Lv${LV[sh["育成"]]}。図鑑${{C:1,B:2,A:3}[sh["指示"]]}回、六令は${{C:"熟達",B:"全開か熟達（一括）",A:"混成"}[sh["指示"]]}。『役割』は${{C:"基本の4つ",B:"基本の4つ＋『追加役割』1体",A:"9つ"}[sh["統率"]]}。『専用』は${{C:3,B:"4〜5",A:6}[sh["能力"]]}体まで（このバトルではまだ動きません）。`}
@@ -769,7 +846,7 @@ function drawB(){const sh=CT.shi;$("shi").innerHTML=sh?Object.entries(sh).map(([
   ${SK.map(k=>`<div class="meter"><span>${SN[k]}</span><input type="range" min="10" max="230" step="5" value="${m.b[k]}" data-i="${i}" data-f="b_${k}" aria-label="${SN[k]}"><b>${rankOf(m.b[k])} ${m.b[k]}</b></div>`).join("")}
   <div class="sum${sum!==BUDGET[i]?" bad":""}">合計 ${sum} / ${BUDGET[i]}</div>
   <div class="two">${[0,1,2,3].map(msel).join("")}</div>
-  <div class="two"><select data-i="${i}" data-f="item">${ITEMS.map(x=>`<option${x===m.item?" selected":""}>${x}</option>`).join("")}</select>
+  <div class="two"><select data-i="${i}" data-f="item">${itemGroups().map(([g,ns])=>`<optgroup label="${g||"なし"}">${ns.map(x=>`<option value="${x}"${x===m.item?" selected":""}>${x}${ITEMD[x][1]&&x!=="なし"?"（"+ITEMD[x][1]+"）":""}</option>`).join("")}</optgroup>`).join("")}</select>
   <select data-i="${i}" data-f="role">${rolesFor(i).map(r=>`<option value="${r}"${r===m.role?" selected":""}>${r||"『役割』なし"}</option>`).join("")}</select></div>`;
   box.appendChild(d)});}
 $("mons").addEventListener("input",e=>{const t=e.target,i=+t.dataset.i,f=t.dataset.f;if(f===undefined)return;const m=CT.mons[i];
