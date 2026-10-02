@@ -1,0 +1,160 @@
+<title>シンオウ・ダメージ計算</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* layout: 2つのカード（攻める側・受ける側）を並べ、下に図鑑風の結果パネル */
+:root{
+  --bg:#eef1f4; --panel:#ffffff; --ink:#1d2430; --sub:#5b6676; --line:#cfd6df;
+  --accent:#2f6fb3; --accent-ink:#ffffff; --warn:#b5462f; --good:#2c7a52;
+  --dex:#16314f; --dex-ink:#e8f1fb; --dex-sub:#9fb6cf;
+  --f-display:"Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --f-body:"Zen Kaku Gothic New", "Hiragino Sans", "Meiryo", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12161c; --panel:#1b212a; --ink:#e3e8ef; --sub:#98a3b3; --line:#2e3744;
+  --accent:#6aa5e6; --accent-ink:#0d1520; --warn:#e07a62; --good:#5fbf8b;
+  --dex:#0c1a2b; --dex-ink:#e3eefa; --dex-sub:#7f98b3; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12161c; --panel:#1b212a; --ink:#e3e8ef; --sub:#98a3b3; --line:#2e3744;
+  --accent:#6aa5e6; --accent-ink:#0d1520; --warn:#e07a62; --good:#5fbf8b;
+  --dex:#0c1a2b; --dex-ink:#e3eefa; --dex-sub:#7f98b3; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6}
+.wrap{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:24px 48px}
+h1{font-family:var(--f-display);font-weight:900;font-size:1.6rem;margin:0 0 4px;text-wrap:balance}
+.lead{color:var(--sub);margin:0 0 20px;max-width:62ch}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:720px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
+.card h2{font-family:var(--f-display);font-size:1.05rem;margin:0 0 12px;display:flex;gap:8px;align-items:center}
+.tag{font-size:.72rem;letter-spacing:.06em;padding:2px 8px;border-radius:99px;background:var(--accent);color:var(--accent-ink)}
+.tag.def{background:var(--sub);color:var(--panel)}
+.rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px}
+.rows .full{grid-column:1/-1}
+label{display:flex;flex-direction:column;gap:4px;font-size:.82rem;color:var(--sub);min-width:0}
+input,select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:6px 8px;width:100%;box-sizing:border-box}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.check{flex-direction:row;align-items:center;gap:8px;color:var(--ink)}
+.check input{width:auto}
+.stat{font-family:var(--f-mono);font-size:.82rem;color:var(--sub)}
+.dex{margin-top:16px;background:var(--dex);color:var(--dex-ink);border-radius:12px;padding:18px 20px}
+.dex .row{display:flex;flex-wrap:wrap;gap:18px 32px;align-items:baseline}
+.word{font-family:var(--f-display);font-weight:900;font-size:1.7rem}
+.at{font-family:var(--f-mono);font-size:1.3rem;color:var(--dex-ink)}
+.k{color:var(--dex-sub);font-size:.78rem;letter-spacing:.06em;display:block}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.bar{height:10px;border-radius:99px;background:rgba(255,255,255,.12);margin-top:14px;position:relative;overflow:hidden}
+.bar span{position:absolute;top:0;bottom:0;background:var(--dex-sub)}
+.bar span.max{background:var(--dex-ink);opacity:.35}
+.note{color:var(--dex-sub);font-size:.82rem;margin-top:12px}
+.sample{font-size:.8rem;color:var(--sub);margin-top:10px}
+details{margin-top:16px;color:var(--sub);font-size:.85rem}
+summary{cursor:pointer}
+table{border-collapse:collapse;font-size:.82rem}
+td,th{padding:3px 10px;border-bottom:1px solid var(--line);text-align:left}
+</style>
+
+<div class="wrap">
+  <h1>シンオウ・ダメージ計算</h1>
+  <p class="lead">図鑑のランクから能力値を出して、1発のダメージを原典の言葉と「＠」で表示します。式は第五世代のダメージ式、ランクと倍率はルールブック第1版の決まりどおりです。最初は例として、ガッシュ（Lv80）の「10まんボルト」をLv80の相手に撃った場面が入っています。</p>
+
+  <div class="grid">
+    <section class="card" aria-label="攻める側">
+      <h2><span class="tag">攻める側</span>技を出すポケモン</h2>
+      <div class="rows">
+        <label>レベル<input id="aLv" type="number" min="1" max="200" value="80"></label>
+        <label>技の分類<select id="cat"><option value="sp">特殊（特攻→特防）</option><option value="ph">物理（攻撃→防御）</option></select></label>
+        <label>攻撃側の能力のランク<select id="aRank"></select></label>
+        <label>Sのときの種族値<input id="aS" type="number" min="200" value="210"></label>
+        <label>ランク変化（−6〜+6）<input id="aStage" type="number" min="-6" max="6" value="0"></label>
+        <label>能力の強化（倍率）<input id="aBoost" type="number" step="0.01" min="0" value="1"></label>
+        <label>技の威力<input id="pow" type="number" min="1" value="90"></label>
+        <label>威力の倍率（持ち物・ポテンシャル）<input id="powMul" type="number" step="0.01" min="0" value="1"></label>
+        <label>タイプ相性<select id="eff"><option>0</option><option>0.25</option><option>0.5</option><option selected>1</option><option>2</option><option>4</option></select></label>
+        <label>そのほかの倍率（壁・天候など）<input id="other" type="number" step="0.01" min="0" value="1"></label>
+        <label class="check"><input id="stab" type="checkbox" checked>タイプ一致（1.5倍）</label>
+        <label class="check"><input id="crit" type="checkbox">急所（2倍。相手の上昇・強化を無視）</label>
+      </div>
+      <p class="stat" id="aStat"></p>
+    </section>
+
+    <section class="card" aria-label="受ける側">
+      <h2><span class="tag def">受ける側</span>技を受けるポケモン</h2>
+      <div class="rows">
+        <label>レベル<input id="dLv" type="number" min="1" max="200" value="80"></label>
+        <label>体力のランク<select id="hRank"></select></label>
+        <label>防御側の能力のランク<select id="dRank"></select></label>
+        <label>Sのときの種族値<input id="dS" type="number" min="200" value="210"></label>
+        <label>ランク変化（−6〜+6）<input id="dStage" type="number" min="-6" max="6" value="0"></label>
+        <label>能力の強化（倍率）<input id="dBoost" type="number" step="0.01" min="0" value="1"></label>
+        <label class="full">今の残り体力（％）<input id="hpNow" type="number" min="1" max="100" value="100"></label>
+      </div>
+      <p class="stat" id="dStat"></p>
+    </section>
+  </div>
+
+  <section class="dex" aria-live="polite">
+    <div class="row">
+      <div><span class="k">表示</span><span class="word" id="word">―</span></div>
+      <div><span class="k">あと何発</span><span class="at" id="at">＠―</span></div>
+      <div><span class="k">最大体力に対して</span><span class="num" id="pct">―</span></div>
+      <div><span class="k">ダメージ（実数）</span><span class="num" id="dmg">―</span></div>
+    </div>
+    <div class="bar" aria-hidden="true"><span class="max" id="barMax"></span><span id="barMin"></span></div>
+    <p class="note" id="note"></p>
+  </section>
+
+  <details>
+    <summary>計算のしかた</summary>
+    <p>能力値: 体力＝種族値×2×Lv/100＋Lv＋10、ほか＝種族値×2×Lv/100＋5（個体値・努力値・性格補正なし）。ランクの「+」は幅の最大、「-」は最小、素のランクは中央あたりの値の幅で計算し、結果は全体の幅で出します。</p>
+    <p>ダメージ: ⌊⌊⌊2×Lv/5＋2⌋×威力×A/D⌋/50⌋＋2 に、急所・乱数（0.85〜1.00）・タイプ一致・相性・そのほかの倍率を掛けます。倍率は全て掛け算です。</p>
+    <table><tr><th>表示</th><th>最大体力の</th></tr>
+      <tr><td>微々たる</td><td>1割未満</td></tr><tr><td>小さな</td><td>1〜2割</td></tr><tr><td>まずまずの</td><td>2〜3.5割</td></tr><tr><td>大きな</td><td>3.5〜6割</td></tr><tr><td>深刻な</td><td>6〜8割</td></tr><tr><td>特大の</td><td>8〜10割</td></tr><tr><td>極大の</td><td>10割〜（1.3倍未満）</td></tr><tr><td>測定不能の</td><td>1.3倍以上</td></tr></table>
+  </details>
+</div>
+
+<script>
+const RANKS=[
+ ["S","S"],["AAA+",195],["AAA",[175,190]],["AAA-",170],["AA+",165],["AA",[145,160]],["AA-",140],
+ ["A+",135],["A",[115,130]],["A-",110],["B+",105],["B",[95,100]],["B-",90],
+ ["C+",85],["C",[65,80]],["C-",60],["D+",55],["D",[45,50]],["D-",40],["E+",35],["E",[10,30]],["E-",1]];
+const $=id=>document.getElementById(id);
+function fill(sel,def){for(const [n] of RANKS){const o=document.createElement("option");o.value=n;o.textContent=n;if(n===def)o.selected=true;sel.appendChild(o)}}
+fill($("aRank"),"A+");fill($("dRank"),"B");fill($("hRank"),"B");
+function base(r,s){const v=RANKS.find(x=>x[0]===r)[1];if(v==="S")return[s,s];return Array.isArray(v)?v:[v,v]}
+const stat=(b,lv)=>Math.floor(b*2*lv/100)+5, hp=(b,lv)=>Math.floor(b*2*lv/100)+lv+10;
+const stageMul=n=>n>=0?(2+n)/2:2/(2-n);
+const num=id=>parseFloat($(id).value)||0;
+function word(p){if(p<0.1)return"微々たるダメージ";if(p<0.2)return"小さなダメージ";if(p<0.35)return"まずまずのダメージ";if(p<0.6)return"大きなダメージ";if(p<0.8)return"深刻なダメージ";if(p<1)return"特大のダメージ";if(p<1.3)return"極大のダメージ";return"測定不能のダメージ"}
+function dmg(lv,pow,A,D,mods,r){let d=Math.floor(Math.floor(Math.floor(2*lv/5+2)*pow*A/D)/50)+2;return Math.floor(d*mods*r)}
+function calc(){
+  const aLv=num("aLv"),dLv=num("dLv"),crit=$("crit").checked;
+  const [ab1,ab2]=base($("aRank").value,num("aS")),[db1,db2]=base($("dRank").value,num("dS")),[hb1,hb2]=base($("hRank").value,200);
+  let aSt=num("aStage"),dSt=num("dStage"),aBo=num("aBoost"),dBo=num("dBoost");
+  if(crit){if(aSt<0)aSt=0;if(dSt>0)dSt=0;if(dBo>1)dBo=1}
+  const A1=stat(ab1,aLv)*stageMul(aSt)*aBo,A2=stat(ab2,aLv)*stageMul(aSt)*aBo;
+  const D1=stat(db1,dLv)*stageMul(dSt)*dBo,D2=stat(db2,dLv)*stageMul(dSt)*dBo;
+  const H1=hp(hb1,dLv),H2=hp(hb2,dLv);
+  const pow=Math.floor(num("pow")*num("powMul"));
+  const mods=(crit?2:1)*($("stab").checked?1.5:1)*parseFloat($("eff").value)*num("other");
+  const lo=dmg(aLv,pow,Math.floor(A1),Math.floor(D2),mods,0.85), hi=dmg(aLv,pow,Math.floor(A2),Math.floor(D1),mods,1);
+  const pLo=lo/H2,pHi=hi/H1;
+  $("aStat").textContent=`能力値: ${Math.floor(A1)}${A1!==A2?"〜"+Math.floor(A2):""}（ランク・強化込み）`;
+  $("dStat").textContent=`体力: ${H1}${H1!==H2?"〜"+H2:""}　防御側の能力値: ${Math.floor(D1)}${D1!==D2?"〜"+Math.floor(D2):""}`;
+  $("dmg").textContent=`${lo}〜${hi}`;
+  $("pct").textContent=`${(pLo*100).toFixed(1)}〜${(pHi*100).toFixed(1)}％`;
+  const wLo=word(pLo),wHi=word(pHi);
+  $("word").textContent=wLo===wHi?wLo:`${wLo}〜${wHi.replace("ダメージ","")}`;
+  const now=num("hpNow")/100;
+  const left=(p)=>{const r=now-p;if(r<=0)return 0;return Math.ceil(r/p)};
+  const atHi=left(pHi),atLo=left(pLo);
+  if(now<=pHi && now>pLo) $("at").textContent=`倒れる〜＠${atLo}`;
+  else if(now<=pLo) $("at").textContent="倒れる";
+  else $("at").textContent=atHi===atLo?`＠${atHi}`:`＠${atHi}〜${atLo}`;
+  $("barMin").style.width=Math.min(100,pLo*100)+"%";
+  $("barMax").style.width=Math.min(100,pHi*100)+"%";
+  $("note").textContent=crit?"急所: 攻撃側のランク低下と、受ける側のランク上昇・強化を無視しています。":"＠は、今の残り体力から同じダメージをあと何発受けたら倒れるかの目安です。";
+}
+document.querySelectorAll("input,select").forEach(e=>e.addEventListener("input",calc));
+calc();
+</script>

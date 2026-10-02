@@ -1,6 +1,6 @@
 # ルールブック（第1版）
 
-原典の世界で、自分のチームを組んでバトルを遊ぶためのルール。舞台は「C」ランクの終盤。決めごとの経緯は [notes/game-design.md](../notes/game-design.md)、細かい仕様の根拠は [world/battle-rules.md](../world/battle-rules.md) と [world/pro-trainer.md](../world/pro-trainer.md)。
+原典の世界で、自分のチームを組んでバトルを遊ぶためのルール。ダメージ計算は [damage-calc.html](damage-calc.html)（公開ページ: https://claude.ai/artifact/4fJQj7Djhx89o2UkZELKsR ）。舞台は「C」ランクの終盤。決めごとの経緯は [notes/game-design.md](../notes/game-design.md)、細かい仕様の根拠は [world/battle-rules.md](../world/battle-rules.md) と [world/pro-trainer.md](../world/pro-trainer.md)。
 
 ---
 
