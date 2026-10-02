@@ -60,6 +60,22 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
 .log .me{color:var(--log-ink)} .log .foe{color:var(--log-ink)}
 .log .spk{font-weight:700}
 .note{font-size:.8rem;color:var(--sub);margin-top:10px}
+.builder{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+.builder h2{font-family:var(--f-display);font-size:1.05rem;margin:0 0 10px}
+.tr{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end}
+.shi{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.shi span{font-family:var(--f-mono);font-size:.8rem;padding:2px 10px;border-radius:6px;background:var(--bg);border:1px solid var(--line)}
+.derived{font-size:.82rem;color:var(--sub);margin:4px 0 12px}
+.mons{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.mon{border:1px solid var(--line);border-radius:8px;padding:10px;min-width:0;background:var(--bg)}
+.mon .hd{display:flex;gap:8px;align-items:center;justify-content:space-between;font-size:.8rem;color:var(--sub);margin-bottom:6px}
+.mon input[type=text]{width:100%;box-sizing:border-box}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.meter{display:grid;grid-template-columns:3.2em 1fr 4.6em;gap:6px;align-items:center;font-size:.8rem;margin-top:4px}
+.meter input{width:100%;padding:0}
+.meter b{font-family:var(--f-mono);font-weight:500;text-align:right}
+.sum{font-family:var(--f-mono);font-size:.78rem;margin-top:6px}
+.sum.bad{color:var(--foe)}
 </style>
 
 <div class="wrap">
@@ -73,7 +89,23 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
     <label>相手の「指示」<select id="foeOrder"><option>C</option><option selected>B</option><option>A</option></select></label>
     <label>自分の六令<select id="myMode"><option value="jk">熟達</option><option value="zk">全開（指示B以上）</option><option value="mix">混成（指示A）</option></select></label>
     <button class="primary" id="start">試合開始</button>
+    <button id="openB">チームを作る</button>
   </div>
+
+  <section class="builder" id="builder" hidden>
+    <h2>チームを作る</h2>
+    <div class="tr">
+      <label>チーム名<input id="tName" type="text" value="オリジナル"></label>
+      <label>トレーナー名<input id="tTrainer" type="text" value="わたし"></label>
+      <button id="roll">資質のダイスを振る</button>
+    </div>
+    <div class="shi" id="shi"></div>
+    <div class="derived" id="derived"></div>
+    <label>『固有』（効果のメモ。バトルではまだ動きません）<input id="koyu" type="text" placeholder="例: 味方の『役割』の発動時、T終了時まで全体の場を「エレキフィールド」にする"></label>
+    <p class="note">能力はメーター式です。1つを上げると、ほかの5つが少しずつ下がって、合計種族値の枠に収まります。「試合に出す」に印を付けた3体（印がなければ上から3体）で戦います。</p>
+    <div class="mons" id="mons"></div>
+    <div class="go"><button class="primary" id="save">保存してバトルに使う</button><span class="meta" id="saveMsg"></span></div>
+  </section>
 
   <div class="field">
     <section class="side me" id="meSide"></section>
@@ -168,7 +200,7 @@ const statF=(b,lv)=>Math.floor(b*2*lv/100)+5, hpF=(b,lv)=>Math.floor(b*2*lv/100)
 const stMul=n=>n>=0?(2+n)/2:2/(2-n);
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 const LV={C:70,B:75,A:80};
-function build(t,lv){return t.mons.map(m=>{const b={};for(const k of "habcds")b[k]=baseOf(m.r[k]);
+function build(t,lv){return t.mons.map(m=>{const b={};for(const k of "habcds")b[k]=m.b?m.b[k]:baseOf(m.r[k]);
  const st={a:statF(b.a,lv),b:statF(b.b,lv),c:statF(b.c,lv),d:statF(b.d,lv),s:statF(b.s,lv)};const mh=hpF(b.h,lv);
  return {...m,lv,base:b,st,maxhp:mh,hp:mh,stg:{a:0,b:0,c:0,d:0,s:0},fainted:false,lock:null,protectN:0,tag:{},firstOut:true}})}
 function eff(mt,dts){let e=1;for(const t of dts){const v=(CH[mt]||{})[t];if(v!==undefined)e*=v}return e}
@@ -330,7 +362,8 @@ function render(keep=true){const prev=keep?{sw:$("sw").value,order:$("order").va
 function start(){
  const mt=TEAMS[$("myTeam").value],ft=TEAMS[$("foeTeam").value];let mode=$("myMode").value;const mo=$("myOrder").value;
  if(mo==="C")mode="jk";if(mo==="B"&&mode==="mix")mode="zk";
- B=newBattle({sides:[{trainer:mt.trainer,team:mt,order:mo,mode,ikusei:"C"},{trainer:ft.trainer,team:ft,order:$("foeOrder").value,mode:$("foeOrder").value==="C"?"jk":"jk",ikusei:"C",ai:true}]});
+ const fo=ft.shi?ft.shi["指示"]:$("foeOrder").value;
+ B=newBattle({sides:[{trainer:mt.trainer,team:mt,order:mo,mode,ikusei:mt.shi?mt.shi["育成"]:"C"},{trainer:ft.trainer,team:ft,order:fo,mode:fo==="C"?"jk":(fo==="A"?"mix":"zk"),ikusei:ft.shi?ft.shi["育成"]:"C",ai:true}]});
  B.log.push({cls:"sys",txt:`◎―――――${ft.trainer}が勝負を仕掛けて来た！（3vs3）`});
  onEnter(B,0,cur(B.sides[0]));onEnter(B,1,cur(B.sides[1]));cur(B.sides[1]).seen=true;updKokozo(B);sel=null;render(false);}
 $("start").onclick=start;
@@ -345,5 +378,60 @@ $("exec").onclick=()=>{
  B.sides[1].team.forEach(x=>{if(B.sides[1].team.indexOf(x)===B.sides[1].act)x.seen=true});
  sel=null;render(false);};
 function afterReplace(){updKokozo(B)}
+
+/* ===== チームを作る ===== */
+const BUDGET=[450,500,500,550,550,600],SK=["h","a","b","c","d","s"],SN={h:"体力",a:"攻撃",b:"防御",c:"特攻",d:"特防",s:"素早"};
+const ROLE_BASE=["","不動のエース","エースアシストα","エースキラーα","鬼人","魔術師","狂走"];
+function rankOf(v){if(v>=200)return"S";for(const [r,[lo,hi]] of Object.entries(RANKV)){if(r==="S")continue;if(v===lo&&lo===hi)return r;}
+ for(const [r,[lo,hi]] of Object.entries(RANKV)){if(r==="S"||lo===hi)continue;if(v>=lo&&v<=hi)return r}
+ if(v>195)return"AAA+";return"E-"}
+function blankMon(i){const per=Math.floor(BUDGET[i]/6/5)*5;const b={};SK.forEach(k=>b[k]=per);b.h+=BUDGET[i]-per*6;
+ return {name:`ポケモン${i+1}`,types:["ノ",""],b,moves:["すてみタックル","でんこうせっか","まもる","つるぎのまい"],item:"なし",role:"",use:i<3}}
+let CT=null;
+function newCT(){CT={name:$("tName").value,trainer:$("tTrainer").value,shi:null,mons:BUDGET.map((_,i)=>blankMon(i))}}
+function roll(){const ks=["指示","育成","統率","能力"];const a=ks.splice(Math.floor(Math.random()*4),1)[0];const b=ks.splice(Math.floor(Math.random()*3),1)[0];
+ CT.shi={[a]:"A",[b]:"B",[ks[0]]:"C",[ks[1]]:"C"};drawB()}
+function rolesFor(i){const t=CT.shi?CT.shi["統率"]:"C";let r=[...ROLE_BASE];if(t==="A")r.push("二枚看板");
+ if(t==="B"){const other=CT.mons.some((m,j)=>j!==i&&m.role==="二枚看板");if(!other)r.push("二枚看板")}return r}
+function meterMove(i,k,v){const m=CT.mons[i];v=Math.round(v/5)*5;let d=v-m.b[k];m.b[k]=v;
+ let others=SK.filter(x=>x!==k),guard=0;while(d!==0&&guard++<400){const step=d>0?-5:5;const cand=others.filter(x=>step<0?m.b[x]>10:m.b[x]<230);if(!cand.length)break;
+  cand.sort((p,q)=>step<0?m.b[q]-m.b[p]:m.b[p]-m.b[q]);m.b[cand[0]]+=step;d+=step;}
+ if(d!==0)m.b[k]-=d;}
+function drawB(){const sh=CT.shi;$("shi").innerHTML=sh?Object.entries(sh).map(([k,v])=>`<span>${k}：${v}</span>`).join(""):"<span>まだ振っていません</span>";
+ if(sh){const type={指示:"指示型",育成:"育成型",統率:"統率型",能力:"能力型"}[Object.keys(sh).find(k=>sh[k]==="A")];
+  $("derived").textContent=`${type}。レベルは全員Lv${LV[sh["育成"]]}。図鑑${{C:1,B:2,A:3}[sh["指示"]]}回、六令は${{C:"熟達",B:"全開か熟達（一括）",A:"混成"}[sh["指示"]]}。『役割』は${{C:"基本の4つ",B:"基本の4つ＋『追加役割』1体",A:"9つ"}[sh["統率"]]}。『専用』は${{C:3,B:"4〜5",A:6}[sh["能力"]]}体まで（このバトルではまだ動きません）。`}
+ else $("derived").textContent="資質のダイスを振ると、レベル・図鑑の回数・使える『役割』が決まります。";
+ const box=$("mons");box.innerHTML="";
+ CT.mons.forEach((m,i)=>{const d=document.createElement("div");d.className="mon";const sum=SK.reduce((a,k)=>a+m.b[k],0);
+  const tsel=(v,id)=>`<select data-i="${i}" data-f="${id}">${id==="t2"?'<option value="">（なし）</option>':""}${TYPES.map(t=>`<option value="${t}"${t===v?" selected":""}>${TN[t]}</option>`).join("")}</select>`;
+  const msel=(j)=>`<select data-i="${i}" data-f="m${j}">${Object.keys(MV).map(n=>`<option${n===m.moves[j]?" selected":""}>${n}</option>`).join("")}</select>`;
+  d.innerHTML=`<div class="hd"><span>枠 合計${BUDGET[i]}</span><label class="check" style="flex-direction:row;gap:4px;color:var(--ink)"><input type="checkbox" data-i="${i}" data-f="use"${m.use?" checked":""}>試合に出す</label></div>
+  <input type="text" data-i="${i}" data-f="name" value="${m.name.replace(/"/g,"&quot;")}" aria-label="名前">
+  <div class="two">${tsel(m.types[0],"t1")}${tsel(m.types[1],"t2")}</div>
+  ${SK.map(k=>`<div class="meter"><span>${SN[k]}</span><input type="range" min="10" max="230" step="5" value="${m.b[k]}" data-i="${i}" data-f="b_${k}" aria-label="${SN[k]}"><b>${rankOf(m.b[k])} ${m.b[k]}</b></div>`).join("")}
+  <div class="sum${sum!==BUDGET[i]?" bad":""}">合計 ${sum} / ${BUDGET[i]}</div>
+  <div class="two">${[0,1,2,3].map(msel).join("")}</div>
+  <div class="two"><select data-i="${i}" data-f="item">${ITEMS.map(x=>`<option${x===m.item?" selected":""}>${x}</option>`).join("")}</select>
+  <select data-i="${i}" data-f="role">${rolesFor(i).map(r=>`<option value="${r}"${r===m.role?" selected":""}>${r||"『役割』なし"}</option>`).join("")}</select></div>`;
+  box.appendChild(d)});}
+$("mons").addEventListener("input",e=>{const t=e.target,i=+t.dataset.i,f=t.dataset.f;if(f===undefined)return;const m=CT.mons[i];
+ if(f.startsWith("b_")){meterMove(i,f.slice(2),+t.value);updMon(i);return}
+ if(f==="name"){m.name=t.value;return}if(f==="t1")m.types[0]=t.value;if(f==="t2")m.types[1]=t.value;if(f[0]==="m"&&f.length===2)m.moves[+f[1]]=t.value;
+ if(f==="item")m.item=t.value;if(f==="role")m.role=t.value;if(f==="use")m.use=t.checked;drawB()});
+function updMon(i){const m=CT.mons[i];SK.forEach(k=>{const el=document.querySelector(`[data-i="${i}"][data-f="b_${k}"]`);if(!el)return;if(+el.value!==m.b[k])el.value=m.b[k];el.nextElementSibling.textContent=`${rankOf(m.b[k])} ${m.b[k]}`});
+ const sum=SK.reduce((a,k)=>a+m.b[k],0);const box=document.querySelectorAll("#mons .mon")[i].querySelector(".sum");box.textContent=`合計 ${sum} / ${BUDGET[i]}`;box.classList.toggle("bad",sum!==BUDGET[i])}
+$("roll").onclick=roll;
+$("openB").onclick=()=>{$("builder").hidden=!$("builder").hidden;if(!CT){newCT();drawB()}};
+function loadSaved(){try{return JSON.parse(localStorage.getItem("tankendo-teams")||"[]")}catch(e){return[]}}
+function registerSaved(){for(const t of loadSaved()){const key="★"+t.name;if(TEAMS[key])continue;TEAMS[key]=toTeam(t);$("myTeam").add(new Option(key,key));$("foeTeam").add(new Option(key,key))}}
+function toTeam(t){let use=t.mons.filter(m=>m.use);if(use.length<3)use=t.mons.slice(0,3);use=use.slice(0,3);
+ return {trainer:t.trainer,shi:t.shi,mons:use.map(m=>({name:m.name,types:m.types.filter(Boolean),b:m.b,moves:m.moves,item:m.item,role:m.role}))}}
+$("save").onclick=()=>{if(!CT.shi){$("saveMsg").textContent="先に資質のダイスを振ってください。";return}
+ CT.name=$("tName").value||"オリジナル";CT.trainer=$("tTrainer").value||"わたし";CT.koyu=$("koyu").value;
+ const all=loadSaved().filter(t=>t.name!==CT.name);all.push(JSON.parse(JSON.stringify(CT)));try{localStorage.setItem("tankendo-teams",JSON.stringify(all))}catch(e){}
+ const key="★"+CT.name;TEAMS[key]=toTeam(CT);if(![...$("myTeam").options].some(o=>o.value===key)){$("myTeam").add(new Option(key,key));$("foeTeam").add(new Option(key,key))}
+ $("myTeam").value=key;$("myTeam").dispatchEvent(new Event("change"));$("saveMsg").textContent=`「${key}」を保存しました。上の「試合開始」で使えます（このブラウザだけに保存されます）。`};
+$("myTeam").addEventListener("change",()=>{const t=TEAMS[$("myTeam").value];if(t.shi){$("myOrder").value=t.shi["指示"]}});
+registerSaved();
 start();
 </script>
