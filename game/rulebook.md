@@ -2,6 +2,8 @@
 
 原典の世界で、自分のチームを組んでバトルを遊ぶためのルール。ダメージ計算は [damage-calc.html](damage-calc.html)（公開ページ: https://claude.ai/artifact/4fJQj7Djhx89o2UkZELKsR ）。舞台は「C」ランクの終盤。決めごとの経緯は [notes/game-design.md](../notes/game-design.md)、細かい仕様の根拠は [world/battle-rules.md](../world/battle-rules.md) と [world/pro-trainer.md](../world/pro-trainer.md)。
 
+遊べる最小版は [battle.html](battle.html)（公開ページ: https://claude.ai/artifact/UrANGHHpqSN2n2WmMQUCNv ）。3vs3、例のチーム2組、技は約50種、『役割』は『不動のエース』『二枚看板』『エースアシストα』『エースキラーα』と先発系だけ。
+
 ---
 
 ## 1. トレーナーを作る

@@ -1,0 +1,348 @@
+<title>探検堂バトルシミュレーター</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* layout: 上に両陣の場（自陣・敵陣の状態表示）、中央に指示パネル、下にスレ風の実況ログ */
+:root{
+  --bg:#edf0f3; --panel:#ffffff; --ink:#1c232e; --sub:#5d6878; --line:#cfd6df;
+  --accent:#2f6fb3; --accent-ink:#ffffff; --foe:#a8452f; --good:#2c7a52; --warn:#b07a12;
+  --log:#16222f; --log-ink:#e6eef7; --log-sub:#8ea3ba; --log-sys:#ffd27a;
+  --f-display:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  --f-body:"Zen Kaku Gothic New","Hiragino Sans","Meiryo",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#11151b; --panel:#1a2029; --ink:#e3e8ef; --sub:#97a2b2; --line:#2d3643;
+  --accent:#6aa5e6; --accent-ink:#0d1520; --foe:#e08467; --good:#5fbf8b; --warn:#e2b04c;
+  --log:#0b131c; --log-ink:#e3edf8; --log-sub:#7d93ab; --log-sys:#f2c766; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11151b; --panel:#1a2029; --ink:#e3e8ef; --sub:#97a2b2; --line:#2d3643;
+  --accent:#6aa5e6; --accent-ink:#0d1520; --foe:#e08467; --good:#5fbf8b; --warn:#e2b04c;
+  --log:#0b131c; --log-ink:#e3edf8; --log-sub:#7d93ab; --log-sys:#f2c766; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:20px 48px}
+h1{font-family:var(--f-display);font-weight:900;font-size:1.5rem;margin:0 0 2px}
+.lead{color:var(--sub);margin:0 0 14px;max-width:70ch;font-size:.9rem}
+.setup{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:end;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+label{display:flex;flex-direction:column;gap:3px;font-size:.78rem;color:var(--sub)}
+select,input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 12px}
+button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
+button:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.field{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.field{grid-template-columns:1fr}}
+.side{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
+.side h2{font-family:var(--f-display);font-size:1rem;margin:0 0 6px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.side.me h2 span.who{color:var(--accent)} .side.foe h2 span.who{color:var(--foe)}
+.active{font-family:var(--f-display);font-weight:700;font-size:1.15rem}
+.meta{font-size:.8rem;color:var(--sub)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chip{font-size:.72rem;padding:1px 8px;border-radius:99px;border:1px solid var(--line);color:var(--sub)}
+.chip.on{border-color:var(--warn);color:var(--warn)}
+.bench{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.ball{font-size:.75rem;padding:2px 8px;border-radius:6px;background:var(--bg);border:1px solid var(--line)}
+.ball.down{text-decoration:line-through;opacity:.5}
+.dexbox{margin-top:8px;font-family:var(--f-mono);font-size:.76rem;color:var(--sub);white-space:pre-wrap}
+.cmd{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:14px}
+.cmd h3{margin:0 0 8px;font-size:.95rem;font-family:var(--f-display)}
+.moves{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:480px){.moves{grid-template-columns:1fr}}
+.moves button{text-align:left;display:flex;justify-content:space-between;gap:8px}
+.moves button.sel{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.moves small{color:var(--sub);font-family:var(--f-mono)}
+.opts{display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:10px;align-items:end}
+.go{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.log{margin-top:14px;background:var(--log);color:var(--log-ink);border-radius:10px;padding:14px 16px;max-height:460px;overflow:auto;font-size:.88rem}
+.log p{margin:0 0 4px}
+.log .t{color:var(--log-sub);font-family:var(--f-mono);margin-top:10px}
+.log .sys{color:var(--log-sys)}
+.log .me{color:var(--log-ink)} .log .foe{color:var(--log-ink)}
+.log .spk{font-weight:700}
+.note{font-size:.8rem;color:var(--sub);margin-top:10px}
+</style>
+
+<div class="wrap">
+  <h1>探検堂バトルシミュレーター</h1>
+  <p class="lead">ルールブック第1版の最小版です。3vs3で、技・交代・『指令』（六令）・四式・図鑑を選んでターンを回します。体力は数字で出さず、スレと同じく「大きなダメージ！＠2」の形で表示します。チームは例として用意した2組で、データは原典の第一節終わりごろを元にした目安です。</p>
+
+  <div class="setup">
+    <label>自分のチーム<select id="myTeam"></select></label>
+    <label>相手のチーム<select id="foeTeam"></select></label>
+    <label>自分の「指示」<select id="myOrder"><option>C</option><option selected>B</option><option>A</option></select></label>
+    <label>相手の「指示」<select id="foeOrder"><option>C</option><option selected>B</option><option>A</option></select></label>
+    <label>自分の六令<select id="myMode"><option value="jk">熟達</option><option value="zk">全開（指示B以上）</option><option value="mix">混成（指示A）</option></select></label>
+    <button class="primary" id="start">試合開始</button>
+  </div>
+
+  <div class="field">
+    <section class="side me" id="meSide"></section>
+    <section class="side foe" id="foeSide"></section>
+  </div>
+
+  <section class="cmd" id="cmd" hidden>
+    <h3 id="cmdTitle">指示</h3>
+    <div class="moves" id="moves"></div>
+    <div class="opts">
+      <label>交代<select id="sw"><option value="">しない</option></select></label>
+      <label>『指令』<select id="order"><option value="">使わない</option></select></label>
+      <label>四式<select id="shiki"><option value="">使わない</option></select></label>
+      <button id="dex">図鑑で解析</button>
+    </div>
+    <div class="go"><button class="primary" id="exec">指示を出す</button><span class="meta" id="hint"></span></div>
+  </section>
+
+  <div class="log" id="log" aria-live="polite"></div>
+  <p class="note">相手は「自分の型（得意な技で押す、危ないときは交代や四式で受ける）」で動き、「指示」が低いほど判断がぶれます。指示の差1つにつき、高い方に急所ランク+1。「ここぞ！」は3vs3なので残り1体、またはお互いの『エース』の対面で入ります。</p>
+</div>
+
+<script id="engine">
+/* ===== データ ===== */
+const TYPES=["ノ","炎","水","電","草","氷","闘","毒","地","飛","超","虫","岩","霊","龍","悪","鋼","妖"];
+const TN={"ノ":"ノーマル","炎":"ほのお","水":"みず","電":"でんき","草":"くさ","氷":"こおり","闘":"かくとう","毒":"どく","地":"じめん","飛":"ひこう","超":"エスパー","虫":"むし","岩":"いわ","霊":"ゴースト","龍":"ドラゴン","悪":"あく","鋼":"はがね","妖":"フェアリー"};
+const CH={ // 攻撃:{防御:倍率}
+"ノ":{"岩":.5,"霊":0,"鋼":.5},
+"炎":{"炎":.5,"水":.5,"草":2,"氷":2,"虫":2,"岩":.5,"龍":.5,"鋼":2},
+"水":{"炎":2,"水":.5,"草":.5,"地":2,"岩":2,"龍":.5},
+"電":{"水":2,"電":.5,"草":.5,"地":0,"飛":2,"龍":.5},
+"草":{"炎":.5,"水":2,"草":.5,"毒":.5,"地":2,"飛":.5,"虫":.5,"岩":2,"龍":.5,"鋼":.5},
+"氷":{"炎":.5,"水":.5,"草":2,"氷":.5,"地":2,"飛":2,"龍":2,"鋼":.5},
+"闘":{"ノ":2,"氷":2,"毒":.5,"飛":.5,"超":.5,"虫":.5,"岩":2,"霊":0,"悪":2,"鋼":2,"妖":.5},
+"毒":{"草":2,"毒":.5,"地":.5,"岩":.5,"霊":.5,"鋼":0,"妖":2},
+"地":{"炎":2,"電":2,"草":.5,"毒":2,"飛":0,"虫":.5,"岩":2,"鋼":2},
+"飛":{"電":.5,"草":2,"闘":2,"虫":2,"岩":.5,"鋼":.5},
+"超":{"闘":2,"毒":2,"超":.5,"悪":0,"鋼":.5},
+"虫":{"炎":.5,"草":2,"闘":.5,"毒":.5,"飛":.5,"超":2,"霊":.5,"悪":2,"鋼":.5,"妖":.5},
+"岩":{"炎":2,"氷":2,"闘":.5,"地":.5,"飛":2,"虫":2,"鋼":.5},
+"霊":{"ノ":0,"超":2,"霊":2,"悪":.5},
+"龍":{"龍":2,"鋼":.5,"妖":0},
+"悪":{"闘":.5,"超":2,"霊":2,"悪":.5,"妖":.5},
+"鋼":{"炎":.5,"水":.5,"電":.5,"氷":2,"岩":2,"鋼":.5,"妖":2},
+"妖":{"炎":.5,"闘":2,"毒":.5,"龍":2,"悪":2,"鋼":.5}};
+// 技: [名前,タイプ,分類(ph/sp/st),威力,命中,優先度,接触,効果]
+const MV={};
+[["10まんボルト","電","sp",90,100,0,0],["かみなり","電","sp",110,70,0,0],["ワイルドボルト","電","ph",90,100,0,1,"recoil4"],
+["しねんのずつき","超","ph",80,90,0,1],["サイコキネシス","超","sp",90,100,0,0],
+["シャドーボール","霊","sp",80,100,0,0],["シャドークロー","霊","ph",70,100,0,1,"crit1"],
+["みずのはどう","水","sp",60,100,0,0],["なみのり","水","sp",90,100,0,0],["ハイドロポンプ","水","sp",110,80,0,0],["アクアテール","水","ph",90,90,0,1],
+["すてみタックル","ノ","ph",120,100,0,1,"recoil3"],["でんこうせっか","ノ","ph",40,100,1,1],["しんそく","ノ","ph",80,100,2,1],["スピードスター","ノ","sp",60,101,0,0],
+["インファイト","闘","ph",120,100,0,1,"drop_bd"],["にどげり","闘","ph",60,100,0,1],["きあいだま","闘","sp",120,70,0,0],
+["じしん","地","ph",100,100,0,0],["だいちのちから","地","sp",90,100,0,0],
+["ストーンエッジ","岩","ph",100,80,0,0,"crit1"],["いわなだれ","岩","ph",75,90,0,0],
+["アイアンヘッド","鋼","ph",80,100,0,1],["ラスターカノン","鋼","sp",80,100,0,0],
+["ドラゴンクロー","龍","ph",80,100,0,1],["りゅうせいぐん","龍","sp",130,90,0,0,"drop_c2"],["げきりん","龍","ph",120,100,0,1],
+["かえんほうしゃ","炎","sp",90,100,0,0],["フレアドライブ","炎","ph",120,100,0,1,"recoil3"],["ニトロチャージ","炎","ph",50,100,0,1,"up_s"],
+["れいとうビーム","氷","sp",90,100,0,0],["つららおとし","氷","ph",85,90,0,0],
+["エナジーボール","草","sp",90,100,0,0],["リーフブレード","草","ph",90,100,0,1,"crit1"],
+["ヘドロばくだん","毒","sp",90,100,0,0],["どくづき","毒","ph",80,100,0,1],
+["ブレイブバード","飛","ph",120,100,0,1,"recoil3"],["エアスラッシュ","飛","sp",75,95,0,0],
+["むしのさざめき","虫","sp",90,100,0,0],["シザークロス","虫","ph",80,100,0,1],
+["あくのはどう","悪","sp",80,100,0,0],["かみくだく","悪","ph",80,100,0,1],["ふいうち","悪","ph",70,100,1,1],
+["ムーンフォース","妖","sp",95,100,0,0],["じゃれつく","妖","ph",90,90,0,1],
+["まもる","ノ","st",0,101,4,0,"protect"],["つるぎのまい","ノ","st",0,101,0,0,"up_a2"],["わるだくみ","悪","st",0,101,0,0,"up_c2"],["りゅうのまい","龍","st",0,101,0,0,"up_as"]
+].forEach(m=>MV[m[0]]={name:m[0],type:m[1],cat:m[2],pow:m[3],acc:m[4],pri:m[5],contact:m[6],fx:m[7]||""});
+const RANKV={"S":[210,210],"AAA+":[195,195],"AAA":[175,190],"AAA-":[170,170],"AA+":[165,165],"AA":[145,160],"AA-":[140,140],"A+":[135,135],"A":[115,130],"A-":[110,110],"B+":[105,105],"B":[95,100],"B-":[90,90],"C+":[85,85],"C":[65,80],"C-":[60,60],"D+":[55,55],"D":[45,50],"D-":[40,40],"E+":[35,35],"E":[10,30],"E-":[1,1]};
+const ROLES={
+ "不動のエース":"「ここぞ！」という時、全能力値が上昇し、技のクリティカル率が上がる。",
+ "二枚看板":"自身の全能力値を強化（1.33倍）し、技が急所に当たりやすくなる。（C+1）",
+ "エースアシストα":"場を離れる時、味方『エース』が最初に繰り出す技の威力を2倍にする。",
+ "エースキラーα":"『エース』に与えるダメージを強化（1.5倍）する。『エース』の「防/特防」の上昇（強化）を無視する。",
+ "鬼人":"先発で場に出ると、「こうげき」が上がる。","魔術師":"先発で場に出ると、「特攻」が上がる。","狂走":"先発で場に出ると、「すばやさ」が上がる。","":"なし"};
+const ITEMS=["なし","いのちのたま","こだわりハチマキ","こだわりメガネ","きあいのタスキ","オボンのみ","たべのこし","ノーマルジュエル"];
+// 例のチーム（第一節の終わりごろの目安）
+const TEAMS={
+ "ミラクルズ（例）":{trainer:"カズマ",mons:[
+  {name:"メジロマックイーン",types:["ノ"],r:{h:"A",a:"A",b:"C",c:"D",d:"C",s:"AA-"},moves:["すてみタックル","でんこうせっか","にどげり","ニトロチャージ"],item:"ノーマルジュエル",role:"鬼人"},
+  {name:"ルサルカ",types:["霊","水"],r:{h:"B+",a:"D",b:"C",c:"A-",d:"AA-",s:"C-"},moves:["シャドーボール","なみのり","みずのはどう","まもる"],item:"オボンのみ",role:"エースアシストα"},
+  {name:"ガッシュ",types:["電"],r:{h:"B",a:"B+",b:"C",c:"A+",d:"C",s:"B-"},moves:["10まんボルト","しねんのずつき","スピードスター","かみなり"],item:"いのちのたま",role:"不動のエース"}]},
+ "スペリオール（例）":{trainer:"先輩",mons:[
+  {name:"ルカリオ",types:["闘","鋼"],r:{h:"B",a:"A",b:"C+",c:"A",d:"C+",s:"A-"},moves:["インファイト","ラスターカノン","しんそく","あくのはどう"],item:"きあいのタスキ",role:"魔術師"},
+  {name:"クロコダイン",types:["龍","岩"],r:{h:"AA",a:"A",b:"A-",c:"C",d:"B",s:"C"},moves:["げきりん","ストーンエッジ","じしん","りゅうのまい"],item:"たべのこし",role:"エースキラーα"},
+  {name:"ミノケンタロス",types:["ノ","地"],r:{h:"B+",a:"A+",b:"B",c:"D",d:"B-",s:"B"},moves:["すてみタックル","じしん","ストーンエッジ","インファイト"],item:"こだわりハチマキ",role:"不動のエース"}]}
+};
+/* ===== 計算 ===== */
+let RNG=Math.random;
+const pick=a=>a[Math.floor(RNG()*a.length)];
+function baseOf(rk){const [lo,hi]=RANKV[rk];if(lo===hi)return lo;const c=[];for(let v=lo;v<=hi;v+=5)c.push(v);return pick(c)}
+const statF=(b,lv)=>Math.floor(b*2*lv/100)+5, hpF=(b,lv)=>Math.floor(b*2*lv/100)+lv+10;
+const stMul=n=>n>=0?(2+n)/2:2/(2-n);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const LV={C:70,B:75,A:80};
+function build(t,lv){return t.mons.map(m=>{const b={};for(const k of "habcds")b[k]=baseOf(m.r[k]);
+ const st={a:statF(b.a,lv),b:statF(b.b,lv),c:statF(b.c,lv),d:statF(b.d,lv),s:statF(b.s,lv)};const mh=hpF(b.h,lv);
+ return {...m,lv,base:b,st,maxhp:mh,hp:mh,stg:{a:0,b:0,c:0,d:0,s:0},fainted:false,lock:null,protectN:0,tag:{},firstOut:true}})}
+function eff(mt,dts){let e=1;for(const t of dts){const v=(CH[mt]||{})[t];if(v!==undefined)e*=v}return e}
+function word(p){if(p<0.1)return"微々たるダメージ";if(p<0.2)return"小さなダメージ";if(p<0.35)return"まずまずのダメージ";if(p<0.6)return"大きなダメージ";if(p<0.8)return"深刻なダメージ";if(p<1)return"特大のダメージ";if(p<1.3)return"極大のダメージ";return"測定不能のダメージ"}
+const CRIT=[1/16,1/8,1/4,1/3,1/2];
+/* ===== バトル ===== */
+function newBattle(cfg){
+ const sides=[0,1].map(i=>{const c=cfg.sides[i];const lv=LV[c.ikusei||"C"];return {name:c.trainer,order:c.order,mode:c.mode,team:build(c.team,lv),act:0,
+  used:{},shikiUsed:{},dex:{C:1,B:2,A:3}[c.order],kokozo:false,assist:false,ai:c.ai,zk:{}}});
+ return {sides,turn:0,log:[],over:false,winner:null};
+}
+const ORD={C:0,B:1,A:2};
+function cur(s){return s.team[s.act]}
+function alive(s){return s.team.filter(m=>!m.fainted)}
+function isAce(m){return m.role==="不動のエース"}
+function L(B,cls,txt,spk){B.log.push({cls,txt,spk})}
+function stage(B,si,m,k){let n=m.stg[k];const s=B.sides[si];if(isAce(m)&&s.kokozo&&m===cur(s))n+=1;return clamp(n,-6,6)}
+function boost(B,si,m,k){let x=1;if(m.role==="二枚看板")x*=1.33;const z=B.sides[si].zk;if(z[k]&&m===cur(B.sides[si]))x*=2;return x}
+function critStage(B,si,m,mv){let c=0;const s=B.sides[si],o=B.sides[1-si];if(m.role==="二枚看板")c++;if(isAce(m)&&s.kokozo)c++;if(mv.fx==="crit1")c++;const d=ORD[s.order]-ORD[o.order];if(d>0)c+=d;return clamp(c,0,4)}
+function calcDmg(B,ai,di,mv,opt={}){ // opt: crit,rand,assist
+ const A=cur(B.sides[ai]),D=cur(B.sides[di]);const ph=mv.cat==="ph";const ak=ph?"a":"c",dk=ph?"b":"d";
+ let as=stage(B,ai,A,ak),ds=stage(B,di,D,dk),ab=boost(B,ai,A,ak),db=boost(B,di,D,dk);
+ if(A.role==="エースキラーα"&&isAce(D)){if(ds>0)ds=0;if(db>1)db=1}
+ if(opt.crit){if(as<0)as=0;if(ds>0)ds=0;if(db>1)db=1}
+ const At=Math.floor(A.st[ak]*stMul(as)*ab),Dt=Math.floor(D.st[dk]*stMul(ds)*db);
+ let pow=mv.pow;if(opt.assist)pow*=2;if(A.item==="ノーマルジュエル"&&mv.type==="ノ"&&!A.tag.jewel)pow=Math.floor(pow*1.3);
+ let d=Math.floor(Math.floor(Math.floor(2*A.lv/5+2)*pow*At/Dt)/50)+2;
+ let mod=(opt.crit?2:1)*(A.types.includes(mv.type)?1.5:1)*eff(mv.type,D.types);
+ if(A.item==="いのちのたま")mod*=1.3;if(A.item==="こだわりハチマキ"&&ph)mod*=1.5;if(A.item==="こだわりメガネ"&&!ph)mod*=1.5;
+ if(A.role==="エースキラーα"&&isAce(D))mod*=1.5;
+ return Math.max(1,Math.floor(d*mod*(opt.rand??1)));
+}
+function expPct(B,ai,di,mv){if(mv.cat==="st")return 0;const D=cur(B.sides[di]);const avg=calcDmg(B,ai,di,mv,{rand:.925});return avg/D.maxhp*Math.min(1,mv.acc/100)}
+function updKokozo(B){const a=cur(B.sides[0]),b=cur(B.sides[1]);const face=a&&b&&!a.fainted&&!b.fainted&&isAce(a)&&isAce(b);
+ B.sides.forEach((s,i)=>{const on=alive(s).length===1||face;if(on&&!s.kokozo){s.kokozo=true;L(B,"sys",`◎${s.name}の陣営が「ここぞ！」という場面になった！`);const m=cur(s);if(isAce(m)&&!m.fainted)L(B,"sys",`◎${m.name}の『不動のエース』が発動！　全能力値が上昇し、技のクリティカル率が上がった！`)}
+  else if(!on&&s.kokozo&&alive(s).length>0){s.kokozo=false;L(B,"sys",`◎${s.name}の陣営が「ここぞ！」という場面でなくなった！`)}})}
+function onEnter(B,si,m){const s=B.sides[si];L(B,"sys",`◎${s.name}は「${m.name}」を繰り出した！`);
+ if(m.firstOut&&B.turn===0){const k={"鬼人":"a","魔術師":"c","狂走":"s"}[m.role];if(k){m.stg[k]=clamp(m.stg[k]+1,-6,6);L(B,"sys",`◎${m.name}の『${m.role}』！　先発で場に出て「${{a:"こうげき",c:"とくこう",s:"すばやさ"}[k]}」が上がった！`)}}
+ m.firstOut=false;if(s.kokozo&&isAce(m))L(B,"sys",`◎${m.name}の『不動のエース』が発動！　全能力値が上昇し、技のクリティカル率が上がった！`);}
+function doSwitch(B,si,to,silent){const s=B.sides[si];const old=cur(s);if(old&&!old.fainted){old.lock=null;old.stg={a:0,b:0,c:0,d:0,s:0};if(old.role==="エースアシストα"){s.assist=true;L(B,"sys",`◎${old.name}の『エースアシストα』！　味方『エース』が最初に繰り出す技の威力が2倍になる！`)}
+  if(!silent)L(B,"me",`${old.name}、戻れ！`,s.name)}
+ s.act=to;onEnter(B,si,cur(s));}
+function applyOrder(B,si,o){const s=B.sides[si],m=cur(s);if(!o)return;const [kind,mode]=o.split(":");s.used[kind]=true;
+ const nm={a:"攻撃",b:"防御",c:"特攻",d:"特防",s:"敏捷",h:"回復"}[kind];
+ if(mode==="zk"){if(kind==="h"){m.tag.skip=true;const h=Math.floor(m.maxhp/2);m.hp=Math.min(m.maxhp,m.hp+h);L(B,"sys",`◎${s.name}の『全開${nm}指令』！　${m.name}は行動をスキップして体力を回復した！`)}else{s.zk[kind]=true;L(B,"sys",`◎${s.name}の『全開${nm}指令』！　1Tの間、${m.name}の能力が2倍になった！`)}}
+ else{if(kind==="h"){m.hp=Math.min(m.maxhp,m.hp+Math.floor(m.maxhp/4));L(B,"sys",`◎${s.name}の『熟達回復指令』！　${m.name}の体力が回復した！`)}else{m.stg[kind]=clamp(m.stg[kind]+1,-6,6);L(B,"sys",`◎${s.name}の『熟達${nm}指令』！　${m.name}の能力が上がった！`)}}}
+function hit(B,ai,di,mv,ctx){const A=cur(B.sides[ai]),D=cur(B.sides[di]),sA=B.sides[ai],sD=B.sides[di];
+ L(B,"sys",`◎${A.name}の「${mv.name}」！`);
+ if(mv.cat==="st"){if(mv.fx==="protect"){A.protectN++;if(A.protectN>1&&RNG()>1/Math.pow(3,A.protectN-1)){L(B,"sys","しかし、うまく決まらなかった！");A.protectN=0;return}A.tag.protect=true;L(B,"sys",`${A.name}は守りの体勢に入った！`);return}
+  const ups={up_a2:[["a",2]],up_c2:[["c",2]],up_as:[["a",1],["s",1]]}[mv.fx]||[];ups.forEach(([k,n])=>A.stg[k]=clamp(A.stg[k]+n,-6,6));L(B,"sys",`${A.name}の能力が上がった！`);A.protectN=0;return}
+ A.protectN=0;
+ if(ctx.modoreSkip){L(B,"sys","しかし、相手は『もどれ！』で入れ替わっていた！");return}
+ if(D.tag.protect){L(B,"sys",`${D.name}は攻撃から身を守った！`);return}
+ const e=eff(mv.type,D.types);if(e===0){L(B,"sys",`${D.name}には効果がないようだ……`);return}
+ if(ctx.evade&&((ctx.evade==="ph"&&mv.cat==="ph")||(ctx.evade==="sp"&&mv.cat==="sp"))){L(B,"sys",`◎${sD.name}の『${ctx.evade==="ph"?"かわせ！":"よけろ！"}』！　${D.name}は攻撃を回避した！`);return}
+ if(mv.acc<=100&&RNG()*100>=mv.acc){L(B,"sys",`しかし、${D.name}には当たらなかった！`);return}
+ const crit=RNG()<CRIT[critStage(B,ai,A,mv)];const assist=isAce(A)&&sA.assist;if(assist)sA.assist=false;
+ let dmg=calcDmg(B,ai,di,mv,{crit,rand:0.85+RNG()*0.15,assist});
+ if(A.item==="ノーマルジュエル"&&mv.type==="ノ"&&!A.tag.jewel){A.tag.jewel=true;L(B,"sys",`◎${A.name}は「ノーマルジュエル」を使用し、「ノ」技の威力を強化（1.3倍）した！`)}
+ if(crit)L(B,"sys","きゅうしょにあたった！");if(e>1)L(B,"sys","こうかはばつぐんだ！");if(e<1)L(B,"sys","こうかはいまひとつのようだ……");
+ const before=D.hp;let tae=false;
+ if(ctx.taero){dmg=Math.floor(dmg/2);if(dmg>=D.hp){dmg=D.hp-1;}tae=true;L(B,"sys",`◎${sD.name}の『たえろ！』！　${D.name}はダメージを半減し、踏ん張った！`)}
+ else if(dmg>=D.hp&&D.hp===D.maxhp&&D.item==="きあいのタスキ"&&!D.tag.sash){dmg=D.hp-1;D.tag.sash=true;L(B,"sys",`◎${D.name}は「きあいのタスキ」で持ちこたえた！`)}
+ D.hp=Math.max(0,D.hp-dmg);
+ const pct=dmg/D.maxhp;let w=D.hp===1&&dmg>=before-1&&before>1?"皮一枚のダメージ":word(pct);
+ if(D.hp<=0){L(B,"sys",`${D.name}に「${w}」！`);L(B,"sys",`◎―――――${D.name}は倒れた！`);D.fainted=true}
+ else{const at=Math.ceil(D.hp/Math.max(1,dmg));L(B,"sys",`${D.name}に「${w}」！＠${at}`)}
+ if(D.item==="オボンのみ"&&!D.fainted&&!D.tag.berry&&D.hp<=D.maxhp/2){D.tag.berry=true;D.hp=Math.min(D.maxhp,D.hp+Math.floor(D.maxhp/4));L(B,"sys",`◎${D.name}は「オボンのみ」を使い、体力を1/4回復した！`)}
+ if(mv.fx==="recoil3"||mv.fx==="recoil4"){const r=Math.floor(dmg/(mv.fx==="recoil3"?3:4));A.hp=Math.max(0,A.hp-r);L(B,"sys",`${A.name}は反動のダメージを受けた！`)}
+ if(A.item==="いのちのたま"&&dmg>0){A.hp=Math.max(0,A.hp-Math.floor(A.maxhp/10));}
+ if(mv.fx==="drop_bd"){A.stg.b=clamp(A.stg.b-1,-6,6);A.stg.d=clamp(A.stg.d-1,-6,6)}if(mv.fx==="drop_c2")A.stg.c=clamp(A.stg.c-2,-6,6);if(mv.fx==="up_s")A.stg.s=clamp(A.stg.s+1,-6,6);
+ if(A.hp<=0&&!A.fainted){L(B,"sys",`◎―――――${A.name}は倒れた！`);A.fainted=true}
+ if((A.item||"").startsWith("こだわり"))A.lock=mv.name;
+}
+function speed(B,si){const s=B.sides[si],m=cur(s);let v=m.st.s*stMul(stage(B,si,m,"s"))*boost(B,si,m,"s");return v}
+/* 指示: {move, switchTo, order:"a:jk", shiki:"kawase|yokero|taero|modore"} */
+function runTurn(B,acts){
+ B.turn++;L(B,"t",`―― T${B.turn} ――`);
+ const S=B.sides;S.forEach(s=>{s.zk={};cur(s).tag.protect=false;cur(s).tag.skip=false});
+ // 先行: 指令・四式
+ const ctx=[{},{}];
+ [0,1].forEach(i=>{const a=acts[i];if(a.order)applyOrder(B,i,a.order);
+  if(a.shiki){S[i].shikiUsed[a.shiki]=true;if(a.shiki==="kawase")ctx[1-i].evade="ph";if(a.shiki==="yokero")ctx[1-i].evade="sp";if(a.shiki==="taero")ctx[1-i].taero=true}});
+ // 交代（もどれは後）
+ const order=[0,1].filter(i=>acts[i].switchTo!=null&&acts[i].shiki!=="modore");
+ order.sort((x,y)=>speed(B,y)-speed(B,x)).forEach(i=>doSwitch(B,i,acts[i].switchTo));
+ // 技
+ let movers=[0,1].filter(i=>acts[i].switchTo==null&&acts[i].move&&!cur(S[i]).tag.skip);
+ movers.sort((x,y)=>{const px=MV[acts[x].move].pri,py=MV[acts[y].move].pri;if(px!==py)return py-px;const sx=speed(B,x),sy=speed(B,y);if(sx!==sy)return sy-sx;return RNG()<.5?-1:1});
+ for(const i of movers){if(B.over)break;const m=cur(S[i]);if(m.fainted)continue;const o=1-i;if(cur(S[o]).fainted)continue;
+  const c={evade:ctx[i].evade,taero:ctx[i].taero,modoreSkip:acts[o].shiki==="modore"&&acts[o].switchTo!=null};
+  if(ctx[i].taero)ctx[i].taero=false;hit(B,i,o,MV[acts[i].move],c);if(c.evade&&MV[acts[i].move].cat!=="st")ctx[i].evade=null;}
+ // もどれ
+ [0,1].forEach(i=>{if(acts[i].shiki==="modore"&&acts[i].switchTo!=null&&!cur(S[i]).fainted){L(B,"sys",`◎${S[i].name}の『もどれ！』！`);doSwitch(B,i,acts[i].switchTo)}});
+ // T終了時
+ S.forEach((s,i)=>{const m=cur(s);if(!m.fainted&&m.item==="たべのこし"&&m.hp<m.maxhp){m.hp=Math.min(m.maxhp,m.hp+Math.floor(m.maxhp/16));L(B,"sys",`${m.name}は「たべのこし」で少し回復した。`)}});
+ updKokozo(B);checkEnd(B);
+}
+function checkEnd(B){B.sides.forEach((s,i)=>{if(!B.over&&alive(s).length===0){B.over=true;B.winner=1-i;L(B,"sys",`◎―――――${B.sides[1-i].name}は${s.name}とのバトルに勝利した！`)}})}
+/* ===== 相手の動き（型を持つAI） ===== */
+const SLIP={C:.2,B:.1,A:.04};
+function aiAct(B,si){const s=B.sides[si],o=B.sides[1-si],m=cur(s),e=cur(o);const a={};
+ let opts=m.moves.filter(n=>!m.lock||n===m.lock).map(n=>({n,v:expPct(B,si,1-si,MV[n])}));
+ // 倒せるなら先制技を優先
+ const meFaster=speed(B,si)>=speed(B,1-si);
+ opts.forEach(x=>{const mv=MV[x.n];if(mv.cat==="st"){x.v=(mv.fx==="protect")?(m.protectN?0:.05):(m.hp/m.maxhp>.6&&!meFaster?.08:.15)}
+  if(x.v*1.0>=e.hp/e.maxhp&&(mv.pri>0||meFaster))x.v+=1});
+ opts.sort((x,y)=>y.v-x.v);let mv=opts[0].n;if(RNG()<SLIP[s.order]&&opts[1])mv=opts[1].n;a.move=mv;
+ // 受けの判断
+ const threat=Math.max(...e.moves.map(n=>expPct(B,1-si,si,MV[n])));const best=e.moves.map(n=>MV[n]).sort((x,y)=>expPct(B,1-si,si,y)-expPct(B,1-si,si,x))[0];
+ const canKO=opts[0].v>=1;
+ if(threat>=m.hp/m.maxhp&&!canKO){
+  const bench=s.team.map((x,i)=>({x,i})).filter(o2=>!o2.x.fainted&&o2.i!==s.act);
+  const safe=bench.map(b=>({i:b.i,r:eff(best.type,b.x.types)})).sort((p,q)=>p.r-q.r)[0];
+  if(safe&&safe.r<=.5&&RNG()>SLIP[s.order]){a.switchTo=safe.i;delete a.move;if(!s.shikiUsed.modore&&ORD[s.order]>=1&&RNG()<.5)a.shiki="modore";}
+  else if(!s.shikiUsed.taero&&RNG()>SLIP[s.order]*2)a.shiki="taero";
+  else if(best.cat==="ph"&&!s.shikiUsed.kawase)a.shiki="kawase";else if(best.cat==="sp"&&!s.shikiUsed.yokero)a.shiki="yokero";
+ }
+ // 指令: 攻めは攻撃系、減っていれば回復
+ if(a.move){const mv=MV[a.move];const mode=s.mode==="zk"?"zk":"jk";
+  if(m.hp/m.maxhp<.45&&!s.used.h&&mode==="jk")a.order="h:jk";
+  else if(mv.cat!=="st"){const k=mv.cat==="ph"?"a":"c";if(!s.used[k])a.order=`${k}:${mode}`;else if(!s.used.s&&!meFaster)a.order=`s:${mode}`}}
+ return a}
+function aiReplace(B,si){const s=B.sides[si],e=cur(B.sides[1-si]);const c=s.team.map((x,i)=>({x,i})).filter(o=>!o.x.fainted);
+ c.forEach(o=>{s.act=o.i;o.v=Math.max(...o.x.moves.map(n=>expPct(B,si,1-si,MV[n])))});c.sort((p,q)=>q.v-p.v);return c[0].i}
+if(typeof module!=="undefined")module.exports={newBattle,runTurn,aiAct,aiReplace,cur,alive,TEAMS,MV,setRNG:f=>RNG=f,doSwitch,onEnter,updKokozo};
+</script>
+
+<script>
+/* ===== 画面 ===== */
+const $=id=>document.getElementById(id);
+let B=null,sel=null;
+for(const n of Object.keys(TEAMS)){$("myTeam").add(new Option(n,n));$("foeTeam").add(new Option(n,n))}
+$("foeTeam").selectedIndex=1;
+function sideHTML(i){const s=B.sides[i],m=cur(s),me=i===0;
+ const chips=[`指示${s.order}`,`図鑑 残り${s.dex}`,s.kokozo?"「ここぞ！」":""].filter(Boolean).map(c=>`<span class="chip${c.includes("ここぞ")?" on":""}">${c}</span>`).join("");
+ const ord=["a","b","c","d","s","h"].filter(k=>s.used[k]).length,shk=Object.keys(s.shikiUsed).length;
+ const bench=s.team.map((x,j)=>`<span class="ball${x.fainted?" down":""}">${j===s.act?"▶ ":""}${me||x.seen?x.name:"？？？"}</span>`).join("");
+ const st=Object.entries(m.stg).filter(([k,v])=>v).map(([k,v])=>`${{a:"攻",b:"防",c:"特攻",d:"特防",s:"速"}[k]}${v>0?"+":""}${v}`).join(" ");
+ const dex=(me||m.dexed)?`${m.types.map(t=>TN[t]).join("/")}　Lv${m.lv}　${m.role?"『"+m.role+"』":""}\n技: ${m.moves.join("、")}\n持ち物: ${m.item}`:`${m.types.map(t=>TN[t]).join("/")}（図鑑で解析すると、技・持ち物・『役割』が見える）`;
+ return `<h2><span class="who">${me?"自陣":"敵陣"}：${s.name}</span><span class="meta">指令 ${ord}/6 使用　四式 ${shk}/4 使用</span></h2>
+ <div class="active">${m.fainted?"（倒れている）":m.name}</div><div class="meta">${st||"能力変化なし"}</div>
+ <div class="chips">${chips}</div><div class="dexbox">${dex}</div><div class="bench">${bench}</div>`}
+function render(){$("meSide").innerHTML=sideHTML(0);$("foeSide").innerHTML=sideHTML(1);
+ const lg=$("log");lg.innerHTML=B.log.map(e=>e.cls==="t"?`<p class="t">${e.txt}</p>`:e.spk?`<p><span class="spk">【${e.spk}】</span>${e.txt}</p>`:`<p class="${e.cls}">${e.txt}</p>`).join("");lg.scrollTop=lg.scrollHeight;
+ const s=B.sides[0],m=cur(s);$("cmd").hidden=B.over;if(B.over)return;
+ const need=m.fainted;$("cmdTitle").textContent=need?`${m.name}が倒れた。次に出すポケモンを選ぶ`:`T${B.turn+1}の指示`;
+ const mv=$("moves");mv.innerHTML="";if(!need)m.moves.forEach(n=>{const x=MV[n];const b=document.createElement("button");b.className=sel===n?"sel":"";b.disabled=!!(m.lock&&m.lock!==n);
+  b.innerHTML=`<span>${n}</span><small>${TN[x.type]}・${x.cat==="ph"?"物理":x.cat==="sp"?"特殊":"変化"}${x.pow?"・"+x.pow:""}${x.pri?"・優先"+x.pri:""}</small>`;b.onclick=()=>{sel=n;render()};mv.appendChild(b)});
+ const sw=$("sw");sw.innerHTML=need?"":'<option value="">しない</option>';s.team.forEach((x,j)=>{if(!x.fainted&&j!==s.act)sw.add(new Option(x.name,j))});
+ const od=$("order");od.innerHTML='<option value="">使わない</option>';od.disabled=need;
+ const NM={a:"攻撃",b:"防御",c:"特攻",d:"特防",s:"敏捷",h:"回復"};
+ ["a","b","c","d","s","h"].forEach(k=>{if(s.used[k])return;const modes=s.mode==="mix"?["jk","zk"]:[s.mode];modes.forEach(md=>od.add(new Option(`${md==="zk"?"全開":"熟達"}${NM[k]}指令`,`${k}:${md}`)))});
+ const sk=$("shiki");sk.innerHTML='<option value="">使わない</option>';sk.disabled=need;
+ [["kawase","かわせ！（物理を1回回避）"],["yokero","よけろ！（特殊を1回回避）"],["taero","たえろ！（半減して必ず耐える）"],["modore","もどれ！（相手の行動後に交代）"]].forEach(([k,t])=>{if(!s.shikiUsed[k])sk.add(new Option(t,k))});
+ $("dex").disabled=need||s.dex<=0||cur(B.sides[1]).dexed;
+ $("hint").textContent=need?"":"技か交代を選んでください。";}
+function start(){
+ const mt=TEAMS[$("myTeam").value],ft=TEAMS[$("foeTeam").value];let mode=$("myMode").value;const mo=$("myOrder").value;
+ if(mo==="C")mode="jk";if(mo==="B"&&mode==="mix")mode="zk";
+ B=newBattle({sides:[{trainer:mt.trainer,team:mt,order:mo,mode,ikusei:"C"},{trainer:ft.trainer,team:ft,order:$("foeOrder").value,mode:$("foeOrder").value==="C"?"jk":"jk",ikusei:"C",ai:true}]});
+ B.log.push({cls:"sys",txt:`◎―――――${ft.trainer}が勝負を仕掛けて来た！（3vs3）`});
+ onEnter(B,0,cur(B.sides[0]));onEnter(B,1,cur(B.sides[1]));cur(B.sides[1]).seen=true;updKokozo(B);sel=null;render();}
+$("start").onclick=start;
+$("dex").onclick=()=>{const s=B.sides[0];if(s.dex<=0)return;s.dex--;cur(B.sides[1]).dexed=true;B.log.push({cls:"sys",txt:`◎${s.name}は「ポケモン図鑑」を使用し、相手のデータを解析した！`});render()};
+$("exec").onclick=()=>{
+ const s=B.sides[0],m=cur(s);
+ if(m.fainted){const v=$("sw").value;if(v==="")return;s.act=+v;onEnter(B,0,cur(s));afterReplace();render();return}
+ const sw=$("sw").value;const a={};if(sw!==""){a.switchTo=+sw}else{if(!sel){$("hint").textContent="技を選ぶか、交代先を選んでください。";return}a.move=sel}
+ if($("order").value)a.order=$("order").value;if($("shiki").value){a.shiki=$("shiki").value;if(a.shiki==="modore"&&a.switchTo==null){$("hint").textContent="『もどれ！』は交代先と一緒に選んでください。";return}}
+ const f=aiAct(B,1);runTurn(B,[a,f]);
+ [1].forEach(i=>{if(!B.over&&cur(B.sides[i]).fainted){const to=aiReplace(B,i);B.sides[i].act=to;onEnter(B,1,cur(B.sides[1]));cur(B.sides[1]).seen=true;updKokozo(B)}});
+ B.sides[1].team.forEach(x=>{if(B.sides[1].team.indexOf(x)===B.sides[1].act)x.seen=true});
+ sel=null;render();};
+function afterReplace(){updKokozo(B)}
+start();
+</script>
