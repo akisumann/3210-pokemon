@@ -152,26 +152,50 @@ const CH={ // 攻撃:{防御:倍率}
 "鋼":{"炎":.5,"水":.5,"電":.5,"氷":2,"岩":2,"鋼":.5,"妖":2},
 "妖":{"炎":.5,"闘":2,"毒":.5,"龍":2,"悪":2,"鋼":.5}};
 // 技: [名前,タイプ,分類(ph/sp/st),威力,命中,優先度,接触,効果]
+// 効果: recoil3/recoil4 反動、crit1 急所+1、protect まもる系、heal 体力1/2回復、drain 与えたダメージの1/2回復、up:a2 自分の能力を上げる、drop:b1d1 自分の能力が下がる
 const MV={};
-[["10まんボルト","電","sp",90,100,0,0],["かみなり","電","sp",110,70,0,0],["ワイルドボルト","電","ph",90,100,0,1,"recoil4"],
-["しねんのずつき","超","ph",80,90,0,1],["サイコキネシス","超","sp",90,100,0,0],
-["シャドーボール","霊","sp",80,100,0,0],["シャドークロー","霊","ph",70,100,0,1,"crit1"],
-["みずのはどう","水","sp",60,100,0,0],["なみのり","水","sp",90,100,0,0],["ハイドロポンプ","水","sp",110,80,0,0],["アクアテール","水","ph",90,90,0,1],
-["すてみタックル","ノ","ph",120,100,0,1,"recoil3"],["でんこうせっか","ノ","ph",40,100,1,1],["しんそく","ノ","ph",80,100,2,1],["スピードスター","ノ","sp",60,101,0,0],
-["インファイト","闘","ph",120,100,0,1,"drop_bd"],["にどげり","闘","ph",60,100,0,1],["きあいだま","闘","sp",120,70,0,0],
-["じしん","地","ph",100,100,0,0],["だいちのちから","地","sp",90,100,0,0],
-["ストーンエッジ","岩","ph",100,80,0,0,"crit1"],["いわなだれ","岩","ph",75,90,0,0],
-["アイアンヘッド","鋼","ph",80,100,0,1],["ラスターカノン","鋼","sp",80,100,0,0],
-["ドラゴンクロー","龍","ph",80,100,0,1],["りゅうせいぐん","龍","sp",130,90,0,0,"drop_c2"],["げきりん","龍","ph",120,100,0,1],
-["かえんほうしゃ","炎","sp",90,100,0,0],["フレアドライブ","炎","ph",120,100,0,1,"recoil3"],["ニトロチャージ","炎","ph",50,100,0,1,"up_s"],
-["れいとうビーム","氷","sp",90,100,0,0],["つららおとし","氷","ph",85,90,0,0],
-["エナジーボール","草","sp",90,100,0,0],["リーフブレード","草","ph",90,100,0,1,"crit1"],
-["ヘドロばくだん","毒","sp",90,100,0,0],["どくづき","毒","ph",80,100,0,1],
-["ブレイブバード","飛","ph",120,100,0,1,"recoil3"],["エアスラッシュ","飛","sp",75,95,0,0],
-["むしのさざめき","虫","sp",90,100,0,0],["シザークロス","虫","ph",80,100,0,1],
-["あくのはどう","悪","sp",80,100,0,0],["かみくだく","悪","ph",80,100,0,1],["ふいうち","悪","ph",70,100,1,1],
-["ムーンフォース","妖","sp",95,100,0,0],["じゃれつく","妖","ph",90,90,0,1],
-["まもる","ノ","st",0,101,4,0,"protect"],["つるぎのまい","ノ","st",0,101,0,0,"up_a2"],["わるだくみ","悪","st",0,101,0,0,"up_c2"],["りゅうのまい","龍","st",0,101,0,0,"up_as"]
+[
+// ノーマル
+["すてみタックル","ノ","ph",120,100,0,1,"recoil3"],["からげんき","ノ","ph",70,100,0,1],["おんがえし","ノ","ph",102,100,0,1],["のしかかり","ノ","ph",85,100,0,1],["ギガインパクト","ノ","ph",150,90,0,1],["でんこうせっか","ノ","ph",40,100,1,1],["しんそく","ノ","ph",80,100,2,1],["ねこだまし","ノ","ph",40,100,3,1],
+["ハイパーボイス","ノ","sp",90,100,0,0],["スピードスター","ノ","sp",60,101,0,0],["はかいこうせん","ノ","sp",150,90,0,0],
+// ほのお
+["フレアドライブ","炎","ph",120,100,0,1,"recoil3"],["ほのおのパンチ","炎","ph",75,100,0,1],["ニトロチャージ","炎","ph",50,100,0,1,"up:s1"],["かえんほうしゃ","炎","sp",90,100,0,0],["だいもんじ","炎","sp",110,85,0,0],["ねっぷう","炎","sp",95,90,0,0],["オーバーヒート","炎","sp",130,90,0,0,"drop:c2"],
+// みず
+["アクアテール","水","ph",90,90,0,1],["たきのぼり","水","ph",80,100,0,1],["アクアジェット","水","ph",40,100,1,1],["なみのり","水","sp",90,100,0,0],["ハイドロポンプ","水","sp",110,80,0,0],["みずのはどう","水","sp",60,100,0,0],["ねっとう","水","sp",80,100,0,0],
+// でんき
+["ワイルドボルト","電","ph",90,100,0,1,"recoil4"],["かみなりパンチ","電","ph",75,100,0,1],["10まんボルト","電","sp",90,100,0,0],["かみなり","電","sp",110,70,0,0],["ボルトチェンジ","電","sp",70,100,0,0],["ほうでん","電","sp",80,100,0,0],
+// くさ
+["リーフブレード","草","ph",90,100,0,1,"crit1"],["ウッドハンマー","草","ph",120,100,0,1,"recoil3"],["タネマシンガン","草","ph",75,100,0,0],["ドレインパンチ","闘","ph",75,100,0,1,"drain"],["エナジーボール","草","sp",90,100,0,0],["ギガドレイン","草","sp",75,100,0,0,"drain"],["リーフストーム","草","sp",130,90,0,0,"drop:c2"],
+// こおり
+["つららおとし","氷","ph",85,90,0,0],["こおりのキバ","氷","ph",65,95,0,1],["こおりのつぶて","氷","ph",40,100,1,0],["れいとうビーム","氷","sp",90,100,0,0],["ふぶき","氷","sp",110,70,0,0],
+// かくとう
+["インファイト","闘","ph",120,100,0,1,"drop:b1d1"],["ばくれつパンチ","闘","ph",100,50,0,1],["かわらわり","闘","ph",75,100,0,1],["にどげり","闘","ph",60,100,0,1],["マッハパンチ","闘","ph",40,100,1,1],["はどうだん","闘","sp",80,101,0,0],["きあいだま","闘","sp",120,70,0,0],
+// どく
+["どくづき","毒","ph",80,100,0,1],["ダストシュート","毒","ph",120,80,0,0],["ヘドロばくだん","毒","sp",90,100,0,0],["ヘドロウェーブ","毒","sp",95,100,0,0],
+// じめん
+["じしん","地","ph",100,100,0,0],["じだんだ","地","ph",75,100,0,1],["10まんばりき","地","ph",95,95,0,1],["だいちのちから","地","sp",90,100,0,0],
+// ひこう
+["ブレイブバード","飛","ph",120,100,0,1,"recoil3"],["つばめがえし","飛","ph",60,101,0,1],["ドリルくちばし","飛","ph",80,100,0,1],["エアスラッシュ","飛","sp",75,95,0,0],["ぼうふう","飛","sp",110,70,0,0],
+// エスパー
+["しねんのずつき","超","ph",80,90,0,1],["サイコカッター","超","ph",70,100,0,0,"crit1"],["サイコキネシス","超","sp",90,100,0,0],["サイコショック","超","sp",80,100,0,0],
+// むし
+["シザークロス","虫","ph",80,100,0,1],["とんぼがえり","虫","ph",70,100,0,1],["メガホーン","虫","ph",120,85,0,1],["むしのさざめき","虫","sp",90,100,0,0],["シグナルビーム","虫","sp",75,100,0,0],
+// いわ
+["ストーンエッジ","岩","ph",100,80,0,0,"crit1"],["いわなだれ","岩","ph",75,90,0,0],["もろはのずつき","岩","ph",150,80,0,1,"recoil3"],["パワージェム","岩","sp",80,100,0,0],
+// ゴースト
+["シャドークロー","霊","ph",70,100,0,1,"crit1"],["かげうち","霊","ph",40,100,1,1],["ポルターガイスト","霊","ph",110,90,0,0],["シャドーボール","霊","sp",80,100,0,0],["たたりめ","霊","sp",65,100,0,0],
+// ドラゴン
+["げきりん","龍","ph",120,100,0,1],["ドラゴンクロー","龍","ph",80,100,0,1],["ドラゴンダイブ","龍","ph",100,75,0,1],["りゅうのはどう","龍","sp",85,100,0,0],["りゅうせいぐん","龍","sp",130,90,0,0,"drop:c2"],
+// あく
+["かみくだく","悪","ph",80,100,0,1],["はたきおとす","悪","ph",65,100,0,1],["ふいうち","悪","ph",70,100,1,1],["つじぎり","悪","ph",70,100,0,1,"crit1"],["あくのはどう","悪","sp",80,100,0,0],["イカサマ","悪","ph",95,100,0,1],
+// はがね
+["アイアンヘッド","鋼","ph",80,100,0,1],["コメットパンチ","鋼","ph",90,90,0,1],["バレットパンチ","鋼","ph",40,100,1,1],["ラスターカノン","鋼","sp",80,100,0,0],["ラスターパージ","鋼","sp",70,100,0,0],
+// フェアリー
+["じゃれつく","妖","ph",90,90,0,1],["ムーンフォース","妖","sp",95,100,0,0],["マジカルシャイン","妖","sp",80,100,0,0],
+// 積み技
+["つるぎのまい","ノ","st",0,101,0,0,"up:a2"],["わるだくみ","悪","st",0,101,0,0,"up:c2"],["りゅうのまい","龍","st",0,101,0,0,"up:a1s1"],["めいそう","超","st",0,101,0,0,"up:c1d1"],["ビルドアップ","闘","st",0,101,0,0,"up:a1b1"],["こうそくいどう","超","st",0,101,0,0,"up:s2"],["てっぺき","鋼","st",0,101,0,0,"up:b2"],["ちょうのまい","虫","st",0,101,0,0,"up:c1d1s1"],["からをやぶる","ノ","st",0,101,0,0,"up:a2c2s2"],
+// 守り・回復
+["まもる","ノ","st",0,101,4,0,"protect"],["みきり","闘","st",0,101,4,0,"protect"],["じこさいせい","ノ","st",0,101,0,0,"heal"],["はねやすめ","飛","st",0,101,0,0,"heal"]
 ].forEach(m=>MV[m[0]]={name:m[0],type:m[1],cat:m[2],pow:m[3],acc:m[4],pri:m[5],contact:m[6],fx:m[7]||""});
 const RANKV={"S":[210,210],"AAA+":[195,195],"AAA":[175,190],"AAA-":[170,170],"AA+":[165,165],"AA":[145,160],"AA-":[140,140],"A+":[135,135],"A":[115,130],"A-":[110,110],"B+":[105,105],"B":[95,100],"B-":[90,90],"C+":[85,85],"C":[65,80],"C-":[60,60],"D+":[55,55],"D":[45,50],"D-":[40,40],"E+":[35,35],"E":[10,30],"E-":[1,1]};
 const ROLES={
@@ -247,10 +271,14 @@ function applyOrder(B,si,o){const s=B.sides[si],m=cur(s);if(!o)return;const [kin
  const nm={a:"攻撃",b:"防御",c:"特攻",d:"特防",s:"敏捷",h:"回復"}[kind];
  if(mode==="zk"){if(kind==="h"){m.tag.skip=true;const h=Math.floor(m.maxhp/2);m.hp=Math.min(m.maxhp,m.hp+h);L(B,"sys",`◎${s.name}の『全開${nm}指令』！　${m.name}は行動をスキップして体力を回復した！`)}else{s.zk[kind]=true;L(B,"sys",`◎${s.name}の『全開${nm}指令』！　1Tの間、${m.name}の能力が2倍になった！`)}}
  else{if(kind==="h"){m.hp=Math.min(m.maxhp,m.hp+Math.floor(m.maxhp/4));L(B,"sys",`◎${s.name}の『熟達回復指令』！　${m.name}の体力が回復した！`)}else{m.stg[kind]=clamp(m.stg[kind]+1,-6,6);L(B,"sys",`◎${s.name}の『熟達${nm}指令』！　${m.name}の能力が上がった！`)}}}
+// "up:a1s1" のような効果の文字列から、能力ランクを上げ下げする
+function fxStg(A,fx,pre,sign){if(!fx.startsWith(pre))return;fx.slice(pre.length).replace(/([abcds])(\d)/g,(_,k,n)=>{A.stg[k]=clamp(A.stg[k]+sign*n,-6,6)})}
 function hit(B,ai,di,mv,ctx){const A=cur(B.sides[ai]),D=cur(B.sides[di]),sA=B.sides[ai],sD=B.sides[di];
  L(B,"sys",`◎${A.name}の「${mv.name}」！`);
  if(mv.cat==="st"){if(mv.fx==="protect"){A.protectN++;if(A.protectN>1&&RNG()>1/Math.pow(3,A.protectN-1)){L(B,"sys","しかし、うまく決まらなかった！");A.protectN=0;return}A.tag.protect=true;L(B,"sys",`${A.name}は守りの体勢に入った！`);return}
-  const ups={up_a2:[["a",2]],up_c2:[["c",2]],up_as:[["a",1],["s",1]]}[mv.fx]||[];ups.forEach(([k,n])=>A.stg[k]=clamp(A.stg[k]+n,-6,6));L(B,"sys",`${A.name}の能力が上がった！`);A.protectN=0;return}
+  A.protectN=0;
+  if(mv.fx==="heal"){if(A.hp>=A.maxhp){L(B,"sys","しかし、体力は満タンだった！");return}A.hp=Math.min(A.maxhp,A.hp+Math.floor(A.maxhp/2));L(B,"sys",`${A.name}は体力を回復した！`);return}
+  fxStg(A,mv.fx,"up:",1);L(B,"sys",`${A.name}の能力が上がった！`);return}
  A.protectN=0;
  if(ctx.modoreSkip){L(B,"sys","しかし、相手は『もどれ！』で入れ替わっていた！");return}
  if(D.tag.protect){L(B,"sys",`${D.name}は攻撃から身を守った！`);return}
@@ -271,7 +299,8 @@ function hit(B,ai,di,mv,ctx){const A=cur(B.sides[ai]),D=cur(B.sides[di]),sA=B.si
  if(D.item==="オボンのみ"&&!D.fainted&&!D.tag.berry&&D.hp<=D.maxhp/2){D.tag.berry=true;D.hp=Math.min(D.maxhp,D.hp+Math.floor(D.maxhp/4));L(B,"sys",`◎${D.name}は「オボンのみ」を使い、体力を1/4回復した！`)}
  if(mv.fx==="recoil3"||mv.fx==="recoil4"){const r=Math.floor(dmg/(mv.fx==="recoil3"?3:4));A.hp=Math.max(0,A.hp-r);L(B,"sys",`${A.name}は反動のダメージを受けた！`)}
  if(A.item==="いのちのたま"&&dmg>0){A.hp=Math.max(0,A.hp-Math.floor(A.maxhp/10));}
- if(mv.fx==="drop_bd"){A.stg.b=clamp(A.stg.b-1,-6,6);A.stg.d=clamp(A.stg.d-1,-6,6)}if(mv.fx==="drop_c2")A.stg.c=clamp(A.stg.c-2,-6,6);if(mv.fx==="up_s")A.stg.s=clamp(A.stg.s+1,-6,6);
+ if(mv.fx==="drain"&&dmg>0&&A.hp>0){A.hp=Math.min(A.maxhp,A.hp+Math.max(1,Math.floor(dmg/2)));L(B,"sys",`${D.name}から体力を吸い取った！`)}
+ fxStg(A,mv.fx,"drop:",-1);if(mv.fx.startsWith("up:")&&A.hp>0){fxStg(A,mv.fx,"up:",1);L(B,"sys",`${A.name}の能力が上がった！`)}
  if(A.hp<=0&&!A.fainted){L(B,"sys",`◎―――――${A.name}は倒れた！`);A.fainted=true}
  if((A.item||"").startsWith("こだわり"))A.lock=mv.name;
 }
@@ -306,7 +335,7 @@ function aiAct(B,si){const s=B.sides[si],o=B.sides[1-si],m=cur(s),e=cur(o);const
  let opts=m.moves.filter(n=>!m.lock||n===m.lock).map(n=>({n,v:expPct(B,si,1-si,MV[n])}));
  // 倒せるなら先制技を優先
  const meFaster=speed(B,si)>=speed(B,1-si);
- opts.forEach(x=>{const mv=MV[x.n];if(mv.cat==="st"){x.v=(mv.fx==="protect")?(m.protectN?0:.05):(m.hp/m.maxhp>.6&&!meFaster?.08:.15)}
+ opts.forEach(x=>{const mv=MV[x.n];if(mv.cat==="st"){const r=m.hp/m.maxhp;x.v=mv.fx==="protect"?(m.protectN?0:.05):mv.fx==="heal"?(r<.5?.45:r<.8?.1:0):(m.stg.a+m.stg.c>=4||r<.5?.02:(r>.6&&!meFaster?.08:.15))}
   if(x.v*1.0>=e.hp/e.maxhp&&(mv.pri>0||meFaster))x.v+=1});
  opts.sort((x,y)=>y.v-x.v);let mv=opts[0].n;if(RNG()<SLIP[s.order]&&opts[1])mv=opts[1].n;a.move=mv;
  // 受けの判断
@@ -397,6 +426,12 @@ function meterMove(i,k,v){const m=CT.mons[i];v=Math.round(v/5)*5;let d=v-m.b[k];
  let others=SK.filter(x=>x!==k),guard=0;while(d!==0&&guard++<400){const step=d>0?-5:5;const cand=others.filter(x=>step<0?m.b[x]>10:m.b[x]<230);if(!cand.length)break;
   cand.sort((p,q)=>step<0?m.b[q]-m.b[p]:m.b[p]-m.b[q]);m.b[cand[0]]+=step;d+=step;}
  if(d!==0)m.b[k]-=d;}
+// 技の選択肢を分類ごとにまとめる（タイプ一致の攻撃／先制技／積み技／守り・回復／そのほかの攻撃（タイプ別））
+function moveGroups(types){const all=Object.values(MV),own=types.filter(Boolean);
+ const atk=all.filter(v=>v.cat!=="st"),g=[["タイプ一致の攻撃",atk.filter(v=>own.includes(v.type)&&v.pri<=0)],["先制技",atk.filter(v=>v.pri>0)],
+  ["積み技",all.filter(v=>v.fx.startsWith("up:")&&v.cat==="st")],["守り・回復",all.filter(v=>v.fx==="protect"||v.fx==="heal")]];
+ TYPES.filter(t=>!own.includes(t)).forEach(t=>g.push([`そのほかの攻撃（${TN[t]}）`,atk.filter(v=>v.type===t&&v.pri<=0)]));
+ return g.filter(x=>x[1].length).map(([k,v])=>[k,v.map(x=>x.name)])}
 function drawB(){const sh=CT.shi;$("shi").innerHTML=sh?Object.entries(sh).map(([k,v])=>`<span>${k}：${v}</span>`).join(""):"<span>まだ振っていません</span>";
  if(sh){const type={指示:"指示型",育成:"育成型",統率:"統率型",能力:"能力型"}[Object.keys(sh).find(k=>sh[k]==="A")];
   $("derived").textContent=`${type}。レベルは全員Lv${LV[sh["育成"]]}。図鑑${{C:1,B:2,A:3}[sh["指示"]]}回、六令は${{C:"熟達",B:"全開か熟達（一括）",A:"混成"}[sh["指示"]]}。『役割』は${{C:"基本の4つ",B:"基本の4つ＋『追加役割』1体",A:"9つ"}[sh["統率"]]}。『専用』は${{C:3,B:"4〜5",A:6}[sh["能力"]]}体まで（このバトルではまだ動きません）。`}
@@ -404,7 +439,7 @@ function drawB(){const sh=CT.shi;$("shi").innerHTML=sh?Object.entries(sh).map(([
  const box=$("mons");box.innerHTML="";
  CT.mons.forEach((m,i)=>{const d=document.createElement("div");d.className="mon";const sum=SK.reduce((a,k)=>a+m.b[k],0);
   const tsel=(v,id)=>`<select data-i="${i}" data-f="${id}">${id==="t2"?'<option value="">（なし）</option>':""}${TYPES.map(t=>`<option value="${t}"${t===v?" selected":""}>${TN[t]}</option>`).join("")}</select>`;
-  const msel=(j)=>`<select data-i="${i}" data-f="m${j}">${Object.keys(MV).map(n=>`<option${n===m.moves[j]?" selected":""}>${n}</option>`).join("")}</select>`;
+  const msel=(j)=>`<select data-i="${i}" data-f="m${j}">${moveGroups(m.types).map(([g,ns])=>`<optgroup label="${g}">${ns.map(n=>`<option${n===m.moves[j]?" selected":""}>${n}</option>`).join("")}</optgroup>`).join("")}</select>`;
   d.innerHTML=`<div class="hd"><span>枠 合計${BUDGET[i]}</span><label class="check" style="flex-direction:row;gap:4px;color:var(--ink)"><input type="checkbox" data-i="${i}" data-f="use"${m.use?" checked":""}>試合に出す</label></div>
   <input type="text" data-i="${i}" data-f="name" value="${m.name.replace(/"/g,"&quot;")}" aria-label="名前">
   <div class="two">${tsel(m.types[0],"t1")}${tsel(m.types[1],"t2")}</div>
