@@ -1,96 +1,268 @@
 <title>探検堂バトルシミュレーター</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;700;900&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Zen+Kaku+Gothic+New:wght@400;700;900&display=swap">
 <style>
-/* layout: 上に両陣の場（自陣・敵陣の状態表示）、中央に指示パネル、下にスレ風の実況ログ */
+/* layout: 夜のスタジアム。上に敵陣の札、まん中に場（敵は奥・自分は手前）、その下にメッセージ窓と指示メニュー。暗い一色の世界にしている */
 :root{
-  --bg:#edf0f3; --panel:#ffffff; --ink:#1c232e; --sub:#5d6878; --line:#cfd6df;
-  --accent:#2f6fb3; --accent-ink:#ffffff; --foe:#a8452f; --good:#2c7a52; --warn:#b07a12;
-  --log:#16222f; --log-ink:#e6eef7; --log-sub:#8ea3ba; --log-sys:#ffd27a;
-  --f-display:"Zen Kaku Gothic New","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+  --night:#0a0f1c; --sky:#101b38; --stand:#18213f; --turf:#1d5a3b; --turf2:#226544;
+  --panel:#131c30; --panel2:#1b2640; --line:#2c3a5c; --ink:#e8edf7; --sub:#9aa8c4;
+  --paper:#fbf7ea; --paper-ink:#1b2236; --paper-line:#2a3456; --sys-ink:#8c5800;
+  --gold:#f2c14e; --me:#5aaeff; --foe:#ff7a63; --good:#61d394; --bad:#ff6b6b;
+  --f-pixel:"DotGothic16","Hiragino Kaku Gothic ProN","Yu Gothic",monospace;
   --f-body:"Zen Kaku Gothic New","Hiragino Sans","Meiryo",sans-serif;
-  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",monospace;
+  color-scheme:dark;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#11151b; --panel:#1a2029; --ink:#e3e8ef; --sub:#97a2b2; --line:#2d3643;
-  --accent:#6aa5e6; --accent-ink:#0d1520; --foe:#e08467; --good:#5fbf8b; --warn:#e2b04c;
-  --log:#0b131c; --log-ink:#e3edf8; --log-sub:#7d93ab; --log-sys:#f2c766; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#11151b; --panel:#1a2029; --ink:#e3e8ef; --sub:#97a2b2; --line:#2d3643;
-  --accent:#6aa5e6; --accent-ink:#0d1520; --foe:#e08467; --good:#5fbf8b; --warn:#e2b04c;
-  --log:#0b131c; --log-ink:#e3edf8; --log-sub:#7d93ab; --log-sys:#f2c766; color-scheme:dark}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.6}
-.wrap{max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:20px 48px}
-h1{font-family:var(--f-display);font-weight:900;font-size:1.5rem;margin:0 0 2px}
-.lead{color:var(--sub);margin:0 0 14px;max-width:70ch;font-size:.9rem}
-.setup{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:end;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:14px}
-label{display:flex;flex-direction:column;gap:3px;font-size:.78rem;color:var(--sub)}
-select,input{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:5px 8px}
-button{font:inherit;cursor:pointer;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--ink);padding:6px 12px}
-button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:700}
-button:disabled{opacity:.45;cursor:not-allowed}
-button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
-.field{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-@media (max-width:760px){.field{grid-template-columns:1fr}}
-.side{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;min-width:0}
-.side h2{font-family:var(--f-display);font-size:1rem;margin:0 0 6px;display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
-.side.me h2 span.who{color:var(--accent)} .side.foe h2 span.who{color:var(--foe)}
-.active{font-family:var(--f-display);font-weight:700;font-size:1.15rem}
-.meta{font-size:.8rem;color:var(--sub)}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.chip{font-size:.72rem;padding:1px 8px;border-radius:99px;border:1px solid var(--line);color:var(--sub)}
-.chip.on{border-color:var(--warn);color:var(--warn)}
-.bench{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.ball{font-size:.75rem;padding:2px 8px;border-radius:6px;background:var(--bg);border:1px solid var(--line)}
-.ball.down{text-decoration:line-through;opacity:.5}
-.dexbox{margin-top:8px;font-family:var(--f-mono);font-size:.76rem;color:var(--sub);white-space:pre-wrap}
-.cmd{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:14px}
-.cmd h3{margin:0 0 8px;font-size:.95rem;font-family:var(--f-display)}
-.moves{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
-@media (max-width:480px){.moves{grid-template-columns:1fr}}
-.moves button{text-align:left;display:flex;justify-content:space-between;gap:8px}
-.moves button.sel{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-.moves small{color:var(--sub);font-family:var(--f-mono)}
-.opts{display:flex;flex-wrap:wrap;gap:10px 14px;margin-top:10px;align-items:end}
-.go{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.log{margin-top:14px;background:var(--log);color:var(--log-ink);border-radius:10px;padding:14px 16px;max-height:460px;overflow:auto;font-size:.88rem}
-.log p{margin:0 0 4px}
-.log .t{color:var(--log-sub);font-family:var(--f-mono);margin-top:10px}
-.log .sys{color:var(--log-sys)}
-.log .me{color:var(--log-ink)} .log .foe{color:var(--log-ink)}
-.log .spk{font-weight:700}
-.note{font-size:.8rem;color:var(--sub);margin-top:10px}
-.builder{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
-.builder h2{font-family:var(--f-display);font-size:1.05rem;margin:0 0 10px}
+html,body{background:var(--night);color:var(--ink)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.55}
+.app{max-width:980px;margin:0 auto;padding-inline:16px;padding-block:14px 40px;display:flex;flex-direction:column;gap:12px}
+button,select,input{font:inherit;color:var(--ink)}
+button{cursor:pointer;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:6px 12px}
+button:hover:not(:disabled){border-color:var(--sub)}
+button:disabled{opacity:.4;cursor:not-allowed}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+select,input[type=text]{background:var(--night);border:1px solid var(--line);border-radius:8px;padding:6px 8px;min-width:0}
+.big{font-family:var(--f-pixel);font-size:1.15rem;background:var(--gold);color:#22180a;border-color:var(--gold);padding:10px 26px;letter-spacing:.06em}
+.big:hover:not(:disabled){filter:brightness(1.08);border-color:var(--gold)}
+
+/* 上のバー */
+.top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{font-family:var(--f-pixel);font-size:1.35rem;letter-spacing:.08em;margin:0;margin-right:auto;color:var(--gold);text-shadow:0 2px 0 #5a3d00}
+.logo small{display:block;font-family:var(--f-body);font-size:.7rem;color:var(--sub);letter-spacing:.04em;text-shadow:none}
+.nav{display:flex;gap:6px;flex-wrap:wrap}
+.nav button{font-size:.85rem;padding:5px 12px}
+.nav button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold)}
+
+/* タイトル（チームを選ぶ） */
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch}
+.vs .mid{align-self:center;font-family:var(--f-pixel);font-size:2rem;color:var(--gold)}
+.corner{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.corner.me{border-top:4px solid var(--me)} .corner.foe{border-top:4px solid var(--foe)}
+.corner h2{margin:0;font-family:var(--f-pixel);font-size:1rem;font-weight:400;letter-spacing:.06em}
+.corner.me h2{color:var(--me)} .corner.foe h2{color:var(--foe)}
+.corner label{display:flex;flex-direction:column;gap:3px;font-size:.78rem;color:var(--sub)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.roster{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.roster li{display:flex;align-items:center;gap:8px;background:var(--night);border-radius:8px;padding:6px 8px;min-width:0}
+.roster small{color:var(--sub);margin-left:auto;font-size:.75rem;white-space:nowrap}
+.dot{width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff8,transparent 45%),var(--c);flex:none}
+.startbar{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap}
+.hintline{font-size:.8rem;color:var(--sub);text-align:center;margin:0}
+@media (max-width:640px){.vs{grid-template-columns:1fr}.vs .mid{justify-self:center;font-size:1.4rem}}
+
+/* バトルの場 */
+.strip{display:flex;gap:6px 10px;flex-wrap:wrap;align-items:center;font-size:.78rem;color:var(--sub)}
+.strip .tn{font-family:var(--f-pixel);font-size:.95rem;color:var(--ink)}
+.strip.foe .tn{color:var(--foe)} .strip.me .tn{color:var(--me)}
+.strip span.chip{border:1px solid var(--line);border-radius:99px;padding:0 9px}
+.strip .kz{border-color:var(--gold);color:#22180a;background:var(--gold);font-weight:700;animation:glow 1.2s ease-in-out infinite alternate}
+@keyframes glow{to{box-shadow:0 0 12px var(--gold)}}
+.stage{position:relative;aspect-ratio:16/8.5;border-radius:14px;overflow:hidden;container-type:inline-size;border:2px solid var(--line);
+  background:
+   radial-gradient(60% 40% at 12% -5%,#fff3c455,transparent 70%),
+   radial-gradient(60% 40% at 88% -5%,#fff3c455,transparent 70%),
+   linear-gradient(var(--sky) 0 30%,var(--stand) 30% 40%,transparent 40%),
+   repeating-linear-gradient(90deg,var(--turf) 0 7%,var(--turf2) 7% 14%)}
+.stage::before{content:"";position:absolute;left:0;right:0;top:30%;height:10%;
+  background:radial-gradient(circle,#ffffff22 1px,transparent 1.6px) 0 0/9px 7px;opacity:.9}
+.stage::after{content:"";position:absolute;left:50%;top:40%;bottom:0;width:2px;background:#ffffff30;transform:skewX(-20deg)}
+.plat{position:absolute;border-radius:50%;background:radial-gradient(closest-side,#ffffff38,#ffffff12 60%,transparent);z-index:1}
+.plat.foe{right:9%;top:43%;width:30%;height:11%}
+.plat.me{left:4%;bottom:3%;width:38%;height:14%}
+.tok{position:absolute;z-index:2;aspect-ratio:1;display:grid;place-items:center}
+.tok.foe{right:14%;top:15%;width:20%}
+.tok.me{left:10%;bottom:9%;width:26%}
+.orb{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 32% 28%,#ffffffb0,transparent 32%),radial-gradient(circle at 70% 75%,#00000055,transparent 55%),linear-gradient(135deg,var(--c1) 45%,var(--c2) 55%);
+  box-shadow:0 0 0 .5cqw #0008,0 1.5cqw 2.5cqw #0007;animation:bob 2.4s ease-in-out infinite}
+.orb span{font-family:var(--f-pixel);font-size:8cqw;color:#fff;text-shadow:0 .4cqw 0 #0009,0 0 1cqw #0006}
+.tok.me .orb span{font-size:10cqw}
+.tok[data-st="par"] .orb{box-shadow:0 0 0 .6cqw #f7d02c,0 1.5cqw 2.5cqw #0007}
+.tok[data-st="brn"] .orb{box-shadow:0 0 0 .6cqw #ee8130,0 1.5cqw 2.5cqw #0007}
+.tok[data-st="psn"] .orb,.tok[data-st="tox"] .orb{box-shadow:0 0 0 .6cqw #a33ea1,0 1.5cqw 2.5cqw #0007}
+.tok[data-st="slp"] .orb{filter:saturate(.5) brightness(.8);animation-duration:5s}
+.tok[data-st="frz"] .orb{box-shadow:0 0 0 .6cqw #bff3ff,0 1.5cqw 2.5cqw #0007;filter:hue-rotate(-20deg) saturate(.6) brightness(1.15);animation:none}
+.tok.down{transform:translateY(35%);opacity:0;transition:transform .5s ease-in,opacity .5s ease-in}
+.tok.empty{opacity:0}
+.tok.hit{animation:hit .45s}
+.tok.enter{animation:enter .45s ease-out}
+.tok.me.atk{animation:atkMe .35s ease-out} .tok.foe.atk{animation:atkFoe .35s ease-out}
+@keyframes bob{50%{transform:translateY(-3%)}}
+@keyframes hit{0%,100%{transform:none;filter:none}15%{transform:translateX(-7%);filter:brightness(2.6)}35%{transform:translateX(6%);filter:none}55%{transform:translateX(-4%);filter:brightness(2)}75%{transform:translateX(2%)}}
+@keyframes enter{from{transform:scale(.15);opacity:0;filter:brightness(4)}70%{transform:scale(1.06);filter:brightness(1.5)}to{transform:none}}
+@keyframes atkMe{50%{transform:translate(10%,-8%) scale(1.04)}}
+@keyframes atkFoe{50%{transform:translate(-10%,8%) scale(1.04)}}
+.hud{position:absolute;z-index:3;width:min(44%,330px);background:var(--paper);color:var(--paper-ink);border:3px solid var(--paper-line);border-radius:10px;
+  padding:.6cqw 1.2cqw;font-size:clamp(.62rem,1.5cqw,.9rem);line-height:1.45;box-shadow:0 .6cqw 0 #0006;display:flex;flex-direction:column;gap:.25em}
+.hud.foe{left:2.5%;top:5%}
+.hud.me{right:2.5%;bottom:6%}
+.hud.empty{visibility:hidden}
+.hud-top{display:flex;align-items:baseline;gap:.6em}
+.hn{font-family:var(--f-pixel);font-size:1.3em;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.lv{font-family:var(--f-pixel)}
+.hud-mid,.hud-bot{display:flex;flex-wrap:wrap;gap:.3em;align-items:center}
+.ty{display:inline-block;background:var(--c);color:var(--ti,#141824);border-radius:4px;padding:0 .45em;font-size:.88em;font-weight:700;line-height:1.5}
+.st{border-radius:4px;padding:0 .45em;font-size:.88em;color:#fff;background:#555}
+.st-brn{background:#c95f15}.st-par{background:#b39200}.st-psn,.st-tox{background:#8a2f88}.st-slp{background:#5c6680}.st-frz{background:#2d8fa6}.st-cnf{background:#a0456a}
+.hud-hit{font-family:var(--f-pixel);display:flex;gap:.5em;align-items:baseline;border-top:1px dashed #2a345655;padding-top:.15em}
+.hud-hit .w{flex:1;min-width:0}
+.hud-hit .w.dim{color:#6b7389}
+.hud-hit .at{font-size:1.25em;color:#b0321f}
+.balls{display:flex;gap:.25em;margin-right:auto}
+.pb{width:.85em;height:.85em;border-radius:50%;border:1.5px solid var(--paper-line);background:linear-gradient(#e8443a 0 45%,var(--paper-line) 45% 55%,#fff 55%)}
+.pb.down{background:#9aa0ad;opacity:.55}
+.pb.on{outline:2px solid #e8a400;outline-offset:1px}
+.stgc{font-size:.85em;border-radius:4px;padding:0 .35em;font-weight:700}
+.stgc.up{background:#d8f3e3;color:#13603a}.stgc.dn{background:#fbe0dc;color:#962a1a}
+.banner{position:absolute;z-index:5;left:0;right:0;top:42%;text-align:center;font-family:var(--f-pixel);font-size:6cqw;color:var(--gold);
+  text-shadow:0 .5cqw 0 #5a3d00,0 0 2cqw #0009;pointer-events:none;opacity:0}
+.banner.go{animation:ban .9s ease-out}
+@keyframes ban{0%{opacity:0;transform:translateX(-30%)}25%,70%{opacity:1;transform:none}100%{opacity:0;transform:translateX(30%)}}
+@media (max-width:600px){.stage{aspect-ratio:4/3.3}.hud{width:54%}.tok.foe{width:24%;top:20%}.tok.me{width:30%}.plat.foe{top:46%}}
+
+/* メッセージ窓 */
+.msg{display:flex;align-items:flex-start;gap:10px;width:100%;text-align:left;background:var(--paper);color:var(--paper-ink);border:4px solid var(--paper-line);border-radius:12px;
+  box-shadow:inset 0 0 0 2px var(--paper),inset 0 0 0 4px #c9c2a8;padding:12px 16px;min-height:4.4em;font-family:var(--f-pixel);font-size:1.08rem;line-height:1.6}
+.msg:hover:not(:disabled){border-color:var(--paper-line)}
+.msg #msgText{flex:1;min-width:0;white-space:pre-wrap}
+.msg #msgText.sys{color:var(--sys-ink)}
+.msg .caret{align-self:flex-end;color:var(--paper-line);animation:blink .8s steps(2) infinite}
+.msg .caret[hidden]{display:none}
+@keyframes blink{50%{opacity:0}}
+.msgctl{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
+.msgctl button{font-size:.78rem;padding:3px 10px}
+
+/* 指示メニュー */
+.menu{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.ask{font-family:var(--f-pixel);font-size:1.05rem;margin:0}
+.tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.tabs button{font-family:var(--f-pixel);font-size:.95rem;padding:8px 4px;background:var(--night)}
+.tabs button[aria-selected="true"]{background:var(--gold);color:#22180a;border-color:var(--gold)}
+.tabs button .n{display:block;font-family:var(--f-body);font-size:.68rem;opacity:.8}
+.pane{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:520px){.pane{grid-template-columns:1fr}.tabs button{font-size:.8rem}}
+.mv{text-align:left;display:flex;flex-direction:column;gap:2px;padding:10px 12px;border:2px solid color-mix(in srgb,var(--c) 75%,#000);
+  background:linear-gradient(160deg,color-mix(in srgb,var(--c) 34%,var(--panel)) ,color-mix(in srgb,var(--c) 12%,var(--panel)))}
+.mv:hover:not(:disabled){border-color:var(--c);transform:translateY(-1px)}
+.mv .mn{font-family:var(--f-pixel);font-size:1.12rem}
+.mv .mi{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.76rem;color:var(--sub)}
+.mv .mf{font-size:.74rem;color:var(--gold);min-height:1.1em}
+.card{text-align:left;display:flex;gap:10px;align-items:center;padding:10px;background:var(--night)}
+.card .t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.card .t b{font-family:var(--f-pixel);font-weight:400;font-size:1.02rem}
+.card .t small{color:var(--sub);font-size:.74rem}
+.card.on{border-color:var(--me)}
+.tog{text-align:left;display:flex;flex-direction:column;gap:2px;padding:9px 12px;background:var(--night)}
+.tog b{font-family:var(--f-pixel);font-weight:400;font-size:1rem}
+.tog small{color:var(--sub);font-size:.74rem}
+.tog[aria-pressed="true"]{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.tog[aria-pressed="true"] b{color:var(--gold)}
+.plan{display:flex;gap:6px 10px;flex-wrap:wrap;align-items:center;font-size:.8rem;color:var(--sub);border-top:1px solid var(--line);padding-top:8px}
+.plan .pc{border:1px solid var(--gold);color:var(--gold);border-radius:99px;padding:1px 10px}
+.plan .warn{color:var(--bad)}
+.data{grid-column:1/-1;background:var(--night);border-radius:8px;padding:10px 12px;font-size:.82rem;display:flex;flex-direction:column;gap:4px}
+.data h4{margin:0;font-family:var(--f-pixel);font-weight:400;font-size:.95rem}
+.data ul{margin:0;padding-left:1.1em}
+.data .dim{color:var(--sub)}
+
+/* 結果 */
+.result{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#05080fcc;padding:16px}
+.result .box{background:var(--panel);border:2px solid var(--gold);border-radius:16px;padding:26px 30px;text-align:center;display:flex;flex-direction:column;gap:12px;max-width:420px}
+.result h2{margin:0;font-family:var(--f-pixel);font-weight:400;font-size:2.2rem;color:var(--gold)}
+.result h2.lose{color:var(--sub)}
+.result .btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+
+/* 実況ログ */
+.logp{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;max-height:380px;overflow:auto;font-size:.84rem}
+.logp p{margin:0 0 3px}
+.logp .t{color:var(--gold);font-family:var(--f-pixel);margin-top:8px}
+.logp .sys{color:#ffd98a}
+.logp .spk{font-weight:700}
+
+/* チームを作る */
+.builder{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.builder h2{margin:0;font-family:var(--f-pixel);font-weight:400;font-size:1.15rem;color:var(--gold)}
+.builder label{display:flex;flex-direction:column;gap:3px;font-size:.78rem;color:var(--sub)}
 .tr{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:end}
-.shi{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
-.shi span{font-family:var(--f-mono);font-size:.8rem;padding:2px 10px;border-radius:6px;background:var(--bg);border:1px solid var(--line)}
-.derived{font-size:.82rem;color:var(--sub);margin:4px 0 12px}
-.mons{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
-.mon{border:1px solid var(--line);border-radius:8px;padding:10px;min-width:0;background:var(--bg)}
-.mon .hd{display:flex;gap:8px;align-items:center;justify-content:space-between;font-size:.8rem;color:var(--sub);margin-bottom:6px}
+.shi{display:flex;flex-wrap:wrap;gap:8px}
+.shi span{font-family:var(--f-pixel);font-size:.9rem;padding:3px 12px;border-radius:8px;background:var(--night);border:1px solid var(--line)}
+.derived,.note{font-size:.82rem;color:var(--sub);margin:0}
+.mons{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px}
+.mon{border:1px solid var(--line);border-radius:10px;padding:10px;min-width:0;background:var(--night);display:flex;flex-direction:column;gap:6px}
+.mon .hd{display:flex;gap:8px;align-items:center;justify-content:space-between;font-size:.8rem;color:var(--sub)}
+.mon .hd label{flex-direction:row;gap:4px;color:var(--ink);align-items:center}
 .mon input[type=text]{width:100%;box-sizing:border-box}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
-.meter{display:grid;grid-template-columns:3.2em 1fr 4.6em;gap:6px;align-items:center;font-size:.8rem;margin-top:4px}
-.meter input{width:100%;padding:0}
-.meter b{font-family:var(--f-mono);font-weight:500;text-align:right}
-.sum{font-family:var(--f-mono);font-size:.78rem;margin-top:6px}
-.sum.bad{color:var(--foe)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.two select{width:100%}
+.meter{display:grid;grid-template-columns:3.2em 1fr 4.8em;gap:6px;align-items:center;font-size:.8rem}
+.meter input{width:100%;padding:0;accent-color:var(--gold)}
+.meter b{font-family:var(--f-pixel);font-weight:400;text-align:right}
+.sum{font-family:var(--f-pixel);font-size:.82rem}
+.sum.bad{color:var(--bad)}
+.go{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.meta{font-size:.8rem;color:var(--sub)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 
-<div class="wrap">
-  <h1>探検堂バトルシミュレーター</h1>
-  <p class="lead">ルールブック第1版の最小版です。3vs3で、技・交代・『指令』（六令）・四式・図鑑を選んでターンを回します。体力は数字で出さず、スレと同じく「大きなダメージ！＠2」の形で表示します。チームは例として用意した2組で、データは原典の第一節終わりごろを元にした目安です。</p>
+<div class="app">
+  <header class="top">
+    <h1 class="logo">探検堂バトル<small>ルールブック第1版のバトルシミュレーター（3vs3）</small></h1>
+    <nav class="nav">
+      <button id="navTitle">チームを選ぶ</button>
+      <button id="openB">チームを作る</button>
+      <button id="navLog" aria-pressed="false" hidden>実況ログ</button>
+    </nav>
+  </header>
 
-  <div class="setup">
-    <label>自分のチーム<select id="myTeam"></select></label>
-    <label>相手のチーム<select id="foeTeam"></select></label>
-    <label>自分の「指示」<select id="myOrder"><option>C</option><option selected>B</option><option>A</option></select></label>
-    <label>相手の「指示」<select id="foeOrder"><option>C</option><option selected>B</option><option>A</option></select></label>
-    <label>自分の六令<select id="myMode"><option value="jk">熟達</option><option value="zk">全開（指示B以上）</option><option value="mix">混成（指示A）</option></select></label>
-    <button class="primary" id="start">試合開始</button>
-    <button id="openB">チームを作る</button>
-  </div>
+  <section id="title">
+    <div class="vs">
+      <div class="corner me">
+        <h2>自陣</h2>
+        <label>チーム<select id="myTeam"></select></label>
+        <div class="row2">
+          <label>「指示」<select id="myOrder"><option>C</option><option selected>B</option><option>A</option></select></label>
+          <label>六令<select id="myMode"><option value="jk">熟達</option><option value="zk">全開（指示B以上）</option><option value="mix">混成（指示A）</option></select></label>
+        </div>
+        <ul class="roster" id="myRoster"></ul>
+      </div>
+      <div class="mid">VS</div>
+      <div class="corner foe">
+        <h2>敵陣</h2>
+        <label>チーム<select id="foeTeam"></select></label>
+        <div class="row2">
+          <label>「指示」<select id="foeOrder"><option>C</option><option selected>B</option><option>A</option></select></label>
+          <label>動かすのは<select id="foeCtl" disabled><option>相手AI（自分の型で動く）</option></select></label>
+        </div>
+        <ul class="roster" id="foeRoster"></ul>
+      </div>
+    </div>
+    <div class="startbar" style="margin-top:14px"><button class="big" id="start">試合開始</button></div>
+    <p class="hintline" style="margin-top:8px">体力は数字で出ません。受けたダメージの大きさと「＠（あと何発で倒れるか）」で読み合います。</p>
+  </section>
+
+  <section id="battle" hidden style="display:flex;flex-direction:column;gap:10px">
+    <div class="strip foe" id="foeTag"></div>
+    <div class="stage" id="stage">
+      <div class="plat foe"></div><div class="plat me"></div>
+      <div class="tok foe empty" id="foeTok"></div>
+      <div class="tok me empty" id="meTok"></div>
+      <div class="hud foe empty" id="foeHud"></div>
+      <div class="hud me empty" id="meHud"></div>
+      <div class="banner" id="banner"></div>
+    </div>
+    <div class="strip me" id="meTag"></div>
+    <button class="msg" id="msg" aria-live="polite"><span id="msgText"></span><span class="caret" id="caret" hidden>▼</span></button>
+    <div class="msgctl">
+      <button id="autoBtn" aria-pressed="true">自動送り：オン</button>
+      <button id="skipBtn">このTを早送り</button>
+    </div>
+    <section class="menu" id="menu" hidden>
+      <p class="ask" id="ask"></p>
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div class="pane" id="pane"></div>
+      <div class="plan" id="plan"></div>
+    </section>
+    <section class="logp" id="logp" hidden></section>
+  </section>
 
   <section class="builder" id="builder" hidden>
     <h2>チームを作る</h2>
@@ -100,33 +272,15 @@ button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid 
       <button id="roll">資質のダイスを振る</button>
     </div>
     <div class="shi" id="shi"></div>
-    <div class="derived" id="derived"></div>
+    <p class="derived" id="derived"></p>
     <label>『固有』（効果のメモ。バトルではまだ動きません）<input id="koyu" type="text" placeholder="例: 味方の『役割』の発動時、T終了時まで全体の場を「エレキフィールド」にする"></label>
     <p class="note">能力はメーター式です。1つを上げると、ほかの5つが少しずつ下がって、合計種族値の枠に収まります。「試合に出す」に印を付けた3体（印がなければ上から3体）で戦います。</p>
     <div class="mons" id="mons"></div>
-    <div class="go"><button class="primary" id="save">保存してバトルに使う</button><span class="meta" id="saveMsg"></span></div>
+    <div class="go"><button class="big" id="save">保存してバトルに使う</button><span class="meta" id="saveMsg"></span></div>
   </section>
-
-  <div class="field">
-    <section class="side me" id="meSide"></section>
-    <section class="side foe" id="foeSide"></section>
-  </div>
-
-  <section class="cmd" id="cmd" hidden>
-    <h3 id="cmdTitle">指示</h3>
-    <div class="moves" id="moves"></div>
-    <div class="opts">
-      <label>交代<select id="sw"><option value="">しない</option></select></label>
-      <label>『指令』<select id="order"><option value="">使わない</option></select></label>
-      <label>四式<select id="shiki"><option value="">使わない</option></select></label>
-      <button id="dex">図鑑で解析</button>
-    </div>
-    <div class="go"><button class="primary" id="exec">指示を出す</button><span class="meta" id="hint"></span></div>
-  </section>
-
-  <div class="log" id="log" aria-live="polite"></div>
-  <p class="note">相手は「自分の型（得意な技で押す、危ないときは交代や四式で受ける）」で動き、「指示」が低いほど判断がぶれます。指示の差1つにつき、高い方に急所ランク+1。「ここぞ！」は3vs3なので残り1体、またはお互いの『エース』の対面で入ります。</p>
 </div>
+
+<div class="result" id="result" hidden><div class="box"><h2 id="resT"></h2><p id="resD" style="margin:0"></p><div class="btns"><button class="big" id="again">もう一度</button><button id="back">チームを選び直す</button></div></div></div>
 
 <script id="engine">
 /* ===== データ ===== */
@@ -253,7 +407,12 @@ const ORD={C:0,B:1,A:2};
 function cur(s){return s.team[s.act]}
 function alive(s){return s.team.filter(m=>!m.fainted)}
 function isAce(m){return m.role==="不動のエース"}
-function L(B,cls,txt,spk){B.log.push({cls,txt,spk})}
+// 画面用に、その時点の両陣のようすを記録する
+function snap(B){return B.sides.map(s=>{const m=cur(s);return {name:s.name,order:s.order,kokozo:s.kokozo,dex:s.dex,
+ ord:["a","b","c","d","s","h"].filter(k=>s.used[k]).length,shk:Object.keys(s.shikiUsed).length,
+ team:s.team.map((x,i)=>({name:x.name,f:x.fainted,a:i===s.act,seen:!!x.seen})),
+ m:s.out?{name:m.name,lv:m.lv,types:m.types,status:m.status,cnf:!!(m.vol&&m.vol.cnf),stg:{...m.stg},f:m.fainted,last:m.lastHit||null}:null}})}
+function L(B,cls,txt,spk){B.log.push({cls,txt,spk,snap:snap(B)})}
 function stage(B,si,m,k){let n=m.stg[k];const s=B.sides[si];if(isAce(m)&&s.kokozo&&m===cur(s))n+=1;return clamp(n,-6,6)}
 function boost(B,si,m,k){let x=1;if(m.role==="二枚看板")x*=1.33;const z=B.sides[si].zk;if(z[k]&&m===cur(B.sides[si]))x*=2;return x}
 function critStage(B,si,m,mv){let c=0;const s=B.sides[si],o=B.sides[1-si];if(m.role==="二枚看板")c++;if(isAce(m)&&s.kokozo)c++;if(hasFx(mv,"crit1"))c++;const d=ORD[s.order]-ORD[o.order];if(d>0)c+=d;return clamp(c,0,4)}
@@ -280,7 +439,7 @@ function expPct(B,ai,di,mv){if(mv.cat==="st")return 0;const A=cur(B.sides[ai]),D
 function updKokozo(B){const a=cur(B.sides[0]),b=cur(B.sides[1]);const face=a&&b&&!a.fainted&&!b.fainted&&isAce(a)&&isAce(b);
  B.sides.forEach((s,i)=>{const on=alive(s).length===1||face;if(on&&!s.kokozo){s.kokozo=true;L(B,"sys",`◎${s.name}の陣営が「ここぞ！」という場面になった！`);const m=cur(s);if(isAce(m)&&!m.fainted)L(B,"sys",`◎${m.name}の『不動のエース』が発動！　全能力値が上昇し、技のクリティカル率が上がった！`)}
   else if(!on&&s.kokozo&&alive(s).length>0){s.kokozo=false;L(B,"sys",`◎${s.name}の陣営が「ここぞ！」という場面でなくなった！`)}})}
-function onEnter(B,si,m){const s=B.sides[si];m.enteredTurn=B.turn;m.vol={};L(B,"sys",`◎${s.name}は「${m.name}」を繰り出した！`);
+function onEnter(B,si,m){const s=B.sides[si];s.out=true;m.enteredTurn=B.turn;m.vol={};L(B,"sys",`◎${s.name}は「${m.name}」を繰り出した！`);
  if(m.firstOut&&B.turn===0){const k={"鬼人":"a","魔術師":"c","狂走":"s"}[m.role];if(k){m.stg[k]=clamp(m.stg[k]+1,-6,6);L(B,"sys",`◎${m.name}の『${m.role}』！　先発で場に出て「${{a:"こうげき",c:"とくこう",s:"すばやさ"}[k]}」が上がった！`)}}
  m.firstOut=false;if(s.kokozo&&isAce(m))L(B,"sys",`◎${m.name}の『不動のエース』が発動！　全能力値が上昇し、技のクリティカル率が上がった！`);}
 function doSwitch(B,si,to,silent){const s=B.sides[si];const old=cur(s);if(old&&!old.fainted){old.lock=null;old.stg={a:0,b:0,c:0,d:0,s:0};old.vol={};if(old.status==="tox")old.toxN=1;if(old.role==="エースアシストα"){s.assist=true;L(B,"sys",`◎${old.name}の『エースアシストα』！　味方『エース』が最初に繰り出す技の威力が2倍になる！`)}
@@ -319,7 +478,7 @@ function canAct(B,si,mv){const m=cur(B.sides[si]),v=m.vol;
   else{L(B,"sys",`${m.name}は「混乱」している！`);if(RNG()<.5){
    const At=Math.floor(m.st.a*stMul(m.stg.a)),Dt=Math.floor(m.st.b*stMul(m.stg.b));
    const d=Math.max(1,Math.floor((Math.floor(Math.floor(Math.floor(2*m.lv/5+2)*40*At/Dt)/50)+2)*(0.85+RNG()*0.15)));
-   m.hp=Math.max(0,m.hp-d);L(B,"sys",`わけも分からず自分を攻撃した！　${m.name}に「${word(d/m.maxhp)}」！`);
+   m.hp=Math.max(0,m.hp-d);m.lastHit={w:word(d/m.maxhp),at:m.hp>0?Math.ceil(m.hp/d):0};L(B,"sys",`わけも分からず自分を攻撃した！　${m.name}に「${word(d/m.maxhp)}」！`);
    if(m.hp<=0){L(B,"sys",`◎―――――${m.name}は倒れた！`);m.fainted=true}return false}}}
  if(m.status==="par"&&RNG()<.25){L(B,"sys",`${m.name}は体がしびれて動けない！`);return false}
  return true}
@@ -365,8 +524,8 @@ function hit(B,ai,di,mv,ctx){const A=cur(B.sides[ai]),D=cur(B.sides[di]),sA=B.si
  D.hp=Math.max(0,D.hp-dmg);
  if(hits>1)L(B,"sys",`${hits}回当たった！`);
  const pct=dmg/D.maxhp;let w=D.hp===1&&dmg>=before-1&&before>1?"皮一枚のダメージ":word(pct);
- if(D.hp<=0){L(B,"sys",`${D.name}に「${w}」！`);L(B,"sys",`◎―――――${D.name}は倒れた！`);D.fainted=true}
- else{const at=Math.ceil(D.hp/Math.max(1,dmg));L(B,"sys",`${D.name}に「${w}」！＠${at}`)}
+ if(D.hp<=0){D.lastHit={w,at:0};L(B,"sys",`${D.name}に「${w}」！`);L(B,"sys",`◎―――――${D.name}は倒れた！`);D.fainted=true}
+ else{const at=Math.ceil(D.hp/Math.max(1,dmg));D.lastHit={w,at};L(B,"sys",`${D.name}に「${w}」！＠${at}`)}
  if(mv.type==="炎"&&D.status==="frz"&&!D.fainted){D.status=null;L(B,"sys",`${D.name}の「凍り」が解けた！`)}
  secondary(B,A,D,mv,!ctx.foeMoved);
  if(D.item==="オボンのみ"&&!D.fainted&&!D.tag.berry&&D.hp<=D.maxhp/2){D.tag.berry=true;D.hp=Math.min(D.maxhp,D.hp+Math.floor(D.maxhp/4));L(B,"sys",`◎${D.name}は「オボンのみ」を使い、体力を1/4回復した！`)}
@@ -412,7 +571,7 @@ function runTurn(B,acts){
  S.forEach((s,i)=>{const m=cur(s);if(!m.fainted&&m.item==="たべのこし"&&m.hp<m.maxhp){m.hp=Math.min(m.maxhp,m.hp+Math.floor(m.maxhp/16));L(B,"sys",`${m.name}は「たべのこし」で少し回復した。`)}});
  S.forEach((s,i)=>{const m=cur(s);if(m.fainted||!["brn","psn","tox"].includes(m.status))return;
   const d=Math.max(1,m.status==="tox"?Math.floor(m.maxhp*m.toxN/16):Math.floor(m.maxhp/8));if(m.status==="tox")m.toxN=Math.min(15,m.toxN+1);
-  m.hp=Math.max(0,m.hp-d);L(B,"sys",`${m.name}は「${STN[m.status]}」のダメージを受けている！　「${word(d/m.maxhp)}」`);
+  m.hp=Math.max(0,m.hp-d);m.lastHit={w:word(d/m.maxhp),at:m.hp>0?Math.ceil(m.hp/d):0};L(B,"sys",`${m.name}は「${STN[m.status]}」のダメージを受けている！　「${word(d/m.maxhp)}」`);
   if(m.hp<=0){L(B,"sys",`◎―――――${m.name}は倒れた！`);m.fainted=true}});
  updKokozo(B);checkEnd(B);
 }
@@ -453,53 +612,125 @@ if(typeof module!=="undefined")module.exports={newBattle,runTurn,aiAct,aiReplace
 <script>
 /* ===== 画面 ===== */
 const $=id=>document.getElementById(id);
-let B=null,sel=null;
+const TC={"ノ":"#a8a77a","炎":"#ee8130","水":"#6390f0","電":"#f7d02c","草":"#7ac74c","氷":"#96d9d6","闘":"#c22e28","毒":"#a33ea1","地":"#e2bf65","飛":"#a98ff3","超":"#f95587","虫":"#a6b91a","岩":"#b6a136","霊":"#735797","龍":"#6f35fc","悪":"#705746","鋼":"#b7b7ce","妖":"#d685ad"};
+const LIGHT_INK=["闘","毒","霊","龍","悪"];
+const ty=t=>`<span class="ty" style="--c:${TC[t]};--ti:${LIGHT_INK.includes(t)?"#fff":"#141824"}">${TN[t]}</span>`;
+const CATN={ph:"物理",sp:"特殊",st:"変化"};
+let B=null,shown=0,typing=null,autoT=null,full="",auto=true,tab="fight",plan={order:"",shiki:""},pendingU=null,lastCfg=null;
+
+/* --- 画面の切り替え --- */
+function show(id){["title","battle","builder"].forEach(s=>$(s).hidden=s!==id);$("navLog").hidden=id!=="battle"}
+$("navTitle").onclick=()=>{show("title");drawRosters()};
+function roster(sel,box){const t=TEAMS[$(sel).value];$(box).innerHTML=t.mons.map(m=>`<li><span class="dot" style="--c:${TC[m.types[0]]}"></span><span>${m.name}</span><small>${m.types.map(x=>TN[x]).join("・")}${m.role?"　『"+m.role+"』":""}</small></li>`).join("")}
+function drawRosters(){roster("myTeam","myRoster");roster("foeTeam","foeRoster")}
 for(const n of Object.keys(TEAMS)){$("myTeam").add(new Option(n,n));$("foeTeam").add(new Option(n,n))}
 $("foeTeam").selectedIndex=1;
-function sideHTML(i){const s=B.sides[i],m=cur(s),me=i===0;
- const chips=[`指示${s.order}`,`図鑑 残り${s.dex}`,s.kokozo?"「ここぞ！」":""].filter(Boolean).map(c=>`<span class="chip${c.includes("ここぞ")?" on":""}">${c}</span>`).join("");
- const ord=["a","b","c","d","s","h"].filter(k=>s.used[k]).length,shk=Object.keys(s.shikiUsed).length;
- const bench=s.team.map((x,j)=>`<span class="ball${x.fainted?" down":""}">${j===s.act?"▶ ":""}${me||x.seen?x.name:"？？？"}</span>`).join("");
- const st=[m.status?`「${STN[m.status]}」`:"",m.vol&&m.vol.cnf?"「混乱」":"",...Object.entries(m.stg).filter(([k,v])=>v).map(([k,v])=>`${{a:"攻",b:"防",c:"特攻",d:"特防",s:"速"}[k]}${v>0?"+":""}${v}`)].filter(Boolean).join(" ");
- const dex=(me||m.dexed)?`${m.types.map(t=>TN[t]).join("/")}　Lv${m.lv}　${m.role?"『"+m.role+"』":""}\n技: ${m.moves.join("、")}\n持ち物: ${m.item}`:`${m.types.map(t=>TN[t]).join("/")}（図鑑で解析すると、技・持ち物・『役割』が見える）`;
- return `<h2><span class="who">${me?"自陣":"敵陣"}：${s.name}</span><span class="meta">指令 ${ord}/6 使用　四式 ${shk}/4 使用</span></h2>
- <div class="active">${m.fainted?"（倒れている）":m.name}</div><div class="meta">${st||"状態・能力変化なし"}</div>
- <div class="chips">${chips}</div><div class="dexbox">${dex}</div><div class="bench">${bench}</div>`}
-function render(keep=true){const prev=keep?{sw:$("sw").value,order:$("order").value,shiki:$("shiki").value}:{};$("meSide").innerHTML=sideHTML(0);$("foeSide").innerHTML=sideHTML(1);
- const lg=$("log");lg.innerHTML=B.log.map(e=>e.cls==="t"?`<p class="t">${e.txt}</p>`:e.spk?`<p><span class="spk">【${e.spk}】</span>${e.txt}</p>`:`<p class="${e.cls}">${e.txt}</p>`).join("");lg.scrollTop=lg.scrollHeight;
- const s=B.sides[0],m=cur(s);$("cmd").hidden=B.over;if(B.over)return;
- const need=m.fainted;$("cmdTitle").textContent=need?`${m.name}が倒れた。次に出すポケモンを選ぶ`:`T${B.turn+1}の指示`;
- const mv=$("moves");mv.innerHTML="";if(!need)m.moves.forEach(n=>{const x=MV[n];const b=document.createElement("button");b.className=sel===n?"sel":"";b.disabled=!!(lockOf(m)&&lockOf(m)!==n);
-  b.innerHTML=`<span>${n}</span><small>${TN[x.type]}・${x.cat==="ph"?"物理":x.cat==="sp"?"特殊":"変化"}${x.pow?"・"+x.pow:""}${x.pri?"・優先"+x.pri:""}${fxNote(x)?"・"+fxNote(x):""}</small>`;b.onclick=()=>{sel=n;render()};mv.appendChild(b)});
- const sw=$("sw");sw.innerHTML=need?"":'<option value="">しない</option>';s.team.forEach((x,j)=>{if(!x.fainted&&j!==s.act)sw.add(new Option(x.name,j))});
- const od=$("order");od.innerHTML='<option value="">使わない</option>';od.disabled=need;
- const NM={a:"攻撃",b:"防御",c:"特攻",d:"特防",s:"敏捷",h:"回復"};
- ["a","b","c","d","s","h"].forEach(k=>{if(s.used[k])return;const modes=s.mode==="mix"?["jk","zk"]:[s.mode];modes.forEach(md=>od.add(new Option(`${md==="zk"?"全開":"熟達"}${NM[k]}指令`,`${k}:${md}`)))});
- const sk=$("shiki");sk.innerHTML='<option value="">使わない</option>';sk.disabled=need;
- [["kawase","かわせ！（物理を1回回避）"],["yokero","よけろ！（特殊を1回回避）"],["taero","たえろ！（半減して必ず耐える）"],["modore","もどれ！（相手の行動後に交代）"]].forEach(([k,t])=>{if(!s.shikiUsed[k])sk.add(new Option(t,k))});
- for(const k of ["sw","order","shiki"]){const el=$(k);if(prev[k]&&[...el.options].some(o=>o.value===prev[k]))el.value=prev[k]}
- $("dex").disabled=need||s.dex<=0||cur(B.sides[1]).dexed;
- $("hint").textContent=need?"":"技か交代を選んでください。（「とんぼがえり」「ボルトチェンジ」は、交代先も選ぶと技のあとにその子へ交代）";}
+$("myTeam").addEventListener("change",()=>{const t=TEAMS[$("myTeam").value];if(t.shi)$("myOrder").value=t.shi["指示"];drawRosters()});
+$("foeTeam").addEventListener("change",()=>{const t=TEAMS[$("foeTeam").value];if(t.shi)$("foeOrder").value=t.shi["指示"];drawRosters()});
+
+/* --- 場の描きかえ（ログ1行ごとの記録から） --- */
+function hudHTML(sn,me){const m=sn.m;
+ const balls=sn.team.map(x=>`<i class="pb${x.f?" down":""}${x.a?" on":""}" title="${me||x.seen||x.a?x.name:"？？？"}"></i>`).join("");
+ const st=(m.status?`<b class="st st-${m.status}">${STN[m.status]}</b>`:"")+(m.cnf?`<b class="st st-cnf">混乱</b>`:"");
+ const stg=Object.entries(m.stg).filter(([k,v])=>v).map(([k,v])=>`<span class="stgc ${v>0?"up":"dn"}">${SK1[k]}${v>0?"+":""}${v}</span>`).join("");
+ const hit=m.last?`<span class="w">${m.last.w}</span>${m.last.at?`<span class="at">＠${m.last.at}</span>`:""}`:`<span class="w dim">ダメージなし</span>`;
+ return `<div class="hud-top"><span class="hn">${m.name}</span><span class="lv">Lv${m.lv}</span></div>
+ <div class="hud-mid">${m.types.map(ty).join("")}${st}</div><div class="hud-hit">${hit}</div><div class="hud-bot"><span class="balls">${balls}</span>${stg}</div>`}
+function tagHTML(sn,me){return `<span class="tn">${me?"自陣":"敵陣"}：${sn.name}</span><span class="chip">指示${sn.order}</span>${me?`<span class="chip">図鑑 残り${sn.dex}</span>`:""}<span class="chip">指令 ${sn.ord}/6</span><span class="chip">四式 ${sn.shk}/4</span>${sn.kokozo?'<span class="chip kz">「ここぞ！」</span>':""}`}
+function anim(el,c){el.classList.remove("hit","enter","atk");void el.offsetWidth;el.classList.add(c)}
+function applySnap(sn){[0,1].forEach(i=>{const s=sn[i],k=i?"foe":"me";$(k+"Tag").innerHTML=tagHTML(s,!i);
+  const hud=$(k+"Hud"),tok=$(k+"Tok");
+  if(!s.m){hud.classList.add("empty");tok.classList.add("empty");tok.dataset.key="";return}
+  hud.classList.remove("empty");hud.innerHTML=hudHTML(s,!i);
+  const key=s.m.name+"|"+s.team.findIndex(x=>x.a);
+  if(tok.dataset.key!==key){tok.dataset.key=key;tok.classList.remove("empty","down");const c1=TC[s.m.types[0]],c2=TC[s.m.types[1]||s.m.types[0]];
+   tok.innerHTML=`<div class="orb" style="--c1:${c1};--c2:${c2}"><span>${[...s.m.name][0]}</span></div>`;anim(tok,"enter")}
+  tok.classList.toggle("down",s.m.f);tok.dataset.st=s.m.status||""})}
+function sideOf(name,sn){for(const i of [0,1])if(sn[i].m&&name.startsWith(sn[i].m.name))return i;return -1}
+function effects(e){if(!e.snap)return;const t=e.txt,sn=e.snap;let m;
+ if((m=t.match(/^◎(.+?)の「/))){const i=sideOf(m[1],sn);if(i>=0)anim($(i?"foeTok":"meTok"),"atk")}
+ else if(/に「.+?」！/.test(t)||/ダメージを受けている|自分を攻撃した|反動のダメージ/.test(t)){
+  const nm=t.startsWith("わけも")?t.match(/！　(.+?)に「/)?.[1]:t.split(/に「|は「|は反動/)[0];const i=nm?sideOf(nm,sn):-1;if(i>=0)anim($(i?"foeTok":"meTok"),"hit")}}
+
+/* --- メッセージを1行ずつ流す --- */
+function play(){$("menu").hidden=true;$("skipBtn").disabled=false;next()}
+function next(){clearTimeout(autoT);autoT=null;
+ if(shown>=B.log.length){done();return}
+ const e=B.log[shown++];if(e.snap)applySnap(e.snap);drawLog();
+ if(e.cls==="t"){const b=$("banner");b.textContent=e.txt.replace(/[―\s]/g,"");b.classList.remove("go");void b.offsetWidth;b.classList.add("go");autoT=setTimeout(next,600);return}
+ effects(e);full=(e.spk?`【${e.spk}】`:"")+e.txt;const el=$("msgText");el.className=e.txt.startsWith("◎")?"sys":"";$("caret").hidden=true;
+ let n=0;clearInterval(typing);typing=setInterval(()=>{n+=2;el.textContent=full.slice(0,n);if(n>=full.length)endType()},18)}
+function endType(){clearInterval(typing);typing=null;$("msgText").textContent=full;$("caret").hidden=false;if(auto)autoT=setTimeout(next,750)}
+$("msg").onclick=()=>{if(typing){endType();return}if(shown<B.log.length||autoT)next()};
+$("autoBtn").onclick=()=>{auto=!auto;$("autoBtn").textContent=`自動送り：${auto?"オン":"オフ"}`;$("autoBtn").setAttribute("aria-pressed",auto);if(auto&&!typing&&shown<B.log.length)next()};
+$("skipBtn").onclick=()=>{clearInterval(typing);typing=null;clearTimeout(autoT);autoT=null;
+ while(shown<B.log.length){const e=B.log[shown++];if(e.snap)applySnap(e.snap)}
+ const last=[...B.log].reverse().find(e=>e.cls!=="t");if(last){full=(last.spk?`【${last.spk}】`:"")+last.txt;$("msgText").textContent=full}drawLog();done()};
+function done(){$("skipBtn").disabled=true;$("caret").hidden=true;
+ if(B.over){const win=B.winner===0;$("resT").textContent=win?"勝利！":"敗北……";$("resT").className=win?"":"lose";
+  $("resD").textContent=win?`${B.sides[0].name}は${B.sides[1].name}とのバトルに勝利した！（${B.turn}T）`:`${B.sides[0].name}は${B.sides[1].name}に敗れた……（${B.turn}T）`;$("result").hidden=false;return}
+ tab=cur(B.sides[0]).fainted?"party":tab;drawMenu()}
+function drawLog(){if($("logp").hidden)return;const lg=$("logp");
+ lg.innerHTML=B.log.slice(0,shown).map(e=>e.cls==="t"?`<p class="t">${e.txt}</p>`:e.spk?`<p><span class="spk">【${e.spk}】</span>${e.txt}</p>`:`<p class="${e.cls}">${e.txt}</p>`).join("");lg.scrollTop=lg.scrollHeight}
+$("navLog").onclick=()=>{const p=$("logp");p.hidden=!p.hidden;$("navLog").setAttribute("aria-pressed",!p.hidden);drawLog()};
+
+/* --- 指示メニュー --- */
+const ON={a:"攻撃",b:"防御",c:"特攻",d:"特防",s:"敏捷",h:"回復"};
+const SHIKI=[["kawase","かわせ！","物理技を1回だけ回避する"],["yokero","よけろ！","特殊技を1回だけ回避する"],["taero","たえろ！","ダメージを半減し、必ず体力1で耐える"],["modore","もどれ！","相手の行動のあとに交代する（ポケモンから交代先を選ぶ）"]];
+function drawMenu(){const s=B.sides[0],m=cur(s),need=m.fainted;$("menu").hidden=false;
+ $("ask").textContent=need?"次に出すポケモンを選んでください。":pendingU?`「${pendingU}」のあとに出すポケモンを選んでください。`:`T${B.turn+1}　${m.name}は　どうする？`;
+ const T=[["fight","たたかう",""],["party","ポケモン",`${alive(s).length}/${s.team.length}`],["order","指令",`残り${6-["a","b","c","d","s","h"].filter(k=>s.used[k]).length}`],["shiki","四式",`残り${4-Object.keys(s.shikiUsed).length}`],["dex","図鑑",`残り${s.dex}`]];
+ $("tabs").innerHTML=T.map(([k,l,n])=>`<button role="tab" data-tab="${k}" aria-selected="${tab===k}"${need&&k!=="party"?" disabled":""}>${l}<span class="n">${n||"　"}</span></button>`).join("");
+ const p=$("pane");
+ if(tab==="fight"){const lk=lockOf(m);p.innerHTML=m.moves.map(n=>{const x=MV[n];
+   const info=`${ty(x.type)}<span>${CATN[x.cat]}</span>${x.pow?`<span>威力${x.pow}</span>`:""}${x.acc>100?"<span>必中</span>":x.acc<100?`<span>命中${x.acc}</span>`:""}${x.pri?`<span>優先${x.pri>0?"+":""}${x.pri}</span>`:""}`;
+   return `<button class="mv" data-mv="${n}" style="--c:${TC[x.type]}"${lk&&lk!==n?" disabled":""}><span class="mn">${n}</span><span class="mi">${info}</span><span class="mf">${fxNote(x)}</span></button>`}).join("")}
+ if(tab==="party"){p.innerHTML=s.team.map((x,j)=>{const on=j===s.act&&!x.fainted;const dis=x.fainted||j===s.act;
+   const sub=x.fainted?"ひんし":on?"場に出ている":[x.status?STN[x.status]:"",x.lastHit?`${x.lastHit.w}＠${x.lastHit.at}`:"ダメージなし"].filter(Boolean).join("　");
+   return `<button class="card${on?" on":""}" data-sw="${j}"${dis?" disabled":""}><span class="dot" style="--c:${TC[x.types[0]]};width:30px;height:30px"></span><span class="t"><b>${x.name}</b><small>${x.types.map(t=>TN[t]).join("・")}${x.role?"　『"+x.role+"』":""}　${x.item}</small><small>${sub}</small></span></button>`}).join("")
+   +(pendingU?`<button class="tog" data-u="auto"><b>おまかせ</b><small>相手に一番通りそうな子を出す</small></button><button class="tog" data-u="cancel"><b>やめる</b><small>技を選び直す</small></button>`:"")}
+ if(tab==="order"){const modes=s.mode==="mix"?["jk","zk"]:[s.mode];let h="";
+  ["a","b","c","d","s","h"].forEach(k=>modes.forEach(md=>{const v=`${k}:${md}`,used=s.used[k];
+   const d=md==="zk"?(k==="h"?"行動をスキップして体力を1/2回復":"1Tの間、能力が2倍"):(k==="h"?"体力を1/4回復":"能力ランク+1");
+   h+=`<button class="tog" data-ord="${v}" aria-pressed="${plan.order===v}"${used?" disabled":""}><b>『${md==="zk"?"全開":"熟達"}${ON[k]}指令』</b><small>${used?"使用済み":d}</small></button>`}));p.innerHTML=h}
+ if(tab==="shiki")p.innerHTML=SHIKI.map(([k,l,d])=>`<button class="tog" data-sk="${k}" aria-pressed="${plan.shiki===k}"${s.shikiUsed[k]?" disabled":""}><b>『${l}』</b><small>${s.shikiUsed[k]?"使用済み":d}</small></button>`).join("");
+ if(tab==="dex"){const f=cur(B.sides[1]);
+  const foe=f.dexed?`<div class="data"><h4>${f.name}（解析済み）</h4><span>${f.types.map(ty).join(" ")}　Lv${f.lv}　${f.role?"『"+f.role+"』":"『役割』なし"}　持ち物：${f.item}</span><ul>${f.moves.map(n=>`<li>${n}　<span class="dim">${TN[MV[n].type]}・${CATN[MV[n].cat]}${MV[n].pow?"・威力"+MV[n].pow:""}${fxNote(MV[n])?"・"+fxNote(MV[n]):""}</span></li>`).join("")}</ul></div>`
+   :`<div class="data"><h4>${f.name}</h4><span class="dim">${f.types.map(t=>TN[t]).join("・")}。図鑑で解析すると、技・持ち物・『役割』が見えます（指示を出す前に使えて、Tは消費しません）。</span></div>`;
+  p.innerHTML=`<button class="tog" id="dexGo"${s.dex<=0||f.dexed?" disabled":""}><b>図鑑で解析する</b><small>残り${s.dex}回${f.dexed?"（この相手は解析済み）":""}</small></button><div></div>`+foe
+   +`<div class="data"><h4>${m.name}（自分）</h4><span>${m.types.map(ty).join(" ")}　Lv${m.lv}　${m.role?"『"+m.role+"』":"『役割』なし"}　持ち物：${m.item}</span></div>`}
+ const parts=[plan.order?`<span class="pc">『${plan.order.endsWith("zk")?"全開":"熟達"}${ON[plan.order[0]]}指令』</span>`:"",plan.shiki?`<span class="pc">『${SHIKI.find(x=>x[0]===plan.shiki)[1]}』</span>`:""].filter(Boolean);
+ $("plan").innerHTML=need?"":`<span>一緒に出す：</span>${parts.join("")||"なし（指令・四式のタブで選べます）"}${plan.shiki==="modore"?'<span class="warn">『もどれ！』は「ポケモン」から交代先を選んで出します</span>':""}<span style="margin-left:auto">技を押すか、交代先を押すと指示が出ます</span>`}
+$("tabs").onclick=e=>{const b=e.target.closest("[data-tab]");if(!b||b.disabled)return;tab=b.dataset.tab;drawMenu()};
+$("pane").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;const s=B.sides[0],m=cur(s);
+ if(b.dataset.mv){const n=b.dataset.mv;if(plan.shiki==="modore"){tab="party";drawMenu();return}
+  if(hasFx(MV[n],"uturn")&&alive(s).length>1){pendingU=n;tab="party";drawMenu();return}commit({move:n});return}
+ if(b.dataset.u){if(b.dataset.u==="cancel"){pendingU=null;tab="fight";drawMenu();return}const n=pendingU;pendingU=null;commit({move:n});return}
+ if(b.dataset.sw!=null){const j=+b.dataset.sw;
+  if(m.fainted){s.act=j;onEnter(B,0,cur(s));updKokozo(B);tab="fight";play();return}
+  if(pendingU){const n=pendingU;pendingU=null;commit({move:n,uturnTo:j});return}commit({switchTo:j});return}
+ if(b.dataset.ord){plan.order=plan.order===b.dataset.ord?"":b.dataset.ord;drawMenu();return}
+ if(b.dataset.sk){plan.shiki=plan.shiki===b.dataset.sk?"":b.dataset.sk;drawMenu();return}
+ if(b.id==="dexGo"){if(s.dex<=0)return;s.dex--;cur(B.sides[1]).dexed=true;L(B,"sys",`◎${s.name}は「ポケモン図鑑」を使用し、相手のデータを解析した！`);play()}};
+function commit(a){if(plan.order)a.order=plan.order;if(plan.shiki)a.shiki=plan.shiki;plan={order:"",shiki:""};tab="fight";
+ const f=aiAct(B,1);runTurn(B,[a,f]);
+ if(!B.over&&cur(B.sides[1]).fainted){const to=aiReplace(B,1);B.sides[1].act=to;onEnter(B,1,cur(B.sides[1]));updKokozo(B)}
+ B.sides[1].team[B.sides[1].act].seen=true;play()}
+
+/* --- 試合を始める --- */
 function start(){
  const mt=TEAMS[$("myTeam").value],ft=TEAMS[$("foeTeam").value];let mode=$("myMode").value;const mo=$("myOrder").value;
  if(mo==="C")mode="jk";if(mo==="B"&&mode==="mix")mode="zk";
  const fo=ft.shi?ft.shi["指示"]:$("foeOrder").value;
  B=newBattle({sides:[{trainer:mt.trainer,team:mt,order:mo,mode,ikusei:mt.shi?mt.shi["育成"]:"C"},{trainer:ft.trainer,team:ft,order:fo,mode:fo==="C"?"jk":(fo==="A"?"mix":"zk"),ikusei:ft.shi?ft.shi["育成"]:"C",ai:true}]});
- B.log.push({cls:"sys",txt:`◎―――――${ft.trainer}が勝負を仕掛けて来た！（3vs3）`});
- onEnter(B,0,cur(B.sides[0]));onEnter(B,1,cur(B.sides[1]));cur(B.sides[1]).seen=true;updKokozo(B);sel=null;render(false);}
+ shown=0;tab="fight";plan={order:"",shiki:""};pendingU=null;$("result").hidden=true;
+ ["meTok","foeTok"].forEach(k=>{$(k).dataset.key="";$(k).className=`tok ${k.startsWith("me")?"me":"foe"} empty`;$(k).innerHTML=""});
+ L(B,"sys",`◎―――――${ft.trainer}が勝負を仕掛けて来た！（3vs3）`);
+ onEnter(B,1,cur(B.sides[1]));cur(B.sides[1]).seen=true;onEnter(B,0,cur(B.sides[0]));updKokozo(B);
+ show("battle");play()}
 $("start").onclick=start;
-$("dex").onclick=()=>{const s=B.sides[0];if(s.dex<=0)return;s.dex--;cur(B.sides[1]).dexed=true;B.log.push({cls:"sys",txt:`◎${s.name}は「ポケモン図鑑」を使用し、相手のデータを解析した！`});render()};
-$("exec").onclick=()=>{
- const s=B.sides[0],m=cur(s);
- if(m.fainted){const v=$("sw").value;if(v==="")return;s.act=+v;onEnter(B,0,cur(s));afterReplace();render(false);return}
- const sw=$("sw").value;const a={};if(sw!==""&&sel&&hasFx(MV[sel],"uturn")){a.move=sel;a.uturnTo=+sw}else if(sw!==""){a.switchTo=+sw}else{if(!sel){$("hint").textContent="技を選ぶか、交代先を選んでください。";return}a.move=sel}
- if($("order").value)a.order=$("order").value;if($("shiki").value){a.shiki=$("shiki").value;if(a.shiki==="modore"&&a.switchTo==null){$("hint").textContent="『もどれ！』は交代先と一緒に選んでください。";return}}
- const f=aiAct(B,1);runTurn(B,[a,f]);
- [1].forEach(i=>{if(!B.over&&cur(B.sides[i]).fainted){const to=aiReplace(B,i);B.sides[i].act=to;onEnter(B,1,cur(B.sides[1]));cur(B.sides[1]).seen=true;updKokozo(B)}});
- B.sides[1].team.forEach(x=>{if(B.sides[1].team.indexOf(x)===B.sides[1].act)x.seen=true});
- sel=null;render(false);};
-function afterReplace(){updKokozo(B)}
-
+$("again").onclick=start;
+$("back").onclick=()=>{$("result").hidden=true;show("title");drawRosters()};
 /* ===== チームを作る ===== */
 const BUDGET=[450,500,500,550,550,600],SK=["h","a","b","c","d","s"],SN={h:"体力",a:"攻撃",b:"防御",c:"特攻",d:"特防",s:"素早"};
 const ROLE_BASE=["","不動のエース","エースアシストα","エースキラーα","鬼人","魔術師","狂走"];
@@ -548,7 +779,7 @@ $("mons").addEventListener("input",e=>{const t=e.target,i=+t.dataset.i,f=t.datas
 function updMon(i){const m=CT.mons[i];SK.forEach(k=>{const el=document.querySelector(`[data-i="${i}"][data-f="b_${k}"]`);if(!el)return;if(+el.value!==m.b[k])el.value=m.b[k];el.nextElementSibling.textContent=`${rankOf(m.b[k])} ${m.b[k]}`});
  const sum=SK.reduce((a,k)=>a+m.b[k],0);const box=document.querySelectorAll("#mons .mon")[i].querySelector(".sum");box.textContent=`合計 ${sum} / ${BUDGET[i]}`;box.classList.toggle("bad",sum!==BUDGET[i])}
 $("roll").onclick=roll;
-$("openB").onclick=()=>{$("builder").hidden=!$("builder").hidden;if(!CT){newCT();drawB()}};
+$("openB").onclick=()=>{show("builder");if(!CT){newCT();drawB()}};
 function loadSaved(){try{return JSON.parse(localStorage.getItem("tankendo-teams")||"[]")}catch(e){return[]}}
 function registerSaved(){for(const t of loadSaved()){const key="★"+t.name;if(TEAMS[key])continue;TEAMS[key]=toTeam(t);$("myTeam").add(new Option(key,key));$("foeTeam").add(new Option(key,key))}}
 function toTeam(t){let use=t.mons.filter(m=>m.use);if(use.length<3)use=t.mons.slice(0,3);use=use.slice(0,3);
@@ -557,8 +788,8 @@ $("save").onclick=()=>{if(!CT.shi){$("saveMsg").textContent="先に資質のダ�
  CT.name=$("tName").value||"オリジナル";CT.trainer=$("tTrainer").value||"わたし";CT.koyu=$("koyu").value;
  const all=loadSaved().filter(t=>t.name!==CT.name);all.push(JSON.parse(JSON.stringify(CT)));try{localStorage.setItem("tankendo-teams",JSON.stringify(all))}catch(e){}
  const key="★"+CT.name;TEAMS[key]=toTeam(CT);if(![...$("myTeam").options].some(o=>o.value===key)){$("myTeam").add(new Option(key,key));$("foeTeam").add(new Option(key,key))}
- $("myTeam").value=key;$("myTeam").dispatchEvent(new Event("change"));$("saveMsg").textContent=`「${key}」を保存しました。上の「試合開始」で使えます（このブラウザだけに保存されます）。`};
+ $("myTeam").value=key;$("myTeam").dispatchEvent(new Event("change"));$("saveMsg").textContent=`「${key}」を保存しました。「チームを選ぶ」の自陣・敵陣のどちらでも使えます（このブラウザだけに保存されます）。`};
 $("myTeam").addEventListener("change",()=>{const t=TEAMS[$("myTeam").value];if(t.shi){$("myOrder").value=t.shi["指示"]}});
 registerSaved();
-start();
+drawRosters();
 </script>
