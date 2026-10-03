@@ -42,7 +42,7 @@ AA意味文変換
 
 【System】
 ◎ガッシュは『全開特攻指令』を受け、自身の「特攻」を2倍にした！@1T
-ガッシュの専用ポテンシャルガッシュの専用ポテンシャル『炸裂する連鎖のライン』発動！@0/1
+ガッシュの専用ポテンシャル『炸裂する連鎖のライン』発動！@0/1
 
 【ガッシュ】
 バォォォォォオオオオオオオオオオオオオオオオオオオオオオオオオ！！！！！！！！
@@ -87,7 +87,7 @@ AA意味文変換
 結局のところ、誰でどう攻めるか程度の違いしかない――――――「統率」型の圧殺、その形ってわけだ
 
 【凛】
-（―――――こいつも確か「統率：A+」って言ったたっけ
+（―――――こいつも確か「統率：A+」って言ってたっけ
 偏りはあれど''同じランクの「統率」型同士ですら押しつぶされる''……恐ろしいチームになったもんよね）
 
 【カズマ】
@@ -118,6 +118,7 @@ AA意味文変換
 【System】
 ◎――――――ベルファストの「はかいこうせん」！（『先行とんぼ』：優先度+1）
 
+【表示】
 『メイド長の華麗なる撤退戦』…
 ベルファスト専用ポテンシャル。　1/試/先行
 自身の攻撃技に「とんぼ」効果を付与し、技の優先度を+1する。
@@ -151,7 +152,7 @@ AA意味文変換
 味方の『役割』に連動し、T終了まで味方が受けるダメージを緩和（0.67倍）した！
 
 【System】
-◎ガッシュの「かみなりあらし」！（『エキスパンション（電）：追加効果+2割）
+◎ガッシュの「かみなりあらし」！（『エキスパンション（電）』：追加効果+2割）
 場の「エレキフィールド」が、ガッシュの「電」技の威力を強化（1.3倍）した！
 
 【ジョナサン】
@@ -172,11 +173,11 @@ AA意味文変換
 【凛】
 こっわ（ドン引き）
 
-【AA内】
-せめてムゲンドラモンくんが残っていれば……
-
 【カズマ】
 ………すまん紅茶、オレの『エース』に相性の悪い奴しか残らなかったことを恨め
+
+【カズマ（AA内）】
+せめてムゲンドラモンくんが残っていれば……
 
 自陣：ガッシュ：速+1、その他+2、命中+1、C+1、、『スラッグアーツ』：命中1.33倍
 敵陣：クロムガウェイン：特防+1
@@ -309,11 +310,9 @@ AA意味文変換
 『スラッグアーツ』…　　　　　　「ここぞ！」という時、自身の「命中」を強化（1.33倍）する。　『キラー』がいると発動しない。
 『エキスパンション（飛）』…　　場の天候のデメリットを受けない。　相手からの強制交代を受けない。
 『ブリティッシュタンク』…　　　「ここぞ！」という時、相手の「ノ/草/氷/飛/超/虫/岩/龍/鋼/妖」技の威力を緩和（0.85倍）する。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『戦場を駆ける白騎士』…
 ランスロット専用ポテンシャル。　1/試/先行
 自身の「ノ」技の威力を強化（1.5倍）し、相手の「まもる」等の技を貫通する。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
 【名前】ムゲンドラモン（Lv：125）♂
 【タイプ】ドラゴン/ほのお
@@ -340,12 +339,10 @@ zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『ツートップ』…　　　　　　　　　味方の『エース』が「瀕死」状態の時、自身に対し味方の『アシスト』が発動する。
 『エキスパンション（龍）』…　　「体力」の種族値が少し増加する。
 『ブリティッシュタンク』…　　　 「ここぞ！」という時、相手の「ノ/草/氷/飛/超/虫/岩/龍/鋼/妖」技の威力を緩和（0.85倍）する。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『無限を描く一斉掃射』…
 ムゲンドラモン専用ポテンシャル。　1/試/先行
 相手ポケモンの「まもる」等の技、特性、
 相手ポケモンと相手トレーナーの防護ポテンシャルを無効化する。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
 【名前】アイギス（Lv：120）♀
 【タイプ】でんき
@@ -392,11 +389,9 @@ zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『リターンヒール』…　　 　 　　 味方と任意交代する時、中確率で味方の体力を1/4回復する。
 『エキスパンション（水）』…　　Ｔ開始時に中確率で自身の状態異常を治癒する。
 『ブリティッシュタンク』…　　　 「ここぞ！」という時、相手の「ノ/草/氷/飛/超/虫/岩/龍/鋼/妖」技の威力を緩和（0.85倍）する。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『メイド長の華麗なる撤退戦』…
 ベルファスト専用ポテンシャル。　1/試/先行
 自身の攻撃技に「とんぼ」効果を付与し、技の優先度を+1する。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
 【名前】メタグロス（Lv：120）-
 【タイプ】はがね/エスパー
