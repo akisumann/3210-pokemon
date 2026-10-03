@@ -1,7 +1,7 @@
 # 索引
 
 ## 原典（`source/`）
-各話の原典のファイル名は、章ごとのあらすじの見出し（`## 第NNN話「…」 → source/NNN_….txt`）に書いてある。原典に入れた直しと作り直した版への差し替えは → [notes/source-edits.md](notes/source-edits.md)。
+各話の原典のファイル名は、章ごとのあらすじの各話の見出し（`第N話「…」 → source/NNN_….txt` の形。見出しの深さは、小さな章に分けている第二節編・第三節編のファイルが `###`、ほかは `##`。000は `## キャラ作成編オープニング → source/000_….txt`）に書いてある。原典に入れた直しと作り直した版への差し替えは → [notes/source-edits.md](notes/source-edits.md)。
 
 | 章 | 話 | あらすじ |
 | --- | --- | --- |
@@ -26,12 +26,9 @@
 - 人物: **[登場人物一覧](characters/README.md)**（トレーナー／ポケモン／民間人） / **[人間関係](characters/relationships.md)**
 - 物語: [あらすじ](story/episodes.md) / [時系列](story/timeline.md) / [バトル記録](story/battles.md) / [ダイス記録](story/dice.md)
 
-## 解決済み
-→ [notes/resolved.md](notes/resolved.md) に移した（未確定事項が解決したら、そちらに移す）。
-
 ## 未確定事項
 
-分けて並べている。答えが出たら [notes/resolved.md](notes/resolved.md) に移す。
+分けて並べている。答えが出たら、解決済みの一覧 [notes/resolved.md](notes/resolved.md)（同じ3つの分野に分けている）に移す。
 
 ### 伏線・謎
 作者が引っ張っている謎や、世界の仕組みにかかわる問い。
