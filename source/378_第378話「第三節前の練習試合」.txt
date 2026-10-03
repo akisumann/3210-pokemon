@@ -14,16 +14,17 @@ AA意味文変換
 相変わらず過ぎて安心感があるよ、テメェらは………
 ふんっ、このハクタイジムはオレの【H】と言っても過言ではない……なぁしぶりんっ！！！
 
-【AA内】
-少なくとも、今回のあんたらのバトルでは………
-
 【凛】
 いや、このジムのフィールド効果って全ジムの中でも大分大人しい方だからそんな影響しないでしょ
+
+【凛（AA内）】
+少なくとも、今回のあんたらのバトルでは………
 
 【ゆら】
 はぇ～、確かにこれは大分大人しい効果ですわぁ
 比べるとクロガネとかヤバイですよね、''「岩」以外が場に出ると1/8のダメージ''とかですもんね
 
+【表示】
 ◆フィールド効果
 《ハクタイジム》のフィールド効果
 T終了時、中確率で場にいるすべての「草」ポケモンの状態異常を治癒する。
@@ -34,11 +35,11 @@ T終了時、中確率で場にいるすべての「草」ポケモンの状態�
 【天花】
 そうですね、お互いシーズンの後半に向けてのはずみをつけられれば最高ですね
 
-【AA内】
-── ｶﾁｬ
-
 【ダージリン】
 よっしゃ、それじゃまずは私がこの悪の「統率」型に善なる「統率」がどういうものかを――――――
+
+【ダージリン（AA内）】
+── ｶﾁｬ
 
 【直哉】
 下がっとけや紅茶、まずはこの企画を立ち上げたオレが悪霊退治をする番じゃろがい
@@ -52,11 +53,11 @@ T終了時、中確率で場にいるすべての「草」ポケモンの状態�
 【ハクタイ門下生C】
 お前ら3人さては同類だな？
 
-【AA内】
-そういうのは苦手なのだけれど………
-
 【カナヲ】
 プロになるためには、こういうアピールや舌戦も必要になるのかしら………
+
+【カナヲ（AA内）】
+そういうのは苦手なのだけれど………
 
 【ダージリン】
 ちっ、しゃーないわね……私のために捨て石になって来なさい、呪霊になるまで頑張ってきなさい
@@ -134,11 +135,9 @@ T終了時、中確率で場にいるすべての「草」ポケモンの状態�
 『スラッグアーツ』…　　　　　　「ここぞ！」という時、自身の「命中」を強化（1.33倍）する。　『キラー』がいると発動しない。
 『エキスパンション（電）』…　 「麻痺」状態にならない。　「電」技の追加効果発生率が2割上がる。
 『グッドラック』…　　　　　　　　自身の特性が「きょううん」に変化した時、自身の能力がランダムに上がる。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『炸裂する連鎖のライン』…
 ガッシュ専用ポテンシャル。　1/試/先行
 自身の技に「おいうち」効果を付与し、相手に「必中」させる。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
 【名前】メジロマックイーン（Lv：130）♀
 【タイプ】ノーマル
@@ -166,11 +165,9 @@ zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『ツートップ』…　　　　　　　　　味方の『エース』が「瀕死」状態の時、自身に対し味方の『アシスト』が発動する。
 『エキスパンション（ノ）』…　　「ノ」技のタイプ一致による強化倍率を2倍にする。
 『グッドラック』…　　　　　　　　自身の特性が「きょううん」に変化した時、自身の能力がランダムに上がる。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『貴顕の使命を果たすべく』…
 メジロマックイーン専用ポテンシャル。　1/試/先行
 自身の「ノ」技の威力を強化（1.5倍）し、相手の「まもる」等の技を貫通する。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
 【名前】マガツイカルガ（Lv：125）-
 【タイプ】ひこう/はがね
@@ -192,7 +189,7 @@ zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『ストームコート』…　　　　　　1/試/自動　自身の体力が満タンの時、相手の「特殊技」の威力を緩和（0.67倍）する。
 『先の先』…　　　　　　　　　　 相手が優先度+1以上の技を使用した時、低確率で先に行動する。
 『対電回避』…　　　　　　　　　敵陣に「電」ポケモンがいる時、相手の「電」技の命中率を低下（0.85倍）させる。
-『対電耐性』…　　　　　　　　　敵陣に「霊」ポケモンがいる時、相手の「電」技のダメージを緩和（0.67倍）する。
+『対電耐性』…　　　　　　　　　敵陣に「電」ポケモンがいる時、相手の「電」技のダメージを緩和（0.67倍）する。
 『対電反撃』…　　　　　　 　　 敵陣に「電」ポケモンがいる時、低確率で一番最後に追加行動を得る。
 『ド根性』…　　　　　　　　　　　中確率で相手の攻撃以外のダメージを無視する。
 『リベンジキュア』…　　　　 　死に出しで場に出た時、中確率で自身の状態異常を治癒する。
@@ -224,11 +221,9 @@ zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『ド根性』…　　　　　　　　　　　　　中確率で相手の攻撃以外のダメージを無視する。
 『エキスパンション（水）』…　　　　Ｔ開始時に中確率で自身の状態異常を治癒する。
 『グッドラック』…　　　　　　　　　　自身の特性が「きょううん」に変化した時、自身の能力がランダムに上がる。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『魔女の与える鉄槌』…
 ルサルカ専用ポテンシャル。
 『エース』が場に出た時、味方と任意交代して場に出ることが出来る。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
 【名前】ライナー・ブラウン（Lv：125）♂
 【タイプ】いわ
@@ -286,7 +281,7 @@ zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 【タイプ】くさ/フェアリー
 【特性】いたずらごころ…　自身の優先度±0の変化技の優先度を＋1する。
 【持ち物】
-【技x8：リーフストーム、ム―ンフォース、こどもだまし、やどりぎのタネ、ひかりのかべ、ばらぞの、くさかり、なやみのタネ】
+【技x8：リーフストーム、ムーンフォース、こどもだまし、やどりぎのタネ、ひかりのかべ、ばらぞの、くさかり、なやみのタネ】
 こうげき：D-
 ぼうぎょ：A　　　　　　　　　　　◎「こどもだまし」…　特/妖/単/40/100/×/優先度+3　10割「怯み」　場に出て最初に繰り出さないと失敗する
 とくこう：A-　　　　　　　　　　　◎「ばらぞの」…　変/草/敵陣/-/-/×/設置技。　場に出た相手の体力を1/8ドレインする
@@ -414,11 +409,9 @@ zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『アドバイス』…　　　　　　　　　「タイム」使用時、相手のデータを解析することが出来る。
 『エキスパンション（地）』…　　設置技の影響を受けない。
 『グッドラック』…　　　　　　　　自身の特性が「きょううん」に変化した時、自身の能力がランダムに上がる。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『根源への扉を開け放つ者』…
 オシュトル専用ポテンシャル。
 「タイム」使用時、Ｔ終了時まで自身の全能力値を強化（1.5倍）する。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
 【名前】リザードン（Lv：125）♂
 【タイプ】ほのお/ひこう
@@ -436,18 +429,16 @@ zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『火炎龍の炎翼』…　　　　　自身の繰り出す「とんぼ」技に「3割：火傷」の追加効果を付与する。
 『火炎龍の業火』…　　　　　「炎」技で相手を倒した時、自陣の設置技を除去する。
 『タイプ：ワイルド』…　　　　　自身が『役割』を持たない時、独自に専用ポテンシャルを保有する。
-『対の先』…　　　　　　 　　　 、相手の「速」の種族値が自分と同ランクの時、中確率で自身の技の優先度を+1する。
+『対の先』…　　　　　　 　　　 相手の「速」の種族値が自分と同ランクの時、中確率で自身の技の優先度を+1する。
 『対岩回避』…　　　　　　　　 敵陣に「岩」ポケモンがいる時、相手の「岩」技の命中率を低下（0.85倍）させる。
 『対岩耐性』…　　　　　 　　　敵陣に「岩」ポケモンがいる時、相手の「岩」技のダメージを緩和（0.67倍）する。
 『対岩迫撃』…　　　　　 　　　 敵陣に「岩」ポケモンがいる時、低確率で自身の技のダメージが2倍になる。
 『ド根性』…　　　　　　　　　　　中確率で相手の攻撃以外のダメージを無視する。
 『エキスパンション（炎）』…　　「凍り」状態にならない。　「炎」技の追加効果発生率が2割上がる。
 『グッドラック』…　　　　　　　　自身の特性が「きょううん」に変化した時、自身の能力がランダムに上がる。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 『天衣無縫の焔の翼』…
 リザードン専用ポテンシャル。
 Ｔ開始時、自身を「メガシンカ」させることが出来る。
-zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
 
 【名前】メガリザードン（Lv：125）♂
 【タイプ】ほのお/ひこう
