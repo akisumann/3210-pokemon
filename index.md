@@ -22,7 +22,7 @@
 
 ## 設定資料
 - ゲーム: [ルールブック](game/rulebook.md) / [設計メモ](notes/game-design.md)
-- 世界観: [概要](world/overview.md) / [地名](world/places.md) / [地方ごとのまとめ](world/regions.md) / [ポケモンの基本](world/pokemon.md) / [種族・系統](world/species.md) / [ポテンシャルの仕組み](world/potentials.md) / [ポテンシャル一覧](world/potential-list.md) / [バトルの細かい仕様](world/battle-rules.md) / [バトルの処理順](world/turn-order.md) / [相手トレーナーの動き方（敵AI）](world/opponent-ai.md) / [技の一覧](world/moves.md) / [相手チームの体力の推測](world/hp-estimates.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度（入口）](world/pro-trainer.md)（[リーグ制度](world/pro-league.md) / [チーム運営](world/pro-team.md) / [トレーナーの資質](world/trainer-stats.md)） / [ポケモン図鑑](world/pokedex.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
+- 世界観: [概要](world/overview.md) / [地名](world/places.md) / [地方ごとのまとめ](world/regions.md) / [ポケモンの基本](world/pokemon.md) / [種族・系統](world/species.md) / [ポテンシャルの仕組み](world/potentials.md) / [ポテンシャル一覧](world/potential-list.md) / [バトルの細かい仕様](world/battle-rules.md) / [持ち物の使われ方](world/items-usage.md) / [バトルの処理順](world/turn-order.md) / [相手トレーナーの動き方（敵AI）](world/opponent-ai.md) / [技の一覧](world/moves.md) / [相手チームの体力の推測](world/hp-estimates.md) / [ダンジョン](world/dungeon.md) / [プロトレーナー制度（入口）](world/pro-trainer.md)（[リーグ制度](world/pro-league.md) / [チーム運営](world/pro-team.md) / [トレーナーの資質](world/trainer-stats.md)） / [ポケモン図鑑](world/pokedex.md) / [ギンガ団](world/ginga-dan.md) / [用語集](world/terms.md)
 - 人物: **[登場人物一覧](characters/README.md)**（トレーナー／ポケモン／民間人） / **[人間関係](characters/relationships.md)**
 - 物語: [あらすじ](story/episodes.md) / [時系列](story/timeline.md) / [バトル記録](story/battles.md) / [ダイス記録](story/dice.md)
 
