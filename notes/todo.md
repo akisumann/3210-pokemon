@@ -3,5 +3,4 @@
 急ぎではないが、いずれやると決めた作業の控え（ユーザーより）。やったら消す。
 
 - **相手チームのポケモンの能力の欄に体力を入れる**: カズマの手持ちのファイルと同じく、`characters/trainers/others-b.md` などの図鑑の要約の能力（攻／防…）の先頭に、[体力の推測](../world/hp-estimates.md) の値と確かさ（◎〜△）を入れる。分かりにくいものは「C〜A くらい」のような幅でよい。数が多いので、使用量に余裕がある時に。
-- **「深刻」「皮一枚」のダメージ表示の全体調査**: → [hp-estimates.md](../world/hp-estimates.md) の冒頭「重要な考察」。
-- **ポテンシャルの「容量」の全体調査**: → [potentials.md](../world/potentials.md) の容量の項。
+- **「深刻」の見直し**: すでに削れていた相手への「深刻」を逆算の根拠にしている箇所を [hp-estimates.md](../world/hp-estimates.md) で探して幅を広げる（集計は [survey-shinkoku.md](survey-shinkoku.md)）。
