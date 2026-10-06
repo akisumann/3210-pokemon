@@ -4,5 +4,4 @@
 
 - **相手チームのポケモンの能力の欄に体力を入れる**: カズマの手持ちのファイルと同じく、`characters/trainers/others-b.md` などの図鑑の要約の能力（攻／防…）の先頭に、[体力の推測](../world/hp-estimates.md) の値と確かさ（◎〜△）を入れる。分かりにくいものは「C〜A くらい」のような幅でよい。数が多いので、使用量に余裕がある時に。
 - **「深刻」「皮一枚」のダメージ表示の全体調査**: → [hp-estimates.md](../world/hp-estimates.md) の冒頭「重要な考察」。
-- **ハクタイジム（と他のジム）は武闘派の専門教育機関か、の全体調査**: → [kousatsu/hakutai-gym.md](kousatsu/hakutai-gym.md)。
 - **ポテンシャルの「容量」の全体調査**: → [potentials.md](../world/potentials.md) の容量の項。
