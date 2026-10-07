@@ -6,3 +6,4 @@
 | --- | --- |
 | [ai-team/team-v1.txt](ai-team/team-v1.txt) | AI向け万能型チーム（ユーザーが組んだもの、2026-10-05）。届いたまま保存 |
 | [ai-team/notes.md](ai-team/notes.md) | そのチームの評価と、話し合いで決まった運用の目安 |
+| [claude-team/team.md](claude-team/team.md) | Claudeが会話で組んでいる古代種の防護殺しチーム（お遊び、2026-10-07〜） |
