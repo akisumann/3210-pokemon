@@ -4,7 +4,7 @@
 
 このファイルは入口。中身は次のファイルに分けた（2026-10-09。大きくなりすぎたため。中身はそのまま）。
 
-普段は「答え」だけの表（1〜3とkazuma）を読めばよい。計算や見立ての経緯は、それぞれの `-notes.md` に全部残している。
+普段は「答え」だけの表（1〜3、kazuma、display）を読めばよい。計算や見立ての経緯は、それぞれの `-notes.md` に全部残している。
 
 | ファイル | 中身 |
 | --- | --- |
@@ -12,7 +12,7 @@
 | [hp-estimates-2.md](hp-estimates-2.md)（根拠: [-notes](hp-estimates-2-notes.md)） | 第二節の相手チームの体力（184〜366） |
 | [hp-estimates-3.md](hp-estimates-3.md)（根拠: [-notes](hp-estimates-3-notes.md)） | 第三節準備編・第三節の相手チームの体力（367〜） |
 | [hp-estimates-kazuma.md](hp-estimates-kazuma.md)（根拠: [-notes](hp-estimates-kazuma-notes.md)） | カズマの手持ちの体力（逆算・推測） |
-| [hp-estimates-display.md](hp-estimates-display.md) | ダメージ表示の目安（「まずまず」「大きな」などの割合） |
+| [hp-estimates-display.md](hp-estimates-display.md)（根拠: [-notes](hp-estimates-display-notes.md)） | ダメージ表示の目安（「まずまず」「大きな」などの割合） |
 
 
 関連: [バトルの細かい仕様](battle-rules.md) / [カズマの手持ちの体力](hp-estimates-kazuma.md#カズマの手持ちの体力逆算推測) / [ダメージ表示の目安](hp-estimates-display.md#ダメージ表示の目安推測) / [ポテンシャル一覧](potential-list.md) / [バトル記録](../story/battles.md)
