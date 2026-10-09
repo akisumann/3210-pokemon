@@ -4,12 +4,14 @@
 
 このファイルは入口。中身は次のファイルに分けた（2026-10-09。大きくなりすぎたため。中身はそのまま）。
 
+普段は「答え」だけの表（1〜3とkazuma）を読めばよい。計算や見立ての経緯は、それぞれの `-notes.md` に全部残している。
+
 | ファイル | 中身 |
 | --- | --- |
-| [hp-estimates-1.md](hp-estimates-1.md) | ジム巡り〜第一節・オフシーズンの相手チームの体力（007〜183） |
-| [hp-estimates-2.md](hp-estimates-2.md) | 第二節の相手チームの体力（184〜366） |
-| [hp-estimates-3.md](hp-estimates-3.md) | 第三節準備編・第三節の相手チームの体力（367〜） |
-| [hp-estimates-kazuma.md](hp-estimates-kazuma.md) | カズマの手持ちの体力（逆算・推測） |
+| [hp-estimates-1.md](hp-estimates-1.md)（根拠: [-notes](hp-estimates-1-notes.md)） | ジム巡り〜第一節・オフシーズンの相手チームの体力（007〜183） |
+| [hp-estimates-2.md](hp-estimates-2.md)（根拠: [-notes](hp-estimates-2-notes.md)） | 第二節の相手チームの体力（184〜366） |
+| [hp-estimates-3.md](hp-estimates-3.md)（根拠: [-notes](hp-estimates-3-notes.md)） | 第三節準備編・第三節の相手チームの体力（367〜） |
+| [hp-estimates-kazuma.md](hp-estimates-kazuma.md)（根拠: [-notes](hp-estimates-kazuma-notes.md)） | カズマの手持ちの体力（逆算・推測） |
 | [hp-estimates-display.md](hp-estimates-display.md) | ダメージ表示の目安（「まずまず」「大きな」などの割合） |
 
 
