@@ -8,7 +8,7 @@
 | --- | --- |
 | `source/` | 原典。貼られた文章をそのまま保存する（ユーザーの指示があるときだけ、誤字などを少し直してよい） |
 | `world/` | 世界観（地理・社会・プロリーグ・ポケモンの仕組み・用語など）。テーマ別 |
-| `characters/` | 登場人物の設定。`trainers/`（トレーナー）、`pokemon/`（ポケモン）、`civilians/`（民間人）に分け、1人1ファイル（カズマだけは木の形: `trainers/kazuma.md` が最上位で、枝と根拠は `trainers/kazuma/`。書き方は `materials.md`）。脇役は各フォルダの `others.md` にまとめる。一覧は `characters/README.md`、関係図は `characters/relationships.md` |
+| `characters/` | 登場人物の設定。`trainers/`（トレーナー）、`pokemon/`（ポケモン）、`civilians/`（民間人）に分け、1人1ファイル。主要キャラは木の形（`trainers/kazuma.md` などが最上位で、枝と根拠は同じ名前のフォルダ `trainers/kazuma/` など。書き方は `materials.md`）。脇役は各フォルダの `others.md` にまとめる。一覧は `characters/README.md`、関係図は `characters/relationships.md` |
 | `story/` | 各話あらすじ（`story/episodes/` に章ごとのファイル。`story/episodes.md` は目次）・時系列・バトル記録・ダイス判定記録 |
 | `index.md` | 索引（章ごとのあらすじへの案内）・未確定事項・矛盾メモ。原典のファイル名はあらすじの各話の見出しにある |
 | `game/` | 原典の世界をゲームとして遊ぶためのもの（`rulebook.md` など）。決めごとの経緯は `notes/game-design.md`。今は保留中（ユーザーより） |
