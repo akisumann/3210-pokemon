@@ -8,6 +8,9 @@ from treeify import parse_section, oneliner, fix_links, footer, safe, plain, ROO
 from splitfile import slug
 
 
+KEEP = 0  # これ以下の長さの箇条・表の行は、木にせずそのまま残す（--keep N で指定）
+
+
 def convert(path):
     path = os.path.normpath(os.path.join(ROOT, path))
     folder = os.path.dirname(path)
@@ -36,6 +39,17 @@ def convert(path):
                 if len(plain(t)) <= 200 and '（出典' not in t:
                     out.append(t)
                     continue
+            if KEEP and b['kind'] in ('bullet', 'para') and len(plain(b['text'])) <= KEEP:
+                out.append(b['text'])
+                continue
+            if KEEP and b['kind'] == 'row' and len(plain(b['row'])) <= KEEP * 1.5:
+                if not out or not out[-1].startswith('|'):
+                    out.append(b['text'].split('\n')[0]); out.append(b['text'].split('\n')[1])
+                out.append(b['row'])
+                if b.get('tail'):
+                    out.append('')
+                    out.extend(b['tail'])
+                continue
             items = b['children'] if b['kind'] == 'group' else [b]
             if b['kind'] == 'group':
                 out.append(f'- {plain(b["label"])}:')
@@ -72,5 +86,8 @@ def convert(path):
 
 
 if __name__ == '__main__':
-    for a in sys.argv[1:]:
+    args = sys.argv[1:]
+    if args and args[0] == '--keep':
+        KEEP = int(args[1]); args = args[2:]
+    for a in args:
         print(a, convert(a))
