@@ -84,8 +84,8 @@ def parse_section(lines):
             while i < len(lines) and lines[i].startswith('|'):
                 tbl.append(lines[i]); i += 1
             head = tbl[:2]
-            for r in tbl[2:]:
-                blocks.append(dict(kind='row', text='\n'.join(head + [r]), row=r))
+            for k, r in enumerate(tbl[2:]):
+                blocks.append(dict(kind='row', text='\n'.join(head + [r]), row=r, first=(k == 0)))
             continue
         if l.startswith('- '):
             j = i + 1

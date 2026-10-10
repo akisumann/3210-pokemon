@@ -43,8 +43,8 @@ def convert(path):
                 out.append(b['text'])
                 continue
             if KEEP and b['kind'] == 'row' and len(plain(b['row'])) <= KEEP * 1.5:
-                if not out or not out[-1].startswith('|'):
-                    out.append(b['text'].split('\n')[0]); out.append(b['text'].split('\n')[1])
+                if b.get('first') or not out or not out[-1].startswith('|'):
+                    out.append(''); out.append(b['text'].split('\n')[0]); out.append(b['text'].split('\n')[1])
                 out.append(b['row'])
                 if b.get('tail'):
                     out.append('')
