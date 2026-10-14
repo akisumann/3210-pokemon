@@ -16,7 +16,7 @@ AIが資料を読むときは、ここから入る。読み方は `CLAUDE.md` �
 | プロリーグ・チーム・資質 | [プロトレーナー制度](world/pro-trainer.md)（[リーグ制度](world/pro-league.md) / [チーム運営](world/pro-team.md) / [トレーナーの資質](world/trainer-stats.md)） |
 | バトルの計算・仕様 | [バトルの細かい仕様](world/battle-rules.md) / [処理順](world/turn-order.md) / [技の一覧](world/moves.md) / [持ち物の使われ方](world/items-usage.md) / [相手の動き方](world/opponent-ai.md) |
 | 体力の推測 | [体力の推測](world/hp-estimates.md) |
-| ポケモンの仕組み・種族・ポテンシャル | [ポケモンの基本](world/pokemon.md) / [種族・系統](world/species.md) / [ポテンシャルの仕組み](world/potentials.md) / [ポテンシャル一覧](world/potential-list.md) / [図鑑](world/pokedex.md) |
+| ポケモンの仕組み・種族・ポテンシャル | [ポケモンの基本](world/pokemon.md) / [種族・系統](world/species.md) / [種族ごとの傾向（AIの集計）](world/species-trends.md) / [ポテンシャルの仕組み](world/potentials.md) / [ポテンシャル一覧](world/potential-list.md) / [図鑑](world/pokedex.md) |
 | 場所・地方・ダンジョン | [地名](world/places.md) / [地方ごと](world/regions.md) / [ダンジョン](world/dungeon.md) |
 | ギンガ団 | [ギンガ団](world/ginga-dan.md) |
 | 言葉の意味 | [用語集](world/terms.md) |
