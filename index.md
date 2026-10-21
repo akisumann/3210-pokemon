@@ -22,7 +22,7 @@ AIが資料を読むときは、ここから入る。読み方は `CLAUDE.md` �
 | 言葉の意味 | [用語集](world/terms.md) |
 | まだ分かっていないこと・伏線 | [未確定事項](open-questions.md)（解決済みは [notes/resolved.md](notes/resolved.md)） |
 | 原典どうしの食い違い・作者の書き間違い | [矛盾メモ](contradictions.md) |
-| 原典そのもの | `source/NNN_*.txt`（ファイル名は各章のあらすじの話の見出しにある） |
+| 原典そのもの | `source/NNN_*.txt`（ファイル名は各章のあらすじの話の見出しにある。端数の話は `365a_` のように英小文字が付く）。原典に入れた直しと作り直した版への差し替えは [原典の修正記録](notes/source-edits.md) |
 | 作業の決まり | [原典の扱い](notes/rules/source.md) / [資料の書き方](notes/rules/materials.md) |
 
 ## 章ごとのあらすじ
@@ -43,6 +43,6 @@ AIが資料を読むときは、ここから入る。読み方は `CLAUDE.md` �
 | 第二節編 後半（270〜366） | 99話 | [09_第二節編（後半）.md](story/episodes/09_第二節編（後半）.md) |
 | 第三節準備編（367〜391） | 25話 | [10_第三節準備編.md](story/episodes/10_第三節準備編.md) |
 | 第三節編（392〜445） | 54話 | [11_第三節編（1）.md](story/episodes/11_第三節編（1）.md) |
-| 第三節編（446〜） | 54話 | [11_第三節編（2）.md](story/episodes/11_第三節編（2）.md) |
+| 第三節編（446〜） | 54話 | [11_第三節編（2）.md](story/episodes/11_第三節編（2）.md)（入口。話の見出しは、そこの表にある小さな章のファイル（-1〜）にある） |
 
 ゲーム（保留中）: [ルールブック](game/rulebook.md) / [設計メモ](notes/game-design.md)
