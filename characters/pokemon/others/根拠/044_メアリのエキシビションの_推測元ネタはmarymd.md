@@ -5,4 +5,4 @@
 - 推測: 元ネタは [mary.md](../../../trainers/mary.md) の「元ネタ」。
 
 ---
-もっと詳しく知りたいときは原典: （出典の記載なし）
+もっと詳しく知りたいときは原典: `source/404_*.txt`, `source/405_*.txt`, `source/406_*.txt`, `source/407_*.txt`, `source/408_*.txt`
