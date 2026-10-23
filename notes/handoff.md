@@ -4,13 +4,13 @@
 
 ## 今の状態
 
-- **原典**: 500〜514は仕上げ済み（記録は `notes/source-edits/500-599.md`、15件）。515〜519は届いたまま保存済み（e2d8c3c）で、話者付けの workflow（wf_c552c6ad-a7f、台本は scratchpad の `save-source-515-519.js`）が途中。途中の変更は「原典515〜519: 話者付けなどの直し（作業中）」でコミット済み。
-- **資料**: 505〜509を入れる workflow（wf_3dec5ee3-909、台本は `~/.claude/projects/-home-user-3210-pokemon/a569906a-d356-55e9-8923-145af509f2cc/workflows/scripts/reflect-505-509-wf_3dec5ee3-909.js`）が途中。途中の変更は「作業中: 505〜509を資料に入れる途中」でコミット済み。
+- **原典**: 500〜519は仕上げ済み（記録は `notes/source-edits/500-599.md`、20件。ca31535）。
+- **資料**: 505〜509を入れる workflow（wf_3dec5ee3-909、台本は `~/.claude/projects/-home-user-3210-pokemon/a569906a-d356-55e9-8923-145af509f2cc/workflows/scripts/reflect-505-509-wf_3dec5ee3-909.js`）は、書く担当5つと story の確かめ役まで済み。残りの確かめ役4つ（team・others・world・battle）と仕上げの点検が、上限で止まったので 2026-10-23 13:10 UTC に続きから再開した。途中の変更はコミット済み（3f80fca）。
 
 ## 再開したら
 
 1. 走っていた workflow が止まっていたら、`Workflow({scriptPath, resumeFromRunId})` で続きから（済んだ担当は使い回される）。journal は `subagents/workflows/<runId>/journal.jsonl`。台本が消えていたら、git の途中のコミットを見て、残りだけを頼み直す（最初からやり直さない）。
-2. 515〜519の原典が終わったら: 確かめ役の record を `notes/source-edits/500-599.md` に足し、`notes/source-edits.md` の件数を 15→20 にし、原典だけで別のコミット。
+2. （済み）515〜519の原典の記録。
 3. 505〜509の資料が終わったら: 仕上げのコミット。そのあと、ユーザーの補足「ミカのチームは対面構築で、攻めと受けの役割がはっきり分かれている（交代で回すつもりのチームではない）」を `characters/trainers/others-b-15.md` のミカのチームに（補足: ユーザーより）で足す。
 4. 次に、510〜519の10話をまとめて資料に入れる workflow（505〜509の台本を下敷きに）。入れること:
    - 章: トバリ杯中規模大会（506〜518）／トバリ杯のあと（519〜）。CLAUDE.md・`story/episodes.md`・`11_第三節編（2）.md` にも。
