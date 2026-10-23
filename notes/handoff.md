@@ -5,7 +5,8 @@
 ## 今の状態
 
 - **原典**: 500〜519は仕上げ済み（記録は `notes/source-edits/500-599.md`、20件）。
-- **資料**: 505〜509は仕上げ済み（3b0f50c）。510〜519を入れる workflow（wf_b06e17e7-e36、台本は `~/.claude/projects/-home-user-3210-pokemon/a569906a-d356-55e9-8923-145af509f2cc/workflows/scripts/reflect-510-519-wf_b06e17e7-e36.js`）を走らせている。止まったら `Workflow({scriptPath, resumeFromRunId: "wf_b06e17e7-e36"})` で続きから。
+- **資料**: 505〜509は仕上げ済み（3b0f50c）。510〜519を入れる workflow（wf_b06e17e7-e36、台本は `~/.claude/projects/-home-user-3210-pokemon/a569906a-d356-55e9-8923-145af509f2cc/workflows/scripts/reflect-510-519-wf_b06e17e7-e36.js`）は、ユーザーの指示で区切りのいいところで止めた（2026-10-23）。書く担当のうち story・battle・team・others は済み。world の書く担当（始まった直後に止めた）、確かめ役5つ、仕上げの点検が残り。再開は `Workflow({scriptPath, resumeFromRunId: "wf_b06e17e7-e36"})`（済んだ4つは使い回される）。
+- **資料の刷新の相談中**: 読むのはAIだけ。形のたたき台（1行1事実＋出典、同じことは1か所、テーマごとの中くらいのファイル（2万字くらいまで）、名前で場所が分かる置き方、呼び名の対応表、毎回変わるものは1か所に集める）をユーザーと話している。ユーザーの指示があるまで刷新には手を付けない。
 
 ## 再開したら
 
