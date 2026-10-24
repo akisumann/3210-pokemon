@@ -1,7 +1,5 @@
 # 未確定事項
 
-← [入口](index.md)
-
 
 分けて並べている。答えが出たら、解決済みの一覧 [notes/resolved.md](notes/resolved.md)（同じ3つの分野に分けている）に移す。
 
