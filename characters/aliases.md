@@ -6,15 +6,16 @@
 
 | 資料での名前 | ほかの呼び方（だれの呼び方か） |
 | --- | --- |
-| [カズマ](trainers/kazuma.md) | 佐藤和真、ミラクルズの監督、「後輩」（先輩）、「運男」（奏、043）、「ポケモン星人」（ゼットン、279）、“猿の世代”の大将格（マスタング、473） |
+| [カズマ](trainers/kazuma.md) | 佐藤和真、“あの男”（テレビコトブキのスタッフ、522）、ジャージの小僧（ワイリー、524）、ミラクルズの監督、「後輩」（先輩）、「運男」（奏、043）、「ポケモン星人」（ゼットン、279）、“猿の世代”の大将格（マスタング、473） |
 | [アカネ](trainers/akane-mars.md) | マーズ（ギンガ団のコードネーム）、新条アカネ（本名）、「汚部屋製造機」（ゼットンの陰口、002） |
 | [渋谷凛](trainers/shibuya-rin.md) | しぶりん（アカネから、002）、凜（表記ゆれ） |
 | [ライザ](trainers/ryza.md) | ライザップ（096〜） |
 | [食蜂操祈](trainers/shokuhou.md) | みさきち、女王蜂（スクールでの通称、015, 412） |
 | [先輩](trainers/senpai.md) | さすらいの先輩（本名は名乗らない、010, 092） |
 | [エール・モフス](trainers/ail.md) | エール |
+| オルガマリー（[others-c](trainers/others-c/オルガマリー.md)） | オルガ（520） |
 | [禪院直哉](trainers/naoya.md) | 直哉、NAOYA（445）。ダージリンとのコンビは「ドブ紅茶」（514） |
-| [ダージリン](trainers/darjeeling.md) | 紅茶（445） |
+| [ダージリン](trainers/darjeeling.md) | 紅茶（445）、ダー様（521） |
 | [スペランカー](trainers/spelunker.md) | スペさん（009, 017） |
 | [三雲修](trainers/osamu.md) | オッサム（カズマ、047, 050） |
 | [ジュピター](trainers/jupiter.md) | コーネリア（本名） |
@@ -41,8 +42,10 @@
 | 岸波白野（[hakuno](civilians/hakuno.md)） | 白野、はくのん、ザビ子（カズマ、217, 219） |
 | ライザの父（[civilians/others](civilians/others/ライザの父.md)） | 地下おじさん（自称）、探検堂の店長、オーナー（009, 016, 036） |
 | テレビコトブキのプロデューサー（[civilians/others](civilians/others/テレビコトブキのプロデューサー.md)） | Pくん（カズマ、412） |
+| テレビコトブキのディレクター（[プロデューサーのファイル](civilians/others/テレビコトブキのプロデューサー.md)） | カヤバーン（作者）、Dくん、同士D（アシスタント）。カズマを「キリトくん」と呼ぶ（522） |
+| テレビコトブキのアシスタント（[プロデューサーのファイル](civilians/others/テレビコトブキのプロデューサー.md)） | アグネス・あぐねす（作者）、おデジ（自称）。“ミラクル団”の幹部（522） |
 | 碇ゲンドウ（[civilians/others](civilians/others/碇ゲンドウ.md)） | ナナカマド博士（襲名） |
-| プルート博士（[civilians/others](civilians/others/プルート博士.md)） | ワイリー（本名） |
+| プルート博士（[civilians/others](civilians/others/プルート博士.md)） | ワイリー（本名）、プルート（コードネーム）、研究部門長、ギンガ団のメインBD（524） |
 | ハンサム（[civilians/others](civilians/others/ハンサム.md)） | 国際警察のコードネーム |
 | ウタ（[civilians/others](civilians/others/ウタ.md)） | シンオウの歌姫 |
 
