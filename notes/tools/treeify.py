@@ -22,10 +22,12 @@ def sources(text):
 
 
 def footer(text):
+    # 本文の（出典）に入っていない話数があるときだけ、最後に（出典: …）を1行足す（2026-10-24から。↑の行と「もっと詳しく」の行は作らない）
     nums = sources(text)
-    if not nums:
-        return 'もっと詳しく知りたいときは原典: （出典の記載なし）'
-    return 'もっと詳しく知りたいときは原典: ' + ', '.join(f'`source/{n}_*.txt`' for n in nums)
+    have = set(re.findall(r'\d{3}', ' '.join(re.findall(r'出典[:：][^）)]*', text))))
+    if not nums or all(n in have for n in nums):
+        return ''
+    return '（出典: ' + ', '.join(nums) + '）'
 
 
 def fix_links(text, from_dir, to_dir, own_old=None, own_new=None):
@@ -184,7 +186,7 @@ def treeify(path):
         bfile = f'{tdir}/{bn}.md'
         anchors[slug(h)] = bfile
         blocks = parse_section(lines)
-        out = [f'# {h}', '', f'↑ [{plain(title[2:])}](../{stem}.md)', '']
+        out = [f'# {h}', '']
         n = 0
 
         def ev(b, label, up_rel, indent=''):
@@ -192,7 +194,8 @@ def treeify(path):
             n += 1
             name = f'{bn}_{n:02d}_{safe(label)}'
             body = fix_links(b['text'], folder, edir, path)
-            t = f'# {label}\n\n↑ [{h}]({up_rel})\n\n{body}\n\n---\n{footer(body)}\n'
+            ft = footer(body)
+            t = f'# {h}\n\n{body}\n' + (f'\n{ft}\n' if ft else '')
             open(f'{edir}/{name}.md', 'w', encoding='utf-8').write(t)
             return f'根拠/{name}.md'
 

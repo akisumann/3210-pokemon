@@ -60,7 +60,7 @@ def convert(path):
                 body = fix_links(c['text'], folder, edir, path)
                 up = f'../../{stem}.md' + (f'#{cur_anchor}' if cur_anchor else '')
                 open(f'{edir}/{name}.md', 'w', encoding='utf-8').write(
-                    f'# {plain(cur_head)}: {lab}\n\n↑ [{plain(cur_head)}]({up})\n\n{body}\n\n---\n{footer(body)}\n')
+                    f'# {plain(cur_head)}\n\n{body}\n' + (f'\n{footer(body)}\n' if footer(body) else ''))
                 ind = '  ' if b['kind'] == 'group' else ''
                 out.append(f'{ind}- {one} → [根拠]({stem}/根拠/{name}.md)')
         chunk = []
