@@ -9,6 +9,7 @@ AIが資料を読むときは、ここから入る。読み方は `CLAUDE.md` �
 | 人物（主人公・手持ち・ライバル・脇役） | [登場人物一覧](characters/README.md) → 各キャラの最上位（例: [カズマ](characters/trainers/kazuma.md)） |
 | あだ名・本名・コードネーム・チーム名から、だれのことか | [呼び名の対応表](characters/aliases.md) |
 | 人物どうしの関係 | [人間関係](characters/relationships.md) |
+| 『役割』の枠ごとの最強（読者の「最優秀〇〇」） | [登場人物一覧の「最優秀〇〇」](characters/README.md#読者の最優秀〇〇役割の枠ごとの最強議論) |
 | ある話で何が起きたか | その話のファイル `story/episodes/<章>/第N話.md`（Glob で `story/episodes/*/第N話.md`）。章の流れは下の「章ごとのあらすじ」の表から章のファイル（各話の一言の目次） |
 | いつ何が起きたか（順番） | [時系列](story/timeline.md)（章のまとまりごとのファイルの目次） |
 | 試合の結果・ターンの流れ | [バトル記録](story/battles.md)（大会ごとの目次 → 1試合1ファイル） |
