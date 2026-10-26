@@ -8,6 +8,8 @@
 - ポケモンの最上位ファイル（characters/pokemon/<名前>.md）の「現在のデータ」の行
 - 枝の 現在のデータ.md の「- Lv:」の行
 - カズマの手持ち（characters/trainers/kazuma/手持ち.md）の表の太字のLv
+- 枝の 現在の状態.md の太字のLv（「Lv**N**（…）」）
+- 枝の 歩み.md の「〜のLvNまで」の一言
 
 見つかったら終了コード1で終わる。使い方: python3 tools/check_levels.py
 """
@@ -74,6 +76,14 @@ def main():
                 found = [int(x) for x in re.findall(r'Lv(\d{3})', line)]
                 if found and max(found) != lv:
                     problems.append(f'{top}: 現在のデータの行がLv{max(found)}（原典では{ep}のあとLv{lv}）')
+        # 枝の現在の状態と歩み（あれば）
+        branch = os.path.dirname(data)
+        for rel, pat in ((branch + '/現在の状態.md', r'Lv\*\*(\d+)\*\*'), (branch + '/歩み.md', r'、\d{3}のLv(\d+)まで')):
+            if not os.path.exists(os.path.join(ROOT, rel)):
+                continue
+            for x in re.findall(pat, read(rel)):
+                if int(x) != lv:
+                    problems.append(f'{rel}: Lv{x}（原典では{ep}のあとLv{lv}）')
         # カズマの手持ちの表
         for line in roster.splitlines():
             rm = re.match(r'^\| \[' + re.escape(roster_name) + r'\]\([^)]*\) \| \*\*(\d+)\*\* \|', line)
