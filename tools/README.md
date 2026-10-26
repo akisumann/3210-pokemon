@@ -7,11 +7,13 @@
 | `check_links.py` | リンク切れ（ファイルがない、見出しがない） |
 | `check_levels.py` | カズマの手持ちのLvのずれ（原典の最新のレベルアップと、最上位ファイル・現在のデータ・カズマの手持ちの表を比べる） |
 | `check_hp.py` | 体力の推測の表（`world/hp-estimates-1/2/3.md`）と、キャラファイルに書いた体力のずれ（表と合わない古い値と、表の値がどこにも書いていない書き忘れ） |
+| `check_ranks.py` | 資質とランクのずれ（`world/trainer-stats.md` の資質の表と、主要トレーナーの最上位ファイルの資質の行を比べる。「A」に昇格したチームが「B」のままの書き方を探す。歩み・history は調べない） |
 
 ```
 python3 tools/check_links.py
 python3 tools/check_levels.py
 python3 tools/check_hp.py
+python3 tools/check_ranks.py
 ```
 
-どちらも、見つかったら食い違いを1行ずつ出して、終了コード1で終わる。
+どれも、見つかったら食い違いを1行ずつ出して、終了コード1で終わる。

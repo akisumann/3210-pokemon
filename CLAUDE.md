@@ -13,7 +13,7 @@
 | `index.md` | 入口（何を知りたいときにどこを開くか、章ごとのあらすじへの案内）。未確定事項は `open-questions.md`、矛盾メモは `contradictions.md`。原典のファイル名はあらすじの各話の見出しにある |
 | `game/` | 原典の世界をゲームとして遊ぶためのもの（`rulebook.md` など）。決めごとの経緯は `notes/game-design.md`。今は保留中（ユーザーより） |
 | `sandbox/` | ストーリーと関係ない遊び・試作（AI向けのチームなど）。設定資料の根拠にしない（ユーザーより） |
-| `tools/` | 資料のチェックのスクリプト（リンク切れ、Lvのずれ、体力のずれ）。push のたびに GitHub Actions でも走る。中身は `tools/README.md` |
+| `tools/` | 資料のチェックのスクリプト（リンク切れ、Lvのずれ、体力のずれ、資質とランクのずれ）。push のたびに GitHub Actions でも走る。中身は `tools/README.md` |
 | `notes/` | 作業の記録。`rules/`（作業ごとの決まり。下の「作業ごとの決まり」）、`source-edits.md`（原典の修正記録・作り直した版への差し替え）、`resolved.md`（解決済みの疑問）など |
 
 ## 作業の進め方（ユーザーより、2026-10-24）
@@ -42,7 +42,7 @@
 | 原典の保存、作り直した版（GPTの変換版）への差し替え、原典の修正（誤字・話者・AA内の移動など）、原文の貼り付けからまとめる | [`notes/rules/source.md`](notes/rules/source.md) |
 | 設定資料を書く・直す（あらすじ、キャラ、関係図、世界観、用語、ポテンシャル、HPの逆算、矛盾メモなど） | [`notes/rules/materials.md`](notes/rules/materials.md) |
 
-資料を書き足したり直したりしたら、終わりに `python3 tools/check_links.py`、`python3 tools/check_levels.py`、`python3 tools/check_hp.py` を走らせ、0件にしてからコミットする（push のたびに GitHub Actions でも走る。中身は [`tools/README.md`](tools/README.md)）。
+資料を書き足したり直したりしたら、終わりに `python3 tools/check_links.py`、`python3 tools/check_levels.py`、`python3 tools/check_hp.py`、`python3 tools/check_ranks.py` を走らせ、0件にしてからコミットする（push のたびに GitHub Actions でも走る。中身は [`tools/README.md`](tools/README.md)）。
 
 どの作業でも守る基本（詳しくは `materials.md`）:
 - 根拠となる原典を `（出典: 001, 005）` の形で記す。

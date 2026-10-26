@@ -20,3 +20,6 @@ jobs:
       - name: 体力の表とキャラファイルのずれ
         if: always()
         run: python3 tools/check_hp.py
+      - name: 資質とランクのずれ
+        if: always()
+        run: python3 tools/check_ranks.py
