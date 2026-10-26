@@ -9,6 +9,7 @@
 | [battles-league-1.md](battles-league-1.md) | プロリーグ公式戦 第一節（ソノオ杯〜コトブキ杯中規模大会） |
 | [battles-league-2.md](battles-league-2.md) | プロリーグ公式戦 第二節（ナギサ杯〜ハクタイ杯大規模大会） |
 | [battles-league-3.md](battles-league-3.md) | プロリーグ公式戦 第三節（ヨスガ杯〜） |
+| [battles-league-4.md](battles-league-4.md) | プロリーグ公式戦 第四節（ミオ杯中規模大会〜） |
 | [battles-gyms.md](battles-gyms.md) | プロになってからのジム戦（トバリ〜） |
 
 ## バトルの準備で決めること（第12話）（出典: 012）
