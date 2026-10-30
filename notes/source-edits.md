@@ -21,4 +21,4 @@
 | [500-599.md](source-edits/500-599.md) | 101件 | 0件 |
 | [600-699.md](source-edits/600-699.md) | 100件 | 0件 |
 | [700-799.md](source-edits/700-799.md) | 105件 | 0件 |
-| [800-899.md](source-edits/800-899.md) | 6件 | 0件 |
+| [800-899.md](source-edits/800-899.md) | 8件 | 0件 |
