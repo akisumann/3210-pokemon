@@ -14,10 +14,10 @@ function load(){ try { const s = localStorage.getItem(SAVE_KEY); return s ? JSON
 // ================= 場所 =================
 const LOCS = [
   { id:"postwick", name:"ブラッシータウン", town:true, home:true, desc:"のどかな牧草地の町。あなたの家と、チャンピオン・ダンデの実家がある。" },
-  { id:"route1", name:"1ばんどうろ", tier:[0, 480], lv:[3, 6], desc:"ブラッシータウンとハロンタウンの間ののどかな道。" },
-  { id:"wildarea", name:"ワイルドエリア", tier:[0, 505], lv:[6, 11], center:true, desc:"天気が気まぐれに変わる、ガラルの広い原っぱ。入口の駅にポケモンセンターがある。" },
+  { id:"route1", name:"1ばんどうろ", tier:[0, 60], lv:[3, 6], desc:"ブラッシータウンとハロンタウンの間ののどかな道。" },
+  { id:"wildarea", name:"ワイルドエリア", tier:[0, 150], lv:[6, 11], center:true, desc:"天気が気まぐれに変わる、ガラルの広い原っぱ。入口の駅にポケモンセンターがある。" },
   { id:"motostoke", name:"エンジンシティ", town:true, center:true, shop:true, desc:"蒸気と歯車の大都市。ジムチャレンジの開会式が行われる。" },
-  { id:"route3", name:"3ばんどうろ", tier:[470, 525], lv:[10, 14], desc:"工場の煙突が並ぶ、ターフタウンへの道。" },
+  { id:"route3", name:"3ばんどうろ", tier:[40, 250], lv:[10, 14], desc:"工場の煙突が並ぶ、ターフタウンへの道。" },
   { id:"turffield", name:"ターフタウン", town:true, center:true, shop:true, gym:"yarrow", desc:"畑と大きな地上絵の町。最初のジム、ヤローのくさタイプのジムがある。" },
 ];
 const RANKS = ["C","B","A"];
@@ -36,7 +36,12 @@ function starterCandidates(){
   }
   return res;
 }
-function wildPool(loc){ return ALL.filter(n => TOTAL[n] >= loc.tier[0] && TOTAL[n] <= loc.tier[1] && !(G.starters || []).includes(n)); }
+// 場所ごとの出現: 合計種族値の弱い順に並べて、tier の番目の範囲（1ばんどうろは弱い方から60体、ワイルドエリアは150体、3ばんどうろは41〜250番目）
+const BY_TOTAL = [...ALL].sort((a, b) => TOTAL[a] - TOTAL[b]);
+function wildPool(loc){ return BY_TOTAL.slice(loc.tier[0], loc.tier[1]).filter(n => !(G.starters || []).includes(n)); }
+// まだ見つけていない種族は2倍出やすい
+function pickWild(pool){ const w = pool.map(n => G.seen[n] ? 1 : 2); let r = Math.random() * w.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < pool.length; i++) { r -= w[i]; if (r < 0) return pool[i]; } return pool[pool.length - 1]; }
 
 // ================= 状態 =================
 let G = null;
@@ -180,7 +185,7 @@ function walk(){
     return battleTrainer({ who:`ジムチャレンジャーの${who}`, team, money:team.reduce((a, m) => a + m.lv * 40, 0), intro:[["talk", `${who}「${line}」`]],
       win:[who, "……やるな。ジムで会おう。"], lose:[who, "まだまだ、ってところね。"] });
   }
-  const sp = pick(pool), m = makeMon(sp, L.lv[0] + rnd(L.lv[1] - L.lv[0] + 1));
+  const sp = pickWild(pool), m = makeMon(sp, L.lv[0] + rnd(L.lv[1] - L.lv[0] + 1));
   G.seen[sp] = 1;
   battleWild(m);
 }
