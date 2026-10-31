@@ -8,7 +8,7 @@
 
 | ファイル | 最初 〜 最後 | 数 |
 | --- | --- | --- |
-| [属-1.md](potential-list/属-1.md) | 『18/DRAGONS』 〜 『ツインテール』 | 169 |
+| [属-1.md](potential-list/属-1.md) | 『18/DRAGONS』 〜 『ツインテール』 | 171 |
 | [属-2.md](potential-list/属-2.md) | 『ティターニア』 〜 『腰痛持ち』 | 169 |
 | [属-3.md](potential-list/属-3.md) | 『金銭欲』 〜 『魔王ディメンション』 | 3 |
 
