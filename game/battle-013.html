@@ -164,16 +164,71 @@ const ABIL = {
   "はやあし":"状態異常の時、「速」を強化（1.5倍）する。「麻痺」の「速」低下を無視する。", "ノーガード":"自身と自身への技が「必中」する。",
   "するどいめ":"「命中」が下がらない。相手の「回避」を無視する。"
 };
-const ITEMS = {
-  "オボンのみ":"体力が1/2以下になると、1/4回復", "イバンのみ":"体力が1/4以下になると、次の1回だけ同じ優先度の中で先に動ける",
-  "ラムのみ":"状態異常と混乱を1回治す", "ノーマルジュエル":"ノーマル技の威力を1回だけ1.3倍", "いのちのたま":"技の威力1.3倍、当てるたび体力1/10を失う",
-  "いかずちプレート":"でんき技1.2倍", "しずくプレート":"みず技1.2倍", "もののけプレート":"ゴースト技1.2倍",
-  "こだわりハチマキ":"攻1.5倍、最初に選んだ技しか出せない", "こだわりメガネ":"特攻1.5倍、最初に選んだ技しか出せない",
-  "こだわりスカーフ":"速1.5倍、最初に選んだ技しか出せない", "きあいのタスキ":"体力満タンからの一撃を体力1で耐える",
-  "きあいのハチマキ":"1割で、倒れる一撃を体力1で耐える", "とつげきチョッキ":"特防1.5倍、変化技が出せない",
-  "ゴツゴツメット":"直接技を当てた相手に最大体力の1/6のダメージ", "しろいハーブ":"下がった能力を1回元に戻す",
-};
-const BERRY = ["オボンのみ","イバンのみ","ラムのみ"];
+// ---- もちものセット（第八世代基準。ジュエルは「ノーマル」だけ（012の作者の注）） ----
+const TB = { "まっさらプレート":"ノーマル","ひのたまプレート":"ほのお","しずくプレート":"みず","いかずちプレート":"でんき","みどりのプレート":"くさ",
+  "つららのプレート":"こおり","こぶしのプレート":"かくとう","もうどくプレート":"どく","だいちのプレート":"じめん","あおぞらプレート":"ひこう",
+  "ふしぎのプレート":"エスパー","たまむしプレート":"むし","がんせきプレート":"いわ","もののけプレート":"ゴースト","りゅうのプレート":"ドラゴン",
+  "こわもてプレート":"あく","こうてつプレート":"はがね","せいれいプレート":"フェアリー",
+  "シルクのスカーフ":"ノーマル","もくたん":"ほのお","しんぴのしずく":"みず","じしゃく":"でんき","きせきのタネ":"くさ","とけないこおり":"こおり",
+  "くろおび":"かくとう","どくバリ":"どく","やわらかいすな":"じめん","するどいくちばし":"ひこう","まがったスプーン":"エスパー","ぎんのこな":"むし",
+  "かたいいし":"いわ","のろいのおふだ":"ゴースト","りゅうのキバ":"ドラゴン","くろいメガネ":"あく","メタルコート":"はがね",
+  "うしおのおこう":"みず","さざなみのおこう":"みず","がんせきおこう":"いわ","あやしいおこう":"エスパー","おはなのおこう":"くさ" };
+const RESIST = { "ホズのみ":"ノーマル","オッカのみ":"ほのお","イトケのみ":"みず","ソクノのみ":"でんき","リンドのみ":"くさ","ヤチェのみ":"こおり",
+  "ヨプのみ":"かくとう","ビアーのみ":"どく","シュカのみ":"じめん","バコウのみ":"ひこう","ウタンのみ":"エスパー","タンガのみ":"むし",
+  "ヨロギのみ":"いわ","カシブのみ":"ゴースト","ハバンのみ":"ドラゴン","ナモのみ":"あく","リリバのみ":"はがね","ロゼルのみ":"フェアリー" };
+const PINCH_HEAL = ["フィラのみ","ウイのみ","マゴのみ","バンジのみ","イアのみ"];
+const PINCH_STAT = { "チイラのみ":"atk","リュガのみ":"def","ヤタピのみ":"spa","ズアのみ":"spd","カムラのみ":"spe" };
+const CURE = { "クラボのみ":["par"],"カゴのみ":["slp"],"モモンのみ":["psn","tox"],"チーゴのみ":["brn"],"ナナシのみ":["frz"],"キーのみ":["confuse"],
+  "ラムのみ":["par","slp","psn","tox","brn","frz","confuse"] };
+const SLOW = ["くろいてっきゅう","きょうせいギプス","パワーリスト","パワーベルト","パワーレンズ","パワーバンド","パワーアンクル","パワーウエイト"];
+const ITEM_GROUPS = [
+  ["攻める", { "こだわりハチマキ":"攻1.5倍。最初に出した技しか出せない", "こだわりメガネ":"特攻1.5倍。最初に出した技しか出せない",
+    "こだわりスカーフ":"速1.5倍。最初に出した技しか出せない", "いのちのたま":"技の威力1.3倍。当てるたびに体力1/10を失う",
+    "たつじんのおび":"ばつぐんの技1.2倍", "ちからのハチマキ":"物理技1.1倍", "ものしりメガネ":"特殊技1.1倍",
+    "ノーマルジュエル":"ノーマル技の威力を1回だけ1.3倍", "ピントレンズ":"急所ランク+1", "するどいツメ":"急所ランク+1",
+    "おうじゃのしるし":"攻撃技に1割で怯み", "するどいキバ":"攻撃技に1割で怯み", "こうかくレンズ":"命中1.1倍",
+    "フォーカスレンズ":"相手より後に動くと命中1.2倍", "かいがらのすず":"与えたダメージの1/8回復", "せんせいのツメ":"2割で同じ優先度の中で先に動く",
+    "じゃくてんほけん":"ばつぐんの技を受けると攻と特攻+2", "ねらいのまと":"持ち主のタイプの無効が消える", "のどスプレー":"音の技を出すと特攻+1" }],
+  ["受ける・守る", { "きあいのタスキ":"体力満タンからの一撃を体力1で耐える", "きあいのハチマキ":"1割で、倒れる一撃を体力1で耐える",
+    "とつげきチョッキ":"特防1.5倍。変化技が出せない", "ゴツゴツメット":"直接技を当てた相手に最大体力の1/6のダメージ",
+    "たべのこし":"毎ターン終わりに体力1/16回復", "くろいヘドロ":"どくタイプは毎ターン1/16回復、それ以外は1/8を失う",
+    "ひかりのこな":"相手の技の命中0.9倍", "のんきのおこう":"相手の技の命中0.9倍", "ふうせん":"じめん技が当たらない。攻撃を受けると割れる",
+    "しろいハーブ":"下がった能力を1回元に戻す", "レッドカード":"攻撃を当ててきた相手を控えと入れ替える",
+    "だっしゅつボタン":"攻撃を受けると控えと入れ替わる", "だっしゅつパック":"能力が下がると控えと入れ替わる",
+    "きれいなぬけがら":"「くろいまなざし」などでも必ず交代できる", "くっつきバリ":"毎ターン終わりに持ち主が体力1/8を失う",
+    "しんかのきせき":"進化前なら防と特防1.5倍（この3体とこの相手には効かない）" }],
+  ["自分に状態異常・遅くする", { "かえんだま":"ターン終わりに持ち主をやけどにする", "どくどくだま":"ターン終わりに持ち主をもうどくにする",
+    "くろいてっきゅう":"速が半分", "きょうせいギプス":"速が半分", "パワーリスト":"速が半分", "パワーベルト":"速が半分", "パワーレンズ":"速が半分",
+    "パワーバンド":"速が半分", "パワーアンクル":"速が半分", "パワーウエイト":"速が半分",
+    "こうこうのしっぽ":"同じ優先度の中でいつも後に動く", "まんぷくおこう":"同じ優先度の中でいつも後に動く" }],
+  ["受けた技で能力が上がる", { "きゅうこん":"みず技を受けると特攻+1", "じゅうでんち":"でんき技を受けると攻+1",
+    "ゆきだま":"こおり技を受けると攻+1", "ひかりごけ":"みず技を受けると特防+1" }],
+  ["プレート（タイプの技1.2倍）", Object.fromEntries(Object.entries(TB).filter(([k]) => k.endsWith("プレート")).map(([k,t]) => [k, `${t}技1.2倍`]))],
+  ["タイプを強める道具・おこう（1.2倍）", Object.fromEntries(Object.entries(TB).filter(([k]) => !k.endsWith("プレート")).map(([k,t]) => [k, `${t}技1.2倍`]))],
+  ["回復のきのみ", { "オボンのみ":"体力1/2以下で1/4回復", "オレンのみ":"体力1/2以下で10回復",
+    ...Object.fromEntries(PINCH_HEAL.map(k => [k, "体力1/4以下で1/3回復"])) }],
+  ["ピンチで能力が上がるきのみ", { "チイラのみ":"体力1/4以下で攻+1", "リュガのみ":"体力1/4以下で防+1", "ヤタピのみ":"体力1/4以下で特攻+1",
+    "ズアのみ":"体力1/4以下で特防+1", "カムラのみ":"体力1/4以下で速+1", "サンのみ":"体力1/4以下で急所ランク+2",
+    "スターのみ":"体力1/4以下でどれかの能力+2", "ミクルのみ":"体力1/4以下で次の技の命中1.2倍",
+    "イバンのみ":"体力1/4以下で、次の1回だけ同じ優先度の中で先に動ける" }],
+  ["攻撃を受けて効くきのみ", { "ジャポのみ":"物理技を受けると相手に体力1/8のダメージ", "レンブのみ":"特殊技を受けると相手に体力1/8のダメージ",
+    "アッキのみ":"物理技を受けると防+1", "タラプのみ":"特殊技を受けると特防+1", "ナゾのみ":"ばつぐんの技を受けると1/4回復",
+    "ボコのみ":"体力満タンの時、1度だけ物理技のダメージを半減（原典の表示どおり）", "マジュのみ":"体力満タンの時、1度だけ特殊技のダメージを半減（原典の表示どおり）" }],
+  ["半減きのみ", Object.fromEntries(Object.entries(RESIST).map(([k,t]) => [k, t === "ノーマル" ? "ノーマル技のダメージを1回半減" : `ばつぐんの${t}技のダメージを1回半減`]))],
+  ["状態異常を治すきのみ", { "ラムのみ":"状態異常と混乱を1回治す", "クラボのみ":"まひを治す", "チーゴのみ":"やけどを治す", "モモンのみ":"どくを治す",
+    "キーのみ":"こんらんを治す", "カゴのみ":"ねむりを治す（この試合では眠らない）", "ナナシのみ":"こおりを治す（この試合では凍らない）",
+    "ヒメリのみ":"PPを戻す（この試合ではPPがない）" }],
+  ["この試合では効果がないもの", { "ひかりのねんど":"壁の技がない", "しめったいわ":"天気の技がない", "あついいわ":"天気の技がない",
+    "さらさらいわ":"天気の技がない", "つめたいいわ":"天気の技がない", "グランドコート":"フィールドの技がない", "エレキシード":"フィールドがない",
+    "グラスシード":"フィールドがない", "サイコシード":"フィールドがない", "ミストシード":"フィールドがない", "ルームサービス":"トリックルームがない",
+    "パワフルハーブ":"溜める技がない", "メンタルハーブ":"ちょうはつ等がない", "ぼうじんゴーグル":"粉の技・天気がない", "あつぞこブーツ":"設置技がない",
+    "ばんのうがさ":"天気がない", "いかさまダイス":"連続技が「にどげり」（2回固定）だけ", "しめつけバンド":"しめつける技がない",
+    "ねばりのかぎづめ":"しめつける技がない", "おおきなねっこ":"吸い取る技がない" }],
+];
+const ITEMS = Object.assign({}, ...ITEM_GROUPS.map(g => g[1]));
+const isBerry = it => !!it && it.endsWith("のみ");
+const FLING = it => !it ? 0 : it === "くろいてっきゅう" ? 130 : it.endsWith("プレート") ? 90 : it === "ゴツゴツメット" ? 60
+  : SLOW.includes(it) ? 70 : it === "しんかのきせき" ? 40 : (isBerry(it) || it.startsWith("こだわり") || it.endsWith("ハーブ") || it.startsWith("きあいの")) ? 10 : 30;
 
 // ================= 状態 =================
 let prep, P, E, turn, over, dexUsed, awaitingSwitch;
@@ -184,7 +239,7 @@ function makeMon(key, item){
   const max = base(r.hp) + 60;
   return { key, ...r, item: item ?? r.item ?? null, s, max, hp:max,
     st:{atk:0,def:0,spa:0,spd:0,spe:0}, status:null, confuse:0, cursed:false, charged:false,
-    disabled:null, disabledT:0, lock:null, flinch:false, ibanReady:false, moved:0, meanLooked:false };
+    disabled:null, disabledT:0, lock:null, flinch:false, ibanReady:false, moved:0, meanLooked:false, critUp:0, micle:false, toxN:1 };
 }
 
 // ================= 準備画面 =================
@@ -202,7 +257,8 @@ function drawPrep(){
       <div class="stats">特性：${r.ability}…${ABIL[r.ability]}<br>技：${mv}<br>攻${r.atk}　防${r.def}　特攻${r.spa}　特防${r.spd}　速${r.spe}</div>
       <div style="margin-top:6px"><label>もちもの：<select></select></label></div>`;
     const cb = d.querySelector("input"), sel = d.querySelector("select");
-    sel.innerHTML = `<option value="">なし</option>` + Object.keys(ITEMS).map(i => `<option ${prep.items[k]===i?"selected":""}>${i}</option>`).join("");
+    sel.innerHTML = `<option value="">なし</option>` + ITEM_GROUPS.map(([g, its]) => `<optgroup label="${g}">` +
+      Object.keys(its).map(i => `<option ${prep.items[k]===i?"selected":""}>${i}</option>`).join("") + `</optgroup>`).join("");
     sel.title = ITEMS[prep.items[k]] || "";
     cb.onchange = () => { if (cb.checked) { if (prep.chosen.length >= 2) { cb.checked = false;
         document.getElementById("prepMsg").textContent = "出せるのは2体まで。先にどれかを外してください。"; return; } prep.chosen.push(k); }
@@ -234,7 +290,8 @@ const act = side => side.team[side.active];
 function tagText(m){
   const n = {atk:"攻",def:"防",spa:"特攻",spd:"特防",spe:"速"};
   const t = Object.entries(m.st).filter(([,v]) => v).map(([k,v]) => n[k] + (v > 0 ? "+" : "") + v);
-  if (m.status === "par") t.push("まひ"); if (m.status === "brn") t.push("やけど");
+  if (m.status === "par") t.push("まひ"); if (m.status === "brn") t.push("やけど"); if (m.status === "psn") t.push("どく"); if (m.status === "tox") t.push("もうどく");
+  if (m.critUp) t.push("急所+" + m.critUp);
   if (m.confuse) t.push("こんらん"); if (m.cursed) t.push("のろい"); if (m.charged) t.push("じゅうでん");
   if (m.disabled) t.push("かなしばり：" + MOVES[m.disabled].n); if (m.lock) t.push("こだわり：" + MOVES[m.lock].n);
   return t.join("　");
@@ -265,6 +322,7 @@ function word(dmg, m, before){
 
 // ================= 計算 =================
 const mult = s => s >= 0 ? (2 + s) / 2 : 2 / (2 - s);
+const STN = { atk:"攻撃", def:"防御", spa:"特攻", spd:"特防", spe:"素早さ" };
 function statOf(m, k, crit, isDef){
   let st = m.st[k];
   if (crit) st = isDef ? Math.min(0, st) : Math.max(0, st);
@@ -276,47 +334,98 @@ function statOf(m, k, crit, isDef){
 }
 function speedOf(m){
   let v = Math.floor(m.s.spe * mult(m.st.spe));
-  if (m.item === "くろいてっきゅう") v = Math.floor(v / 2);
+  if (SLOW.includes(m.item)) v = Math.floor(v / 2);
   if (m.item === "こだわりスカーフ") v = Math.floor(v * 1.5);
   if (m.ability === "はやあし" && m.status) v = Math.floor(v * 1.5);
   else if (m.status === "par") v = Math.floor(v / 4);
   return v;
 }
-function flingPower(item){ if (!item) return 0; if (item === "くろいてっきゅう") return 130; if (BERRY.includes(item)) return 10; return 30; }
-function calc(a, d, key, roll = null, critForce = null){
+const flingPower = FLING;
+function effOf(mt, d){
+  if (mt === "じめん" && d.item === "ふうせん") return 0;
+  let e = 1;
+  for (const t of d.types) { let x = CHART[mt]?.[t] ?? 1; if (x === 0 && d.item === "ねらいのまと") x = 1; e *= x; }
+  return e;
+}
+// real=false はAIの見積もり用（きのみ等を使わない）
+function calc(a, d, key, roll = null, critForce = null, real = true){
   const mv = MOVES[key];
-  const crit = critForce ?? (Math.random() < 1/16);
+  const stage = (["ピントレンズ","するどいツメ"].includes(a.item) ? 1 : 0) + (a.critUp || 0);
+  const crit = critForce ?? (Math.random() < [1/16, 1/8, 1/4, 1/3, 1/2][Math.min(4, stage)]);
   const [ak, dk] = mv.c === "ph" ? ["atk","def"] : ["spa","spd"];
   const A = statOf(a, ak, crit, false), D = statOf(d, dk, crit, true);
   let pow = key === "fling" ? flingPower(a.item) : mv.p;
   if (mv.t === "でんき" && a.charged) pow *= 2;
   let jewel = false;
   if (mv.t === "ノーマル" && a.item === "ノーマルジュエル") { pow = Math.floor(pow * 1.3); jewel = true; }
-  const plate = { "いかずちプレート":"でんき", "しずくプレート":"みず", "もののけプレート":"ゴースト" }[a.item];
-  if (plate === mv.t) pow = Math.floor(pow * 1.2);
+  if (TB[a.item] === mv.t) pow = Math.floor(pow * 1.2);
+  if (a.item === "ちからのハチマキ" && mv.c === "ph") pow = Math.floor(pow * 1.1);
+  if (a.item === "ものしりメガネ" && mv.c === "sp") pow = Math.floor(pow * 1.1);
   let dmg = Math.floor(Math.floor(22 * pow * A / D) / 50) + 2;
   if (crit) dmg *= 2;
   const r = roll ?? (85 + Math.floor(Math.random() * 16));
   dmg = Math.floor(dmg * r / 100);
   if (a.types.includes(mv.t)) dmg = Math.floor(dmg * 1.5);
-  const e = eff(mv.t, d.types);
+  const e = effOf(mv.t, d);
   dmg = Math.floor(dmg * e);
   if (a.status === "brn" && mv.c === "ph") dmg = Math.floor(dmg / 2);
+  if (a.item === "たつじんのおび" && e > 1) dmg = Math.floor(dmg * 1.2);
   if (a.item === "いのちのたま") dmg = Math.floor(dmg * 1.3);
-  return { dmg: e === 0 ? 0 : Math.max(1, dmg), crit, e, jewel };
+  let resist = null;
+  if (RESIST[d.item] === mv.t && (e > 1 || mv.t === "ノーマル") && e > 0) { dmg = Math.floor(dmg / 2); resist = d.item; }
+  else if ((d.item === "ボコのみ" && mv.c === "ph" || d.item === "マジュのみ" && mv.c === "sp") && d.hp === d.max && e > 0) { dmg = Math.floor(dmg / 2); resist = d.item; }
+  return { dmg: e === 0 ? 0 : Math.max(1, dmg), crit, e, jewel, resist };
 }
 
-// ================= 技の処理 =================
-function hpLoss(m, n, label){ const b = m.hp; m.hp = Math.max(0, m.hp - n); if (label) sys(label + word(Math.min(n, b), m, b)); }
-function heal(m, n){ m.hp = Math.min(m.max, m.hp + n); }
-function afterDamageItems(m){
-  if (m.hp > 0 && m.item === "オボンのみ" && m.hp <= m.max / 2) {
-    heal(m, Math.floor(m.max / 4)); sys(`◎${m.name}は「オボンのみ」を使い、体力を1/4回復した！`); m.item = null; }
-  if (m.hp > 0 && m.item === "イバンのみ" && m.hp <= m.max / 4) { m.ibanReady = true; }
+// ================= 状態の変化 =================
+function hpLoss(m, n, label){ const b = m.hp; m.hp = Math.max(0, m.hp - n); if (label) sys(label + word(n, m, b)); }
+function heal(m, n, label){ if (m.hp <= 0 || m.hp >= m.max) return; m.hp = Math.min(m.max, m.hp + n); if (label) sys(label); }
+function useItem(m){ m.lastItem = m.item; m.item = null; }
+function lower(m, k, n, side){
+  if (m.hp <= 0) return;
+  const old = m.st[k]; m.st[k] = Math.max(-6, m.st[k] - n);
+  if (old === m.st[k]) { sys(`${m.name}の ${STN[k]}は もう下がらない！`); return; }
+  sys(`${m.name}の ${STN[k]}が ${n > 1 ? "がくっと " : ""}下がった！`);
+  if (m.item === "しろいハーブ") { for (const x in m.st) if (m.st[x] < 0) m.st[x] = 0; useItem(m); sys(`◎${m.name}は「しろいハーブ」で 能力を元に戻した！`); }
+  else if (m.item === "だっしゅつパック" && side) { useItem(m); sys(`◎${m.name}は「だっしゅつパック」で 戻っていく！`); forceOut(side, false); }
 }
-function cureByLum(m){
-  if (m.item === "ラムのみ" && (m.status || m.confuse)) { m.status = null; m.confuse = 0; m.item = null;
-    sys(`◎${m.name}は「ラムのみ」で 状態異常を 治した！`); }
+function raise(m, k, n, label){ if (m.hp <= 0) return; const o = m.st[k]; m.st[k] = Math.min(6, m.st[k] + n);
+  if (o !== m.st[k]) sys(`${label || ""}${m.name}の ${STN[k]}が ${n > 1 ? "ぐーんと " : ""}上がった！`); }
+function curePerBerry(m){
+  const list = CURE[m.item]; if (!list) return;
+  if (m.status && list.includes(m.status) || m.confuse && list.includes("confuse")) {
+    if (list.includes(m.status)) m.status = null; if (list.includes("confuse")) m.confuse = 0;
+    sys(`◎${m.name}は「${m.item}」で 状態異常を 治した！`); useItem(m); }
+}
+function setStatus(m, st){
+  if (m.status || m.hp <= 0) return false;
+  if (st === "brn" && m.types.includes("ほのお")) return false;
+  if ((st === "psn" || st === "tox") && (m.types.includes("どく") || m.types.includes("はがね"))) return false;
+  if (st === "par" && m.types.includes("でんき")) return false;
+  m.status = st; if (st === "tox") m.toxN = 1;
+  sys(`${m.name}は ${{ par:"まひして 技が出にくくなった", brn:"やけどを負った", psn:"どくを浴びた", tox:"もうどくを浴びた" }[st]}！`);
+  curePerBerry(m); return true;
+}
+function pinchItems(m){
+  if (m.hp <= 0 || !m.item) return;
+  const it = m.item;
+  if (it === "オボンのみ" && m.hp <= m.max / 2) { useItem(m); heal(m, Math.floor(m.max / 4), `◎${m.name}は「オボンのみ」を使い、体力を1/4回復した！`); }
+  else if (it === "オレンのみ" && m.hp <= m.max / 2) { useItem(m); heal(m, 10, `◎${m.name}は「オレンのみ」で 体力を10回復した！`); }
+  else if (PINCH_HEAL.includes(it) && m.hp <= m.max / 4) { useItem(m); heal(m, Math.floor(m.max / 3), `◎${m.name}は「${it}」で 体力を1/3回復した！`); }
+  else if (m.hp <= m.max / 4) {
+    if (PINCH_STAT[it]) { useItem(m); raise(m, PINCH_STAT[it], 1, `◎「${it}」！ `); }
+    else if (it === "サンのみ") { useItem(m); m.critUp = 2; sys(`◎${m.name}は「サンのみ」で 張り切っている！（急所ランク+2）`); }
+    else if (it === "スターのみ") { useItem(m); const ks = Object.keys(m.st).filter(k => m.st[k] < 6); if (ks.length) raise(m, ks[Math.floor(Math.random() * ks.length)], 2, "◎「スターのみ」！ "); }
+    else if (it === "ミクルのみ") { useItem(m); m.micle = true; sys(`◎${m.name}は「ミクルのみ」で 次の技が当たりやすくなった！`); }
+    else if (it === "イバンのみ") { m.ibanReady = true; }
+  }
+}
+function eatBerryAs(m, b){ // ついばむで食べた時
+  if (b === "オボンのみ") heal(m, Math.floor(m.max / 4), `${m.name}の 体力が回復した！`);
+  else if (b === "オレンのみ") heal(m, 10, `${m.name}の 体力が回復した！`);
+  else if (PINCH_HEAL.includes(b)) heal(m, Math.floor(m.max / 3), `${m.name}の 体力が回復した！`);
+  else if (PINCH_STAT[b]) raise(m, PINCH_STAT[b], 1);
+  else if (CURE[b] && (m.status || m.confuse)) { if (CURE[b].includes(m.status)) m.status = null; if (CURE[b].includes("confuse")) m.confuse = 0; }
 }
 function canMove(a){
   if (a.flinch) { a.flinch = false; sys(`${a.name}は ひるんで 動けない！`); return false; }
@@ -327,12 +436,19 @@ function canMove(a){
     sys(`${a.name}は こんらんしている！`);
     if (Math.random() < .5) {
       const self = Math.max(1, Math.floor(Math.floor(22 * 40 * statOf(a,"atk",false,false) / statOf(a,"def",false,true)) / 50) + 2);
-      hpLoss(a, self, "わけも わからず 自分を攻撃した！ "); return false;
+      hpLoss(a, self, "わけも わからず 自分を攻撃した！ "); pinchItems(a); return false;
     }
   }
   return true;
 }
-function useMove(aSide, dSide, key){
+function benchOf(side){ return side.team.map((m, i) => i).filter(i => i !== side.active && side.team[i].hp > 0); }
+function forceOut(side, dragged){
+  const b = benchOf(side); if (!b.length) return false;
+  switchIn(side, b[0], dragged); return true;
+}
+
+// ================= 技の処理 =================
+function useMove(aSide, dSide, key, movedFirst){
   const a = act(aSide), d = act(dSide), mv = MOVES[key];
   if (!canMove(a)) return;
   a.moved++;
@@ -341,44 +457,47 @@ function useMove(aSide, dSide, key){
   if (key === "fakeout" && a.moved > 1) { sys("しかし うまく決まらなかった！"); return; }
   if (key === "fling" && !a.item) { sys("しかし 投げるものがない！"); return; }
   const noGuard = a.ability === "ノーガード" || d.ability === "ノーガード";
-  if (mv.a && !noGuard && Math.random() * 100 >= mv.a) { sys(`${d.name}には 当たらなかった！`); return; }
+  if (mv.a && !noGuard) {
+    let acc = mv.a;
+    if (a.item === "こうかくレンズ") acc *= 1.1;
+    if (a.item === "フォーカスレンズ" && !movedFirst) acc *= 1.2;
+    if (a.micle) { acc *= 1.2; a.micle = false; }
+    if (["ひかりのこな","のんきのおこう"].includes(d.item)) acc *= .9;
+    if (Math.random() * 100 >= acc) { sys(`${d.name}には 当たらなかった！`); return; }
+  }
   if (mv.a && noGuard && mv.c !== "st") sys("―――「ノーガード」により、技は「必中」だ！");
 
   // ---- 変化技 ----
   if (mv.c === "st") {
-    if (key === "charge") { a.charged = true; a.st.spd = Math.min(6, a.st.spd + 1); sys(`${a.name}は じゅうでんを始めた！ 特防が 上がった！`); return; }
-    if (key === "curse") { hpLoss(a, Math.floor(a.max / 2)); d.cursed = true; sys(`${a.name}は 自分の体力を削って、${d.name}に のろいをかけた！`); afterDamageItems(a); return; }
+    if (key === "charge") { a.charged = true; raise(a, "spd", 1); sys(`${a.name}は じゅうでんを始めた！`); return; }
+    if (key === "curse") { hpLoss(a, Math.floor(a.max / 2)); d.cursed = true; sys(`${a.name}は 自分の体力を削って、${d.name}に のろいをかけた！`); pinchItems(a); return; }
     if (key === "meanlook") { d.meanLooked = true; sys(`${d.name}は もう 逃げられない！`); return; }
-    if (key === "tailwhip") { d.st.def = Math.max(-6, d.st.def - 1); sys(`${d.name}の 防御が 下がった！`); return; }
+    if (key === "tailwhip") { lower(d, "def", 1, dSide); return; }
     if (key === "trick") {
       if (!a.item && !d.item) { sys("しかし うまく決まらなかった！"); return; }
       [a.item, d.item] = [d.item, a.item]; a.lock = null; d.lock = null;
       sys(`${a.name}と ${d.name}の もちものが 入れ替わった！`);
       if (a.item) sys(`${a.name}は「${a.item}」を 受け取った！`);
-      return;
+      if (d.item) sys(`${d.name}は「${d.item}」を 受け取った！`);
+      pinchItems(a); pinchItems(d); return;
     }
-    if (key === "willowisp") {
-      if (d.status || d.types.includes("ほのお")) { sys("しかし うまく決まらなかった！"); return; }
-      d.status = "brn"; sys(`${d.name}は やけどを負った！`); cureByLum(d); return;
-    }
-    if (key === "roar") {
-      const bench = dSide.team.map((m, i) => i).filter(i => i !== dSide.active && dSide.team[i].hp > 0);
-      if (!bench.length) { sys("しかし うまく決まらなかった！"); return; }
-      switchIn(dSide, bench[Math.floor(Math.random() * bench.length)], true); return;
-    }
+    if (key === "willowisp") { if (!setStatus(d, "brn")) sys("しかし うまく決まらなかった！"); return; }
+    if (key === "roar") { if (!forceOut(dSide, true)) sys("しかし うまく決まらなかった！"); return; }
     return;
   }
 
   // ---- 攻撃技 ----
-  const hits = mv.hits || 1; let total = 0, last = null;
+  const hits = mv.hits || 1; let total = 0, anyE = 1;
   for (let h = 0; h < hits; h++) {
     if (d.hp <= 0) break;
-    const r = calc(a, d, key); last = r;
+    const r = calc(a, d, key);
     if (r.e === 0) { sys(`${d.name}には 効果が ないようだ……`); return; }
-    if (r.jewel) { sys(`◎${a.name}は「ノーマルジュエル」を使い、「ノ」技の威力を強化（1.3倍）した！`); a.item = null; }
+    anyE = r.e;
+    if (r.jewel) { sys(`◎${a.name}は「ノーマルジュエル」を使い、「ノ」技の威力を強化（1.3倍）した！`); useItem(a); }
+    if (r.resist) { sys(`◎${d.name}は「${r.resist}」で ダメージを 弱めた！`); useItem(d); }
     let dmg = r.dmg; const before = d.hp;
     if (dmg >= d.hp) {
-      if (d.item === "きあいのタスキ" && d.hp === d.max) { dmg = d.hp - 1; d.item = null; d._endure = "きあいのタスキ"; }
+      if (d.item === "きあいのタスキ" && d.hp === d.max) { dmg = d.hp - 1; useItem(d); d._endure = "きあいのタスキ"; }
       else if (d.item === "きあいのハチマキ" && Math.random() < .1) { dmg = d.hp - 1; d._endure = "きあいのハチマキ"; }
     }
     d.hp = Math.max(0, d.hp - dmg); total += before - d.hp;
@@ -386,43 +505,71 @@ function useMove(aSide, dSide, key){
     if (h === 0) { if (r.e > 1) sys("こうかは ばつぐんだ！"); else if (r.e < 1) sys("こうかは いまひとつのようだ"); }
     sys(word(r.dmg, d, before));
     if (d._endure) { sys(`${d.name}は「${d._endure}」で、皮一枚で踏んばった！`); d._endure = null; }
-    if (mv.ct && d.item === "ゴツゴツメット" && a.hp > 0) hpLoss(a, Math.floor(a.max / 6), "ゴツゴツメット！ ");
-    afterDamageItems(d);
+    // 受けた側のもちもの
+    const it = d.item;
+    if (it === "ふうせん") { useItem(d); sys(`${d.name}の「ふうせん」が 割れた！`); }
+    if (mv.ct && it === "ゴツゴツメット" && a.hp > 0) hpLoss(a, Math.floor(a.max / 6), "ゴツゴツメット！ ");
+    if (d.hp > 0) {
+      if (it === "ジャポのみ" && mv.c === "ph" || it === "レンブのみ" && mv.c === "sp") { useItem(d); hpLoss(a, Math.floor(a.max / 8), `◎「${it}」！ `); }
+      if (it === "アッキのみ" && mv.c === "ph") { useItem(d); raise(d, "def", 1, "◎「アッキのみ」！ "); }
+      if (it === "タラプのみ" && mv.c === "sp") { useItem(d); raise(d, "spd", 1, "◎「タラプのみ」！ "); }
+      if (it === "ナゾのみ" && r.e > 1) { useItem(d); heal(d, Math.floor(d.max / 4), `◎${d.name}は「ナゾのみ」で 体力を回復した！`); }
+      if (it === "じゃくてんほけん" && r.e > 1) { useItem(d); raise(d, "atk", 2, "◎「じゃくてんほけん」！ "); raise(d, "spa", 2); }
+      if (it === "きゅうこん" && mv.t === "みず") { useItem(d); raise(d, "spa", 1, "◎「きゅうこん」！ "); }
+      if (it === "ひかりごけ" && mv.t === "みず") { useItem(d); raise(d, "spd", 1, "◎「ひかりごけ」！ "); }
+      if (it === "じゅうでんち" && mv.t === "でんき") { useItem(d); raise(d, "atk", 1, "◎「じゅうでんち」！ "); }
+      if (it === "ゆきだま" && mv.t === "こおり") { useItem(d); raise(d, "atk", 1, "◎「ゆきだま」！ "); }
+      pinchItems(d);
+    }
   }
   if (hits > 1) sys(`${hits}回 当たった！`);
-  if (key === "fling") { sys(`${a.name}は「${a.item}」を 投げつけた！`); a.item = null; }
-  if (key === "pluck" && d.item && BERRY.includes(d.item)) {
-    const b = d.item; d.item = null; sys(`${a.name}は ${d.name}の「${b}」を ついばんで 食べた！`);
-    if (b === "オボンのみ") heal(a, Math.floor(a.max / 4));
+  if (key === "fling") {
+    const it = a.item; sys(`${a.name}は「${it}」を 投げつけた！`); useItem(a);
+    if (d.hp > 0) { if (it === "かえんだま") setStatus(d, "brn"); if (it === "どくどくだま") setStatus(d, "tox");
+      if (["おうじゃのしるし","するどいキバ"].includes(it) && d.ability !== "せいしんりょく") d.flinch = true; }
+  }
+  if (key === "pluck" && isBerry(d.item)) {
+    const b = d.item; useItem(d); sys(`${a.name}は ${d.name}の「${b}」を ついばんで 食べた！`); eatBerryAs(a, b);
   }
   if (mv.t === "でんき") a.charged = false;
-  // 反動・いのちのたま
+  if (key === "hypervoice" && a.item === "のどスプレー" && a.hp > 0) { useItem(a); raise(a, "spa", 1, "◎「のどスプレー」！ "); }
+  // 反動・いのちのたま・かいがらのすず
   if (mv.recoil && total > 0) hpLoss(a, Math.max(1, Math.floor(total / mv.recoil)), "反動！ ");
   if (key === "struggle" && a.hp > 0) hpLoss(a, Math.max(1, Math.floor(a.max / 4)), "反動！ ");
   if (a.item === "いのちのたま" && total > 0 && a.hp > 0) hpLoss(a, Math.floor(a.max / 10), "いのちのたま！ ");
-  afterDamageItems(a);
+  if (a.item === "かいがらのすず" && total > 0) heal(a, Math.max(1, Math.floor(total / 8)), `◎${a.name}は「かいがらのすず」で 少し回復した！`);
+  pinchItems(a);
   // 追加効果
   if (d.hp > 0 && mv.sec && Math.random() * 100 < mv.sec[0]) {
     const s = mv.sec[1];
     if (s === "flinch") { if (d.ability === "せいしんりょく") sys(`${d.name}は 特性「せいしんりょく」で 怯まなかった！`); else d.flinch = true; }
-    if (s === "par" && !d.status && !d.types.includes("でんき")) { d.status = "par"; sys(`${d.name}は まひして 技が出にくくなった！`); cureByLum(d); }
-    if (s === "spd-") { d.st.spd = Math.max(-6, d.st.spd - 1); sys(`${d.name}の 特防が 下がった！`); }
-    if (s === "confuse" && !d.confuse) { d.confuse = 2 + Math.floor(Math.random() * 4); sys(`${d.name}は こんらんした！`); cureByLum(d); }
+    if (s === "par") setStatus(d, "par");
+    if (s === "spd-") lower(d, "spd", 1, dSide);
+    if (s === "confuse" && !d.confuse) { d.confuse = 2 + Math.floor(Math.random() * 4); sys(`${d.name}は こんらんした！`); curePerBerry(d); }
   }
-  if (a.hp > 0 && mv.self === "spe+") { a.st.spe = Math.min(6, a.st.spe + 1); sys(`${a.name}の 素早さが 上がった！`); }
-  if (a.hp > 0 && mv.self === "spe-") { a.st.spe = Math.max(-6, a.st.spe - 1); sys(`${a.name}の 素早さが 下がった！`); }
+  if (d.hp > 0 && ["おうじゃのしるし","するどいキバ"].includes(a.item) && mv.sec?.[1] !== "flinch" && Math.random() < .1) {
+    if (d.ability !== "せいしんりょく") d.flinch = true; }
+  if (a.hp > 0 && mv.self === "spe+") raise(a, "spe", 1);
+  if (a.hp > 0 && mv.self === "spe-") lower(a, "spe", 1, act(aSide) === a ? aSide : null);
   if (mv.ct && d.ability === "のろわれボディ" && a.hp > 0 && !a.disabled && Math.random() < .5) {
     a.disabled = key; a.disabledT = 4; sys(`${d.name}の「のろわれボディ」！ ${a.name}の「${mv.n}」は 封じられた！`);
+  }
+  // 入れ替えのもちもの（レッドカード・だっしゅつボタン）
+  if (total > 0 && d.hp > 0 && act(dSide) === d) {
+    if (d.item === "レッドカード" && a.hp > 0 && benchOf(aSide).length) { useItem(d); sys(`◎${d.name}は「レッドカード」を 突きつけた！`); forceOut(aSide, true); }
+    else if (d.item === "だっしゅつボタン" && benchOf(dSide).length) { useItem(d); sys(`◎${d.name}は「だっしゅつボタン」で 戻っていく！`); forceOut(dSide, false); }
   }
 }
 
 function switchIn(side, idx, forced){
   const old = act(side);
-  old.st = {atk:0,def:0,spa:0,spd:0,spe:0}; old.confuse = 0; old.lock = null; old.disabled = null; old.charged = false; old.cursed = false;
+  old.st = {atk:0,def:0,spa:0,spd:0,spe:0}; old.confuse = 0; old.lock = null; old.disabled = null; old.charged = false;
+  old.cursed = false; old.meanLooked = false; old.critUp = 0; old.micle = false; if (old.status === "tox") old.toxN = 1;
   side.active = idx; const m = act(side); m.moved = 0; m.flinch = false;
   const who = side === P ? "カズマ" : "先輩";
   sys(forced ? `${m.name}が 引きずり出された！` : `◎${who}は「${m.name}」を繰り出した！`);
   if (m.ability === "ノーガード") sys(`◎${m.name}の特性「ノーガード」発動！ お互いの技が「必中」する！`);
+  if (m.item === "ふうせん") sys(`${m.name}は「ふうせん」で 浮いている！`);
 }
 
 // ================= 相手の動き =================
@@ -430,7 +577,7 @@ function expected(a, d, key){
   const mv = MOVES[key];
   if (mv.c === "st") return 0;
   if (key === "fling" && !a.item) return 0;
-  let sum = 0; for (const r of [85, 92, 100]) sum += calc(a, d, key, r, false).dmg;
+  let sum = 0; for (const r of [85, 92, 100]) sum += calc(a, d, key, r, false, false).dmg;
   let x = sum / 3 * ((a.ability === "ノーガード" || d.ability === "ノーガード") ? 1 : (mv.a || 100) / 100);
   return Math.min(x, d.hp + 1);
 }
@@ -471,10 +618,18 @@ function startBattle(){
 
 function endOfTurn(){
   for (const side of [P, E]) { const m = act(side); if (m.hp <= 0) continue;
-    if (m.status === "brn") hpLoss(m, Math.max(1, Math.floor(m.max / 8)), `${m.name}は やけどで `);
+    if (m.item === "たべのこし") heal(m, Math.max(1, Math.floor(m.max / 16)), `◎${m.name}は「たべのこし」で 少し回復した！`);
+    if (m.item === "くろいヘドロ") { if (m.types.includes("どく")) heal(m, Math.max(1, Math.floor(m.max / 16)), `◎${m.name}は「くろいヘドロ」で 少し回復した！`);
+      else hpLoss(m, Math.max(1, Math.floor(m.max / 8)), "くろいヘドロ！ "); }
+    if (m.hp > 0 && m.status === "brn") hpLoss(m, Math.max(1, Math.floor(m.max / 8)), `${m.name}は やけどで `);
+    if (m.hp > 0 && m.status === "psn") hpLoss(m, Math.max(1, Math.floor(m.max / 8)), `${m.name}は どくで `);
+    if (m.hp > 0 && m.status === "tox") { hpLoss(m, Math.max(1, Math.floor(m.max * m.toxN / 16)), `${m.name}は もうどくで `); m.toxN = Math.min(15, m.toxN + 1); }
     if (m.hp > 0 && m.cursed) hpLoss(m, Math.max(1, Math.floor(m.max / 4)), `${m.name}は のろわれている！ `);
+    if (m.hp > 0 && m.item === "くっつきバリ") hpLoss(m, Math.max(1, Math.floor(m.max / 8)), "くっつきバリ！ ");
     if (m.disabled && --m.disabledT <= 0) { sys(`${m.name}の かなしばりが 解けた！`); m.disabled = null; }
-    afterDamageItems(m);
+    if (m.hp > 0 && m.item === "かえんだま" && !m.status) { if (setStatus(m, "brn")) sys(`（「かえんだま」が 発動した）`); }
+    if (m.hp > 0 && m.item === "どくどくだま" && !m.status) { if (setStatus(m, "tox")) sys(`（「どくどくだま」が 発動した）`); }
+    pinchItems(m);
   }
 }
 
@@ -517,19 +672,25 @@ function doTurn(choice){
   if (choice.switchTo !== undefined) { switchIn(P, choice.switchTo, false); }
   else acts.push({ side:P, other:E, key:choice.move });
   acts.push({ side:E, other:P, key:eKey });
+  for (const x of acts) { x.mon = act(x.side); x.claw = x.mon.item === "せんせいのツメ" && Math.random() < .2; }
   acts.sort((x, y) => {
-    const px = prioOf(act(x.side), x.key), py = prioOf(act(y.side), y.key);
+    const px = prioOf(x.mon, x.key), py = prioOf(y.mon, y.key);
     if (px !== py) return py - px;
-    const ix = act(x.side).ibanReady, iy = act(y.side).ibanReady;
-    if (ix !== iy) return ix ? -1 : 1;
-    const sx = speedOf(act(x.side)), sy = speedOf(act(y.side));
+    const fx = x.claw || x.mon.ibanReady, fy = y.claw || y.mon.ibanReady;
+    if (fx !== fy) return fx ? -1 : 1;
+    const lx = ["こうこうのしっぽ","まんぷくおこう"].includes(x.mon.item), ly = ["こうこうのしっぽ","まんぷくおこう"].includes(y.mon.item);
+    if (lx !== ly) return lx ? 1 : -1;
+    const sx = speedOf(x.mon), sy = speedOf(y.mon);
     return sx !== sy ? sy - sx : Math.random() - .5;
   });
+  let first = true;
   for (const a of acts) {
     const m = act(a.side);
-    if (m.hp <= 0 || act(a.other).hp <= 0) continue;
-    if (m.ibanReady && m.item === "イバンのみ") { sys(`◎${m.name}は「イバンのみ」で 先に動けるようになった！`); m.item = null; m.ibanReady = false; }
-    useMove(a.side, a.other, a.key);
+    if (m !== a.mon || m.hp <= 0 || act(a.other).hp <= 0) { first = false; continue; }
+    if (a.claw) sys(`◎「せんせいのツメ」で ${m.name}の 動きが 速くなった！`);
+    else if (m.ibanReady && m.item === "イバンのみ") { sys(`◎${m.name}は「イバンのみ」で 先に動けるようになった！`); useItem(m); m.ibanReady = false; }
+    useMove(a.side, a.other, a.key, first);
+    first = false;
     if (faintCheck()) return;
   }
   endOfTurn();
@@ -561,7 +722,7 @@ function menu(){
     add(`${mv.n}<small>${info}</small>`, () => doTurn({ move:k }), dis);
   }
   P.team.forEach((m, i) => { if (i !== P.active && m.hp > 0)
-    add(`${m.name}に交代<small>体力 ${m.hp}/${m.max}</small>`, () => doTurn({ switchTo:i }), p.meanLooked); });
+    add(`${m.name}に交代<small>体力 ${m.hp}/${m.max}</small>`, () => doTurn({ switchTo:i }), p.meanLooked && p.item !== "きれいなぬけがら"); });
   const e = act(E);
   add(`ポケモン図鑑 ＠${Object.keys(dexUsed).length ? 0 : 1}/1<small>指示の前に相手の場のポケモンを解析</small>`, () => {
     dexUsed[e.key] = true; showDex(e); render(); menu(); }, Object.keys(dexUsed).length > 0);
