@@ -387,9 +387,9 @@ function party(){
     const opts = `<option value="">なし</option>` + ITEM_GROUPS.map(([g, its]) => `<optgroup label="${esc(g)}">` + Object.keys(its).map(it =>
       `<option ${m.item === it ? "selected" : ""} ${used.has(it) && m.item !== it ? "disabled" : ""}>${esc(it)}</option>`).join("") + `</optgroup>`).join("");
     const st = ["hp","atk","def","spa","spd","spe"].map(k => `<td>${{ hp:"体力", atk:"攻", def:"防", spa:"特攻", spd:"特防", spe:"速" }[k]}</td><td><b>${rankOf(m.base[k])}</b>（${m.base[k]}）${m.base[k] > m.base0[k] ? "↑+" + (m.base[k] - m.base0[k]) : ""}</td>
-      <td>${m.ikusei >= 5 && m.base[k] < m.base0[k] + 20 ? `<button data-up="${i}:${k}" style="padding:2px 8px">育成 +5</button>` : ""}</td>`).map(r => `<tr>${r}</tr>`).join("");
+      <td>${m.ikusei >= 5 ? `<button data-up="${i}:${k}" style="padding:2px 8px">育成 +5</button>` : ""}</td>`).map(r => `<tr>${r}</tr>`).join("");
     return `<div class="mon"><div class="row"><span class="name">${i + 1}. ${esc(m.nick)} Lv${m.lv}</span><span>${m.types.map(chip).join("")}</span></div>
-      <div class="stats">体力 ${m.hp}/${m.max}${m.status ? "　" + statusName(m.status) : ""}　次のLvまで ${m.lv * 12 - m.exp}　育成ポイント ${m.ikusei}（5で種族値+5。1つの能力につき+20まで）<br>
+      <div class="stats">体力 ${m.hp}/${m.max}${m.status ? "　" + statusName(m.status) : ""}　次のLvまで ${m.lv * 12 - m.exp}　育成ポイント ${m.ikusei}（5で種族値+5。上限なし）<br>
       特性：${esc(m.ability)}${m.abilityDesc ? "…" + esc(m.abilityDesc) : ""}${ABIL_DONE.has(m.ability) ? "" : "（効果はまだ入れていません）"}<br>
       技：${m.moves.map(k => `<span title="${esc(moveBtnInfo({ p:m }, k))}">${esc(k)}</span>`).join("・")}
       ${(m.learnable || []).length ? `<br>覚えられる技：${m.learnable.map(k => `<button data-learn="${i}:${esc(k)}" style="padding:2px 8px">${esc(k)}</button>`).join(" ")}` : ""}</div>
