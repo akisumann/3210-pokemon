@@ -11,7 +11,6 @@
 | `characters/` | 登場人物。`trainers/`・`pokemon/`・`civilians/`。主要キャラは木の形（最上位 `trainers/kazuma.md` など、枝は同じ名前のフォルダ）。脇役は各フォルダの `others*.md`（一言の並び）と、同じ名前のフォルダの1人1ファイル。一覧は `characters/README.md`、関係図は `characters/relationships.md` |
 | `story/` | あらすじ（`story/episodes/` に1話1ファイル、`story/episodes.md` が目次）・時系列・バトル記録（1試合1ファイル）・ダイス |
 | `index.md` | 入口（何を知りたいときにどこを開くか）。未確定事項は `open-questions.md`、矛盾メモは `contradictions.md` |
-| `game/` | 原典の世界をゲームとして遊ぶためのもの。今は保留中（ユーザーより） |
 | `sandbox/` | ストーリーと関係ない遊び・試作。設定資料の根拠にしない（ユーザーより） |
 | `tools/` | 資料のチェックのスクリプト（リンク切れ、Lv、体力、資質とランク）。push のたびに GitHub Actions でも走る |
 | `notes/` | 作業の記録と決まり（`rules/`）、解決済みの疑問（`resolved.md`）など |

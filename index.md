@@ -65,4 +65,4 @@ AIが資料を読むときは、ここから入る。読み方は `CLAUDE.md` �
 | まだ分かっていないこと | [第二部の未確定事項](open-questions2.md) |
 | 原典そのもの | `source2/NNN_*.txt`。直しは [第二部の原典の修正記録](notes/source-edits2.md) |
 
-ゲーム（保留中）: [ルールブック](game/rulebook.md) / [設計メモ](notes/game-design.md)
+ゲーム（前の試作は捨てた）: [設計メモ](notes/game-design.md)
