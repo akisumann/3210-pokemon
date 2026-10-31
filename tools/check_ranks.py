@@ -29,6 +29,11 @@ TRAINERS = {
     '出雲天花': 'characters/trainers/tenka.md',
     'アカネ': 'characters/trainers/akane-mars.md',
 }
+# 第二部（world2/trainer-stats.md の表 → characters2 のファイル）
+TRAINERS2 = {
+    'できる夫': 'characters2/trainers/できる夫.md',
+    '阿慈谷ヒフミ': 'characters2/trainers/阿慈谷ヒフミ.md',
+}
 
 
 def read(path):
@@ -36,9 +41,9 @@ def read(path):
         return f.read()
 
 
-def stat_table():
+def stat_table(path='world/trainer-stats.md'):
     table = {}
-    for line in read('world/trainer-stats.md').split('\n'):
+    for line in read(path).split('\n'):
         m = re.match(r'- ([^:：]+)[:：] *' + '／'.join(s + '(' + RANK + ')' for s in STATS), line)
         if m:
             table[m.group(1).strip()] = list(m.groups()[1:])
@@ -55,12 +60,12 @@ def stat_table():
     return table
 
 
-def check_stats(problems):
-    table = stat_table()
-    for name, path in TRAINERS.items():
+def check_stats(problems, table_path='world/trainer-stats.md', trainers=TRAINERS):
+    table = stat_table(table_path)
+    for name, path in trainers.items():
         key = next((k for k in table if k == name or k.startswith(name)), None)
         if key is None:
-            problems.append(f'資質: 表に「{name}」の行がない（world/trainer-stats.md）')
+            problems.append(f'資質: 表に「{name}」の行がない（{table_path}）')
             continue
         lines = [l for l in read(path).split('\n') if '資質' in l and any(s in l for s in STATS)]
         if not lines:
@@ -103,6 +108,7 @@ def check_ranks(problems):
 def main():
     problems = []
     check_stats(problems)
+    check_stats(problems, 'world2/trainer-stats.md', TRAINERS2)
     check_ranks(problems)
     for p in problems:
         print(p)

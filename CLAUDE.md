@@ -64,7 +64,7 @@
 ## 第二部「ポケの子（？）」（2026-10-31〜）
 
 - カズマの話とは別の世界線（つながりはない。作者より）。キャラは全部リセット。ポケモンの仕組みは同じで、種族の傾向もある程度は使える（補足: ユーザーより）。
-- 置き場所: 原典 `source2/NNN_タイトル.txt`、あらすじ `story2/`（`story2/episodes.md` が目次、`story2/構想.md` は作者の構想）、人物 `characters2/`（一覧は `characters2/README.md`）、世界観 `world2.md`、原典の修正記録 `notes/source-edits2.md`。入口は `index.md` の「第二部」の節。
+- 置き場所: 原典 `source2/NNN_タイトル.txt`、あらすじ `story2/`（`story2/episodes.md` が目次、`story2/構想.md` は作者の構想）、人物 `characters2/`（一覧は `characters2/README.md`）、バトル記録 `story2/battles.md`、世界観 `world2.md`（入口）と `world2/`（資質・体力の表）、未確定事項 `open-questions2.md`、原典の修正記録 `notes/source-edits2.md`。入口は `index.md` の「第二部」の節。
 - 出典は `（出典: 2-001）` の形（第一部の `（出典: 001）` と区別する）。
 - 仕組み（ダメージの式・資質・ポテンシャルなど）は第一部の `world/` を参考にし、第二部で違いが出たら `world2.md` に書く。第一部の人物・チーム・地名の資料を第二部の根拠にしない。
 - 原典はユーザーがGPTで変換した本文だけを渡す（webarchive は渡さない。ユーザーより、2026-10-31）。決まり（話者・AA内・保存の手順）は第一部と同じ `notes/rules/source.md` と `notes/rules/materials.md`。

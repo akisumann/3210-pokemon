@@ -17,6 +17,8 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TABLES = ['world/hp-estimates-1.md', 'world/hp-estimates-2.md', 'world/hp-estimates-3.md']
+# 第二部は表もキャラファイルも別に調べる（同じ名前でも別のポケモンのため）
+PARTS = [(TABLES, 'characters'), (['world2/hp-estimates.md'], 'characters2')]
 MARK = '○◎△'
 # 「体力」のすぐあとがランク・数字・「不明」などで始まるものだけ（「体力を回復」などを拾わない）
 INLINE = re.compile(r'体力(?=[A-ESＡ-Ｓ0-9不高上逆])([^／|\n]{1,80}?[' + MARK + '])')
@@ -33,9 +35,11 @@ def norm(v):
     return ''.join(sorted(v))
 
 
-def table_rows():
+def table_rows(tables):
     rows = []
-    for rel in TABLES:
+    for rel in tables:
+        if not os.path.exists(os.path.join(ROOT, rel)):
+            continue
         cols = None
         with open(os.path.join(ROOT, rel), encoding='utf-8') as f:
             for line in f:
@@ -55,13 +59,15 @@ def table_rows():
     return rows
 
 
-def char_files():
-    for path in glob.glob(os.path.join(ROOT, 'characters', '**', '*.md'), recursive=True):
+def char_files(chardir):
+    for path in glob.glob(os.path.join(ROOT, chardir, '**', '*.md'), recursive=True):
         yield path
 
 
-def main():
-    rows = table_rows()
+def check(tables, chardir):
+    rows = table_rows(tables)
+    if not rows:
+        return [], 0, 0
     by_name = {}
     for r in rows:
         by_name.setdefault(r['base'], set()).add(r['value'])
@@ -69,7 +75,7 @@ def main():
     # 名前の前後がカタカナや漢字に続いていないものだけ（「サン」が「サンダー」に当たらないように）
     edge = r'ァ-ヶー・A-Za-z一-龥'
     name_re = re.compile(r'(?<![' + edge + r'])(' + '|'.join(re.escape(n) for n in names if len(n) >= 2) + r')(?![' + edge + r'])')
-    texts = {p: open(p, encoding='utf-8').read() for p in char_files()}
+    texts = {p: open(p, encoding='utf-8').read() for p in char_files(chardir)}
     problems = []
     found_values = {}  # ファイル → そのファイルに書いてある体力の値（ならした形）
     # 古い値: 書き込みのすぐ前に出てくる名前の、表のどの値とも合わないもの
@@ -113,9 +119,17 @@ def main():
         files = [p for p, t in texts.items() if r['base'] in t]
         if files and not any(r['value'] in found_values[p] for p in files):
             problems.append(f'書き忘れ {r["table"]}: {r["name"]} の体力（{r["raw"]}）が、キャラファイルのどこにもない')
+    return problems, len(rows), len(texts)
+
+
+def main():
+    problems, nrows, nfiles = [], 0, 0
+    for tables, chardir in PARTS:
+        p, r, f = check(tables, chardir)
+        problems += p; nrows += r; nfiles += f
     for p in problems:
         print(p)
-    print(f'体力のずれ: {len(problems)}件（表の{len(rows)}行と、キャラファイル{len(texts)}個を確認）')
+    print(f'体力のずれ: {len(problems)}件（表の{nrows}行と、キャラファイル{nfiles}個を確認）')
     return 1 if problems else 0
 
 

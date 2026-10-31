@@ -59,7 +59,9 @@ AIが資料を読むときは、ここから入る。読み方は `CLAUDE.md` �
 | 人物 | [第二部の登場人物](characters2/README.md)（呼び名は [呼び名の対応表](characters2/aliases.md)） |
 | ある話で何が起きたか | [第二部のあらすじ（目次）](story2/episodes.md) → `story2/episodes/<章>/第N話.md` |
 | 始まる前に作者が話していた構想 | [構想](story2/構想.md) |
-| 世界・地名・用語・第一部の資料との関係 | [第二部の世界](world2.md) |
+| 試合の結果・ターンの流れ | [第二部のバトル記録](story2/battles.md) |
+| 世界・地名・用語・第一部の資料との関係 | [第二部の世界](world2.md)（資質は [world2/trainer-stats.md](world2/trainer-stats.md)、体力は [world2/hp-estimates.md](world2/hp-estimates.md)） |
+| まだ分かっていないこと | [第二部の未確定事項](open-questions2.md) |
 | 原典そのもの | `source2/NNN_*.txt`。直しは [第二部の原典の修正記録](notes/source-edits2.md) |
 
 ゲーム（保留中）: [ルールブック](game/rulebook.md) / [設計メモ](notes/game-design.md)
