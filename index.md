@@ -65,4 +65,4 @@ AIが資料を読むときは、ここから入る。読み方は `CLAUDE.md` �
 | まだ分かっていないこと | [第二部の未確定事項](open-questions2.md) |
 | 原典そのもの | `source2/NNN_*.txt`。直しは [第二部の原典の修正記録](notes/source-edits2.md) |
 
-ゲーム（文字だけのバトル）: [第4話 VS ルサルカ](game/battle-004.html) / [第13話 先輩戦](game/battle-013.html) / [前の試作の設計メモ](notes/game-design.md)
+ゲーム（文字だけのバトル）: [第4話 VS ルサルカ](game/battle-004.html) / [第13話 先輩戦](game/battle-013.html) / [第14話 潮田渚戦](game/battle-014.html) / [前の試作の設計メモ](notes/game-design.md)
