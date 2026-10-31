@@ -370,6 +370,8 @@ function gym(){
 }
 
 // ================= 手持ち =================
+// 育成: 1回で次のランク（B→B+→A-→A→A+…）まで上げる。1つの能力につき4段階まで
+function nextNotch(v){ const i = STEP.indexOf(rankOf(v)); for (let j = i + 1; j < STEP.length; j++) { const nv = rankMid(STEP[j]); if (nv > v) return nv; } return null; }
 function party(){
   const allItems = Object.keys(ITEMS);
   const used = new Set(G.party.map(m => m.item).filter(Boolean));
@@ -377,10 +379,10 @@ function party(){
     m.base0 = m.base0 || Object.assign({}, m.base);
     const opts = `<option value="">なし</option>` + ITEM_GROUPS.map(([g, its]) => `<optgroup label="${esc(g)}">` + Object.keys(its).map(it =>
       `<option ${m.item === it ? "selected" : ""} ${used.has(it) && m.item !== it ? "disabled" : ""}>${esc(it)}</option>`).join("") + `</optgroup>`).join("");
-    const st = ["hp","atk","def","spa","spd","spe"].map(k => `<td>${{ hp:"体力", atk:"攻", def:"防", spa:"特攻", spd:"特防", spe:"速" }[k]}</td><td><b>${rankOf(m.base[k])}</b>${m.base[k] > m.base0[k] ? "↑" : ""}</td>
-      <td>${m.ikusei >= 5 && m.base[k] < m.base0[k] + 20 ? `<button data-up="${i}:${k}" style="padding:2px 8px">育成</button>` : ""}</td>`).map(r => `<tr>${r}</tr>`).join("");
+    const st = ["hp","atk","def","spa","spd","spe"].map(k => `<td>${{ hp:"体力", atk:"攻", def:"防", spa:"特攻", spd:"特防", spe:"速" }[k]}</td><td><b>${rankOf(m.base[k])}</b>（${m.base[k]}）${m.ikuseiN && m.ikuseiN[k] ? "↑" + m.ikuseiN[k] : ""}</td>
+      <td>${m.ikusei >= 5 && ((m.ikuseiN || {})[k] || 0) < 4 && nextNotch(m.base[k]) ? `<button data-up="${i}:${k}" style="padding:2px 8px">育成 → ${rankOf(nextNotch(m.base[k]))}</button>` : ""}</td>`).map(r => `<tr>${r}</tr>`).join("");
     return `<div class="mon"><div class="row"><span class="name">${i + 1}. ${esc(m.nick)} Lv${m.lv}</span><span>${m.types.map(chip).join("")}</span></div>
-      <div class="stats">体力 ${m.hp}/${m.max}${m.status ? "　" + statusName(m.status) : ""}　次のLvまで ${m.lv * 12 - m.exp}　育成ポイント ${m.ikusei}（5で1段階）<br>
+      <div class="stats">体力 ${m.hp}/${m.max}${m.status ? "　" + statusName(m.status) : ""}　次のLvまで ${m.lv * 12 - m.exp}　育成ポイント ${m.ikusei}（5で1段階。1つの能力につき4段階まで）<br>
       特性：${esc(m.ability)}${m.abilityDesc ? "…" + esc(m.abilityDesc) : ""}${ABIL_DONE.has(m.ability) ? "" : "（効果はまだ入れていません）"}<br>
       技：${m.moves.map(k => `<span title="${esc(moveBtnInfo({ p:m }, k))}">${esc(k)}</span>`).join("・")}
       ${(m.learnable || []).length ? `<br>覚えられる技：${m.learnable.map(k => `<button data-learn="${i}:${esc(k)}" style="padding:2px 8px">${esc(k)}</button>`).join(" ")}` : ""}</div>
@@ -395,7 +397,8 @@ function party(){
   root.querySelectorAll("select[data-item]").forEach(el => el.onchange = () => { G.party[+el.dataset.item].item = el.value || null; save(); party(); });
   root.querySelectorAll("button[data-lead]").forEach(el => el.onclick = () => { const i = +el.dataset.lead; const [m] = G.party.splice(i, 1); G.party.unshift(m); save(); party(); });
   root.querySelectorAll("button[data-up]").forEach(el => el.onclick = () => { const [i, k] = el.dataset.up.split(":"); const m = G.party[+i];
-    m.ikusei -= 5; m.base[k] += 5; if (k === "hp") recompute(m); save(); party(); });
+    const nv = nextNotch(m.base[k]); if (!nv) return; m.ikusei -= 5; m.base[k] = nv; m.ikuseiN = m.ikuseiN || {}; m.ikuseiN[k] = (m.ikuseiN[k] || 0) + 1;
+    if (k === "hp") recompute(m); save(); party(); });
   root.querySelectorAll("button[data-swap]").forEach(el => el.onclick = () => { const i = +el.dataset.swap; const out = G.party.pop(); const inn = G.box.splice(i, 1)[0]; G.party.push(inn); G.box.push(out); save(); party(); });
   root.querySelectorAll("button[data-learn]").forEach(el => el.onclick = () => learnMenu(...el.dataset.learn.split(":").map((x, j) => j ? x : +x)));
 }
