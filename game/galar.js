@@ -238,11 +238,10 @@ function bmenu(){
       for (const k of p.p.moves) if (MOVES[k]) list.push({ label:`${chip(MOVES[k].t)}${esc(k)}`, small:moveBtnInfo(p, k), dis:!usable.includes(k), fn:() => turn({ move:k }) });
       BT.P.team.forEach((m, i) => { if (i !== BT.P.active && m.p.hp > 0) list.push({ label:`${esc(NM(m))}に交代`, small:`体力 ${m.p.hp}/${m.p.max}`,
         dis:p.meanLooked && p.p.item !== "きれいなぬけがら", fn:() => turn({ switchTo:i }) }); });
+      list.push({ label:`ポケモン図鑑 ＠${BUI.dex ? 0 : 1}/1`, small:"相手の場のポケモンを解析（指示の前、1試合1回）", dis:BUI.dex, fn:() => { BUI.dex = true; showDex(act(BT.E)); bmenu(); } });
       if (BT.wild) {
         for (const [b, n] of Object.entries(G.balls)) if (n > 0) list.push({ label:`${b}を投げる`, small:`残り ${n}`, fn:() => turn({ ball:b }) });
         list.push({ label:"逃げる", fn:() => turn({ run:true }) });
-      } else {
-        list.push({ label:`ポケモン図鑑 ＠${BUI.dex ? 0 : 1}/1`, small:"相手の場のポケモンを解析", dis:BUI.dex, fn:() => { BUI.dex = true; showDex(act(BT.E)); bmenu(); } });
       }
     }
   }
