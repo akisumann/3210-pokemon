@@ -58,7 +58,10 @@ for f in ['world/hp-estimates-1.md','world/hp-estimates-2.md','world/hp-estimate
         if len(c) < 2: continue
         nm = re.sub(r'[（(].*', '', c[0]).strip()
         v, raw = hp_value(c[1])
-        if v is not None and nm not in hp: hp[nm] = dict(v=v, raw=raw.split('。')[0][:40], conf=(c[2] if len(c) > 2 else ''))
+        if v is not None and nm not in hp:
+            early = re.search(r'(\d{3})までは\**(' + RANK + r')', raw.replace('*', ''))
+            for n2 in nm.split('／'):
+                hp[n2] = dict(v=v, raw=raw.split('。')[0][:40], conf=(c[2] if len(c) > 2 else ''), early=(int(early.group(1)), early.group(2)) if early else None)
 
 # ---------- 技 ----------
 moves = {}
@@ -142,6 +145,18 @@ for f in sorted(glob.glob('source/*.txt')):
 moves.get('おそいかかる', {}).update(t='あく', c='ph', p=130, a=85, src='thread')
 moves.get('ねこかぶり', {}).update(t='フェアリー', c='sp', p=70, a=100, src='thread')
 
+# 図鑑の名前と体力の表の名前が違うもの（表は短い名前・メガシンカ前の名前のことがある）をつなぐ
+for n, apps in species.items():
+    if n in hp: continue
+    base = re.sub(r'^メガ|“.*”|（.*）', '', n)
+    cands = [h for h in list(hp) if h == base or (len(h) >= 2 and (n.startswith(h) or h in n.split('・')[0] or h == n.split('・')[0] or h == n.split('=')[0]))]
+    if n == 'ザク': cands = []
+    if cands:
+        src = max(cands, key=len); hp[n] = dict(hp[src], alias=src)
+# 「NNNまではX」とある時は、初登場がそれより前ならXを使う
+for n, apps in species.items():
+    h = hp.get(n)
+    if h and h.get('early') and int(apps[0]['ep']) <= h['early'][0]: hp[n] = dict(h, v=h['early'][1])
 used = collections.Counter(m for apps in species.values() for a in apps for m in a['moves'])
 missing = sorted(n for n in used if n not in moves)
 
