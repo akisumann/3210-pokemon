@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ガラル安価旅</title>
+<style>
+  :root {
+    --bg:#f5f3ee; --panel:#ffffff; --ink:#1d1d1f; --sub:#6b6b70; --line:#dcd8cf; --good:#3a9a5b; --mid:#d8a42b; --low:#c9473f;
+    --accent:#2f5aa8; --btn:#eef1f8; --sel:#dfe7ff; --warn:#a14a12;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg:#16171a; --panel:#222429; --ink:#ececef; --sub:#a0a0a8; --line:#3a3c43; --accent:#8ea8ff; --btn:#2c3040; --sel:#34406a; --warn:#f0a070; }
+  }
+  :root[data-theme="dark"] { --bg:#16171a; --panel:#222429; --ink:#ececef; --sub:#a0a0a8; --line:#3a3c43; --accent:#8ea8ff; --btn:#2c3040; --sel:#34406a; --warn:#f0a070; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif; line-height:1.6; }
+  main { max-width:680px; margin:0 auto; padding:16px; }
+  header { display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+  h1 { font-size:1.1rem; margin:0; }
+  h2 { font-size:1rem; margin:0 0 6px; }
+  .sub { color:var(--sub); font-size:.85rem; }
+  .panel { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin-bottom:10px; }
+  .row { display:flex; justify-content:space-between; align-items:baseline; gap:8px; flex-wrap:wrap; }
+  .name { font-weight:700; }
+  .meta { color:var(--sub); font-size:.82rem; }
+  .bar { height:10px; background:var(--line); border-radius:5px; overflow:hidden; margin:6px 0 4px; }
+  .bar > div { height:100%; background:var(--good); transition:width .3s; }
+  .tags { font-size:.8rem; color:var(--sub); min-height:1.2em; }
+  .log { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:10px 12px; max-height:340px; overflow-y:auto; font-size:.92rem; margin-bottom:10px; }
+  .log p { margin:0 0 5px; white-space:pre-wrap; }
+  .log .sys { color:var(--accent); }
+  .log .turn { color:var(--sub); font-size:.8rem; border-top:1px dashed var(--line); padding-top:4px; margin-top:8px; }
+  .log .dex { font-family:ui-monospace,Menlo,Consolas,monospace; font-size:.8rem; background:var(--bg); padding:6px 8px; border-radius:6px; }
+  .log .warn { color:var(--warn); }
+  .story p { margin:0 0 8px; }
+  .story .talk::before { content:""; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  button { font:inherit; padding:10px 8px; border-radius:8px; border:1px solid var(--line); background:var(--btn); color:var(--ink); cursor:pointer; text-align:left; }
+  button small { display:block; color:var(--sub); font-size:.75rem; }
+  button:disabled { opacity:.4; cursor:default; }
+  button.wide { grid-column:1/-1; text-align:center; }
+  button.primary { border-color:var(--accent); }
+  input[type=text], select { font:inherit; padding:8px; border-radius:6px; border:1px solid var(--line); background:var(--panel); color:var(--ink); max-width:100%; }
+  .chip { display:inline-block; font-size:.72rem; padding:0 6px; border-radius:9px; color:#fff; margin-right:3px; vertical-align:1px; }
+  .mon { border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:8px; background:var(--panel); }
+  .mon .stats { font-size:.8rem; color:var(--sub); }
+  .note { color:var(--sub); font-size:.78rem; margin-top:14px; }
+  .hide { display:none; }
+  table.st { border-collapse:collapse; font-size:.8rem; }
+  table.st td { padding:1px 8px 1px 0; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>ガラル安価旅</h1>
+    <span class="sub" id="hud"></span>
+  </header>
+  <div id="screen"></div>
+  <p class="note">スレ（シンオウの物語）に出たポケモン560体のデータで旅をする、文字だけのゲーム（第1版：ターフタウンのジムまで）。種族のデータは原典の図鑑、体力は資料の見立て、技は原典と資料の表。人物はガラル本来の人、ストーリーはオリジナル。能力値はスレの決まり（体力以外は種族値＋5、体力は＋60、レベル差は1につき1%）。ダイマックスはまだない。</p>
+</main>
+<script src="data.js"></script>
+<script src="items.js"></script>
+<script src="battle.js"></script>
+<script src="galar.js"></script>
+</body>
+</html>

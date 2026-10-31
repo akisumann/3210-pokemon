@@ -12,6 +12,7 @@
 | `story/` | 各話あらすじ（`story/episodes/` に章ごとのファイル。`story/episodes.md` は目次）・時系列・バトル記録・ダイス判定記録 |
 | `index.md` | 入口（何を知りたいときにどこを開くか、章ごとのあらすじへの案内）。未確定事項は `open-questions.md`、矛盾メモは `contradictions.md`。原典のファイル名はあらすじの各話の見出しにある |
 | `source2/`・`story2/`・`characters2/`・`world2.md` | 第二部「ポケの子（？）」（ホウエン、別の世界線）の原典と資料。入口は `index.md` の「第二部」の節 |
+| `game/` | 文字だけのゲーム「ガラル安価旅」（`galar.html`。説明は `game/README.md`） |
 | `notes/` | 作業の記録。`source-edits.md`（原典の修正記録・作り直した版への差し替え）、`resolved.md`（解決済みの疑問）など |
 
 ## 原典のルール（要約）
