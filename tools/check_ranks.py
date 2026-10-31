@@ -37,6 +37,8 @@ TRAINERS2 = {
     '磯野波平': 'characters2/trainers/磯野波平.md',
     'キバオウ': 'characters2/trainers/キバオウ.md',
     '烈海王': 'characters2/trainers/烈海王.md',
+    '碇シンジ': 'characters2/trainers/碇シンジ.md',
+    '古手川': 'characters2/trainers/古手川.md',
 }
 
 
