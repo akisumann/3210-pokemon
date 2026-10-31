@@ -56,7 +56,7 @@ AIが資料を読むときは、ここから入る。読み方は `CLAUDE.md` �
 
 | 知りたいこと | 開くファイル |
 | --- | --- |
-| 人物 | [第二部の登場人物](characters2/README.md) |
+| 人物 | [第二部の登場人物](characters2/README.md)（呼び名は [呼び名の対応表](characters2/aliases.md)） |
 | ある話で何が起きたか | [第二部のあらすじ（目次）](story2/episodes.md) → `story2/episodes/<章>/第N話.md` |
 | 始まる前に作者が話していた構想 | [構想](story2/構想.md) |
 | 世界・地名・用語・第一部の資料との関係 | [第二部の世界](world2.md) |
