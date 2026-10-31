@@ -157,6 +157,22 @@ for n, apps in species.items():
 for n, apps in species.items():
     h = hp.get(n)
     if h and h.get('early') and int(apps[0]['ep']) <= h['early'][0]: hp[n] = dict(h, v=h['early'][1])
+# カズマの手持ちは時期ごとの体力が分かっている（hp-estimates-kazuma-notes.md の3列目「A（013〜599）→A+（600〜）」など）。初登場の話数に合う段を使う
+stages = {}
+for line in open('world/hp-estimates-kazuma-notes.md', encoding='utf-8'):
+    c = [x.strip() for x in line.strip().strip('|').split('|')]
+    if len(c) < 3 or not c[2].startswith('**'): continue
+    seq = []
+    for m in re.finditer(r'(' + RANK + r')（(〜)?(\d{3})?', c[2].split('**')[1]):
+        seq.append((0 if m.group(2) or not m.group(3) else int(m.group(3)), m.group(1)))
+    if seq: stages[c[0]] = seq
+for n, apps in species.items():
+    h = hp.get(n); key = (h or {}).get('alias', n)
+    if key in stages:
+        ep = int(apps[0]['ep']); seq = stages[key]
+        cur = [r for st, r in seq if st <= ep]
+        v = cur[-1] if cur else seq[0][1]
+        hp[n] = dict(h or {}, v=v, stage=f'{v}（初登場{apps[0]["ep"]}話の時期）')
 used = collections.Counter(m for apps in species.values() for a in apps for m in a['moves'])
 missing = sorted(n for n in used if n not in moves)
 
