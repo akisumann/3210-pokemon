@@ -33,6 +33,8 @@ TRAINERS = {
 TRAINERS2 = {
     'できる夫': 'characters2/trainers/できる夫.md',
     '阿慈谷ヒフミ': 'characters2/trainers/阿慈谷ヒフミ.md',
+    'ルビー': 'characters2/trainers/ルビー.md',
+    '磯野波平': 'characters2/trainers/磯野波平.md',
 }
 
 
