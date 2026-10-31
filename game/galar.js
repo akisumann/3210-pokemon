@@ -66,7 +66,7 @@ function title(){
   G = null;
   const saved = load();
   const list = [{ label:"はじめから", fn:makeTrainer, cls:"wide primary" }];
-  if (saved) list.push({ label:"つづきから", small:`${esc(saved.name)}　バッジ${saved.badges.length}　${LOCS[saved.loc].name}`, fn:() => { G = saved; travel(); }, cls:"wide" });
+  if (saved) list.push({ label:"つづきから", small:`${esc(saved.name)}　バッジ${saved.badges.length}　${LOCS[saved.loc].name}`, fn:() => { G = saved; for (const m of G.box) { m.hp = m.max; m.status = null; m.item = null; } travel(); }, cls:"wide" });
   screen(`<div class="panel"><h2>ガラル安価旅</h2><p class="sub">ガラル地方のジムチャレンジに、スレのポケモンたちと挑む。資質はダイスで決まり、仲間は道で出会って捕まえる。</p></div>` + buttons(list));
   bind(list);
 }
@@ -161,7 +161,11 @@ function travel(){
 function partyStrip(){ return `<div class="sub">${G.party.map(m => `${esc(m.nick)} Lv${m.lv} ${m.hp}/${m.max}${m.status ? "（" + statusName(m.status) + "）" : ""}`).join("　/　")}</div>`; }
 function statusName(s){ return { par:"まひ", brn:"やけど", psn:"どく", tox:"もうどく", slp:"ねむり", frz:"こおり" }[s] || s; }
 function move(d){ G.loc += d; travel(); }
-function healAll(msg){ for (const m of G.party) { m.hp = m.max; m.status = null; } story([["", msg]], travel); }
+function healAll(msg){ for (const m of G.party.concat(G.box)) { m.hp = m.max; m.status = null; } story([["", msg]], travel); }
+// ボックスに預ける: 回復し、もちものは「もちものセット」に戻す（同じ物が2体に付かないように）
+function toBox(m){ m.hp = m.max; m.status = null; m.item = null; G.box.push(m); }
+// 手持ちに戻す時: 手持ちの誰かと同じもちものなら外す
+function fromBox(m, others){ if (m.item && others.some(o => o !== m && o.item === m.item)) m.item = null; return m; }
 function shop(){
   const list = Object.entries(BALLS).map(([n, b]) => ({ label:`${n}　${b.price}円`, small:`持っている数 ${G.balls[n] || 0}`, dis:G.money < b.price,
     fn:() => { G.money -= b.price; G.balls[n] = (G.balls[n] || 0) + 1; save(); shop(); } }));
@@ -283,7 +287,7 @@ function throwBall(ball){
   if (shakes === 3) {
     sys(`やった！ ${NM(e)}を 捕まえた！`);
     const p = e.p; p.status = null; G.caught[p.sp] = 1;
-    if (G.party.length < 6) { G.party.push(p); sys(`${NM(e)}は 手持ちに加わった。`); } else { G.box.push(p); sys(`${NM(e)}は ボックスに送られた。`); }
+    if (G.party.length < 6) { G.party.push(p); sys(`${NM(e)}は 手持ちに加わった。`); } else { toBox(p); sys(`${NM(e)}は ボックスに送られた。（手持ちの画面で入れ替えられる）`); }
     BT.end("caught"); return true;
   }
   sys(["ああっ！ ボールから出てきてしまった！", "あと少しだったのに！", "惜しい！ もうちょっとで捕まえられたのに！"][shakes]);
@@ -391,9 +395,14 @@ function party(){
       ${(m.learnable || []).length ? `<br>覚えられる技：${m.learnable.map(k => `<button data-learn="${i}:${esc(k)}" style="padding:2px 8px">${esc(k)}</button>`).join(" ")}` : ""}</div>
       <table class="st">${st}</table>
       <div style="margin-top:6px"><label class="sub">もちもの：<select data-item="${i}">${opts}</select></label>
-      ${i > 0 ? `<button data-lead="${i}" style="padding:4px 10px">先頭にする</button>` : ""}</div></div>`;
+      ${i > 0 ? `<button data-lead="${i}" style="padding:4px 10px">先頭にする</button>` : ""}
+      ${G.party.length > 1 ? `<button data-deposit="${i}" style="padding:4px 10px">ボックスに預ける</button>` : ""}</div></div>`;
   }).join("");
-  const box = G.box.length ? `<div class="panel"><h2>ボックス</h2>${G.box.map((m, i) => `<div class="row"><span>${esc(m.nick)} Lv${m.lv}</span><button data-swap="${i}" style="padding:2px 8px" ${G.party.length < 1 ? "disabled" : ""}>手持ちの最後と入れ替える</button></div>`).join("")}</div>` : "";
+  const partyOpts = G.party.map((m, j) => `<option value="${j}">${esc(m.nick)} Lv${m.lv}</option>`).join("");
+  const box = G.box.length ? `<div class="panel"><h2>ボックス（${G.box.length}体）</h2><p class="sub">預けたポケモンは回復し、もちものはセットに戻る。</p>${G.box.map((m, i) => `<div class="mon"><div class="row"><span class="name">${esc(m.nick)} Lv${m.lv}</span><span>${m.types.map(chip).join("")}</span></div>
+      <div class="stats">特性：${esc(m.ability)}　技：${m.moves.map(esc).join("・")}</div>
+      <div style="margin-top:6px">${G.party.length < 6 ? `<button data-take="${i}" style="padding:4px 10px">手持ちに加える</button>` : ""}
+      <label class="sub">入れ替える相手：<select data-swapwho="${i}">${partyOpts}</select></label> <button data-swap="${i}" style="padding:4px 10px">入れ替える</button></div></div>`).join("")}</div>` : "";
   screen(`<div class="panel"><h2>手持ち</h2><p class="sub">もちもの（もちものセット）は、同じ物を2体に持たせられない。技は最大6つ。</p></div>${html}${box}` + buttons([{ label:"戻る", cls:"wide" }]));
   const root = $("screen");
   root.querySelector("button[data-i]").onclick = travel;
@@ -401,7 +410,10 @@ function party(){
   root.querySelectorAll("button[data-lead]").forEach(el => el.onclick = () => { const i = +el.dataset.lead; const [m] = G.party.splice(i, 1); G.party.unshift(m); save(); party(); });
   root.querySelectorAll("button[data-up]").forEach(el => el.onclick = () => { const [i, k] = el.dataset.up.split(":"); const m = G.party[+i];
     m.ikusei -= 5; m.base[k] += 5; if (k === "hp") recompute(m); save(); party(); });
-  root.querySelectorAll("button[data-swap]").forEach(el => el.onclick = () => { const i = +el.dataset.swap; const out = G.party.pop(); const inn = G.box.splice(i, 1)[0]; G.party.push(inn); G.box.push(out); save(); party(); });
+  root.querySelectorAll("button[data-swap]").forEach(el => el.onclick = () => { const i = +el.dataset.swap; const j = +root.querySelector(`select[data-swapwho="${i}"]`).value;
+    const inn = G.box.splice(i, 1)[0]; const out = G.party[j]; G.party[j] = fromBox(inn, G.party.filter((x, k) => k !== j)); toBox(out); save(); party(); });
+  root.querySelectorAll("button[data-take]").forEach(el => el.onclick = () => { if (G.party.length >= 6) return; G.party.push(fromBox(G.box.splice(+el.dataset.take, 1)[0], G.party)); save(); party(); });
+  root.querySelectorAll("button[data-deposit]").forEach(el => el.onclick = () => { if (G.party.length <= 1) return; toBox(G.party.splice(+el.dataset.deposit, 1)[0]); save(); party(); });
   root.querySelectorAll("button[data-learn]").forEach(el => el.onclick = () => learnMenu(...el.dataset.learn.split(":").map((x, j) => j ? x : +x)));
 }
 function learnMenu(i, k){
