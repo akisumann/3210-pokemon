@@ -292,7 +292,7 @@ function giveExp(foe, trainer){
   const lines = [];
   const base = Math.round((foe.lv * 6 + 10) * (trainer ? 1.5 : 1));
   for (const m of G.party) {
-    if (m.hp <= 0) continue;
+    // 倒れていても入る（スレでは013で倒れたマックイーンも014でLvが上がっていた）
     const gain = BT.participants.has(m) ? base : Math.round(base / 2);
     m.exp += gain;
     while (m.exp >= m.lv * 12) {
