@@ -75,22 +75,69 @@ GUESS = set("""いしづき うさぎとび うまのり おそいかかる か�
 ベアクロー ベノムクロイツ ロケットバーナー ゆうたいりだつ てっこうだん でんこうそうげき サイコプラズマ かいていじしん ぎょらい しっぽをまく ワンダースチーム""".split())
 for n in GUESS:
     if n in moves: moves[n]['src'] = 'guess'
+# スレの技の「効果」の文を、ゲームの効果の書き方に直す
+ST = {"麻痺":"par","火傷":"brn","やけど":"brn","猛毒":"tox","毒":"psn","凍り":"frz","氷":"frz","眠り":"slp","混乱":"conf","怯み":"flinch","ひるみ":"flinch"}
+SK = {"攻":"atk","防":"def","特攻":"spa","特防":"spd","速":"spe","命中":"acc","回避":"eva","避":"eva"}
+def thread_fx(text, contact):
+    t = text.replace('　', ' ').replace('～', '~').replace('〜', '~')
+    fx = []; extra = {}
+    if contact: fx.append('c')
+    for m in re.finditer(r'(\d+)割[：:]?「?(相手の)?([^」\s]+?)」?(?=[。\s　「]|$)', t):
+        n = int(m.group(1)) * 10; what = m.group(3)
+        if what in ST: fx.append(f'{ST[what]}@{n}'); continue
+        sm = re.fullmatch(r'([^\d+-]+?)([+-]\d)', what)
+        if sm:
+            for k in sm.group(1).split('/'):
+                if k in SK: fx.append(f'{"tgt" if m.group(2) else "self"}:{SK[k]}{sm.group(2)}@{n}')
+    for m in re.finditer(r'(相手の)?「([^」]+?)([+-]\d)」', t):
+        if re.search(r'\d+割「?' + re.escape(m.group(2)), t): continue
+        for k in m.group(2).split('/'):
+            if k in SK: fx.append(f'{"tgt" if m.group(1) else "self"}:{SK[k]}{m.group(3)}')
+    if m := re.search(r'(\d)~(\d)回の連続', t): fx.append('m25' if m.group(1) == '2' else 'm25')
+    elif m := re.search(r'(\d)回の連続', t): fx.append(f'm{m.group(1)}')
+    if '必ず急所' in t or '確定急所' in t: fx.append('cr9')
+    elif '急所に当たりやすい' in t: fx.append('cr1')
+    if re.search(r'まもる」?等?の?技?を?貫通|「まもる」貫通', t): fx.append('breakprotect')
+    if 'とんぼ' in t or '命中後、味方と' in t: fx.append('pivot')
+    if '強制交代' in t: fx.append('dragout')
+    if '「溜め」技' in t or '溜め技' in t: fx.append('charge')
+    if '反動で動けない' in t or '次のT動けない' in t: fx.append('rech')
+    if m := re.search(r'1/(\d)の反動', t): fx.append(f'rc{m.group(1)}')
+    elif '反動' in t and (m := re.search(r'ダメージの1/(\d)', t)): fx.append(f'rc{m.group(1)}')
+    if m := re.search(r'(1/2|3/4)を?回復', t): fx.append('dr2' if m.group(1) == '1/2' else 'dr4')
+    if '上昇（強化）を無視' in t: fx.append('ignore_stats')
+    if '相手の体力を半分' in t: fx.append('halfhp')
+    if '相手の体力の1/4' in t: fx.append('quarterhp')
+    if 'まもる」等の技' in t and '優先度+4' in t: fx.append('protect')
+    if '場に出て最初' in t: fx.append('firstturn')
+    if 'しめつける' in t: fx.append('bind')
+    if '「必中」' in t: extra['a'] = 0
+    tm = re.findall(r'「(.)」', t)
+    if '2つのタイプを持つ' in t and len(tm) >= 2 and all(x in ABBR for x in tm[:2]): extra['t2'] = ABBR[tm[1]]
+    return ' '.join(dict.fromkeys(fx)), extra
+def add_thread(n, cat, typ, power, acc, contact, eff):
+    cat = {'物理':'ph','特殊':'sp','変化':'st','物':'ph','特':'sp','変':'st'}.get(cat); t = ABBR.get(typ[:1])
+    if not cat or not t: return
+    p = int(power) if str(power).isdigit() else 0
+    a = int(acc) if str(acc).isdigit() else 0
+    pr = re.search(r'優先度([+-]?\d+)', eff); pr = int(pr.group(1)) if pr else 0
+    fx, extra = thread_fx(eff, contact.startswith(('○', '〇')))
+    old = moves.get(n)
+    if old and old['src'] == 'std' and old['t'] == t and not re.sub(r'\bc\b', '', fx).strip() and not re.search(r'通常', eff):
+        fx = ' '.join(dict.fromkeys((('c ' if contact.startswith(('○','〇')) else '') + old['fx']).split()))
+    moves[n] = dict(t=t, c=cat, p=p, a=extra.get('a', a), pr=pr, fx=fx, desc=eff[:90], src='thread', **({'t2': extra['t2']} if 't2' in extra else {}))
 # 資料の表（このスレ独自の技・原作と効果が違う技）を上書き
 for f in ['world/moves.md','world/moves/原作と効果が違う技.md','world/moves/原典で出た、一覧にない技.md']:
     for line in open(f, encoding='utf-8'):
         c = [x.strip() for x in line.strip().strip('|').split('|')]
         if len(c) < 8 or c[0] in ('技','---') or c[0].startswith('-'): continue
-        n = c[0].strip('*「」 ')
-        cat = {'物理':'ph','特殊':'sp','変化':'st'}.get(c[1])
-        t = ABBR.get(c[2][:1])
-        if not cat or not t: continue
-        p = int(c[4]) if c[4].isdigit() else 0
-        a = int(c[5]) if c[5].isdigit() else 0
-        fx = ('c ' if c[6].startswith(('○','〇')) else '') + ('cr9 ' if '急所' in c[7] and ('必ず' in c[7] or '確定' in c[7]) else '')
-        pr = re.search(r'優先度([+-]?\d+)', c[7]); pr = int(pr.group(1)) if pr else 0
-        old = moves.get(n, {})
-        moves[n] = dict(t=t, c=cat, p=p, a=a, pr=pr, fx=(old.get('fx') if old and old.get('src') == 'std' and old.get('t') == t else fx.strip()),
-                        desc=c[7][:80], src='thread')
+        add_thread(c[0].strip('*「」 '), c[1], c[2], c[4], c[5], c[6], c[7])
+# 原典の中の技の説明（「技名」… 物/悪/単/25/100/〇/効果）。資料の表にない技だけ足す
+thread_names = {n for n, m in moves.items() if m['src'] == 'thread'}
+for f in sorted(glob.glob('source/*.txt')):
+    for m in re.finditer(r'「([^」]+)」…\s*(物|特|変)/([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^/]+)/([^\n]*)', open(f, encoding='utf-8').read()):
+        n = m.group(1)
+        if n not in thread_names: add_thread(n, m.group(2), m.group(3), m.group(5), m.group(6), m.group(7), m.group(8)); thread_names.add(n)
 # 原典の図鑑の食い違い（world/moves.md の「食い違い」）
 moves.get('おそいかかる', {}).update(t='あく', c='ph', p=130, a=85, src='thread')
 moves.get('ねこかぶり', {}).update(t='フェアリー', c='sp', p=70, a=100, src='thread')

@@ -220,7 +220,7 @@ function moveBtnInfo(m, k){
   const mv = MOVES[k]; if (!mv) return "";
   const un = unimplemented(mv);
   const cat = { ph:"物理", sp:"特殊", st:"変化" }[mv.c];
-  return `${mv.t}・${cat}${mv.c !== "st" ? "・威力" + (mv.fx.tags.has("fling") ? FLING(m.p.item) : mv.p || "—") : ""}${mv.a ? "・命中" + mv.a : ""}${mv.pr ? "・優先" + (mv.pr > 0 ? "+" : "") + mv.pr : ""}${mv.src === "guess" ? "・数値は推測" : ""}${un.length ? "・一部の効果は未実装" : ""}`;
+  return `${mv.t}${mv.t2 ? "/" + mv.t2 : ""}・${cat}${mv.c !== "st" ? "・威力" + (mv.fx.tags.has("fling") ? FLING(m.p.item) : mv.p || "—") : ""}${mv.a ? "・命中" + mv.a : ""}${mv.pr ? "・優先" + (mv.pr > 0 ? "+" : "") + mv.pr : ""}${mv.src === "guess" ? "・数値は推測" : ""}${un.length ? "・一部の効果は未実装" : ""}`;
 }
 function bmenu(){
   const box = $("cmds"); const list = [];

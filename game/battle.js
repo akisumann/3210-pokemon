@@ -51,14 +51,14 @@ function parseFx(fx){
   return o;
 }
 const MOVES = {};
-for (const [n, m] of Object.entries(GDATA.moves)) MOVES[n] = { n, t:m.t, c:m.c, p:m.p, a:m.a, pr:m.pr, src:m.src, desc:m.desc || "", fx:parseFx(m.fx) };
+for (const [n, m] of Object.entries(GDATA.moves)) MOVES[n] = { n, t:m.t, t2:m.t2 || null, c:m.c, p:m.p, a:m.a, pr:m.pr, src:m.src, desc:m.desc || "", fx:parseFx(m.fx) };
 MOVES["わるあがき"] = { n:"わるあがき", t:"なし", c:"ph", p:50, a:0, pr:0, src:"std", fx:parseFx("c struggle") };
 const isPunch = n => /パンチ|ぶんまわす|ふんどのこぶし|プラズマフィスト|コメットパンチ|ドレインパンチ|グロウパンチ|マッハパンチ|バレットパンチ|シャドーパンチ/.test(n);
 const isBite = n => /キバ|かみ|くらいつく|サイコファング/.test(n);
 const isPulse = n => /はどう/.test(n);
 const isSlice = n => /きり|ぎり|カッター|ブレード|つるぎ|せつだん|ざん|きりさく|リーフブレード/.test(n);
 // 実装していない効果
-const DONE_TAGS = new Set("c s struggle ignore_stats ignore_ability yawn halfhp breakprotect painsplit rampage charge facade endeavor rech focuspunch pursuit lockon protect endure fake sucker pivot roar dragout selfko selfhalf selfrc2 trap bind curse trick haze haze1 fixedlv ohko counter mirrorcoat metalburst hex acrobatics foulplay bodypress physdef reversal eruption knockoff pluck fling crashkick firstturn revenge payback venoshock tailwind sub leechseed aquaring taunt disable soak destinybond heal50 rest cureteam saltcure burnup freezedry weatherball wringout trapself selfthird topsyturvy luckychant flee physdef aquaring".split(" "));
+const DONE_TAGS = new Set("c s struggle ignore_stats ignore_ability yawn halfhp breakprotect painsplit rampage charge facade endeavor rech focuspunch pursuit lockon protect endure fake sucker pivot roar dragout selfko selfhalf selfrc2 trap bind curse trick haze haze1 fixedlv ohko counter mirrorcoat metalburst hex acrobatics foulplay bodypress physdef reversal eruption knockoff pluck fling crashkick firstturn revenge payback venoshock tailwind sub leechseed aquaring taunt disable soak destinybond heal50 rest cureteam saltcure burnup freezedry weatherball wringout trapself selfthird topsyturvy luckychant flee physdef aquaring quarterhp".split(" "));
 function unimplemented(mv){ return [...mv.fx.tags].filter(t => !DONE_TAGS.has(t) && t !== "na").concat(mv.fx.tags.has("na") ? ["na"] : []); }
 
 // ================= 特性（主なものだけ実装。ほかは図鑑の説明だけ出す） =================
@@ -163,6 +163,7 @@ function calc(a, d, mv, opt = {}){
   if (mv.fx.fixed) return { dmg:mv.fx.fixed, crit:false, e:1 };
   if (mv.fx.tags.has("fixedlv")) return { dmg:a.p.lv, crit:false, e:effOf(mv.t, d, a) === 0 ? 0 : 1 };
   if (mv.fx.tags.has("halfhp")) return { dmg:Math.max(1, d.p.hp >> 1), crit:false, e:effOf(mv.t, d, a) === 0 ? 0 : 1 };
+  if (mv.fx.tags.has("quarterhp")) return { dmg:Math.max(1, d.p.hp >> 2), crit:false, e:effOf(mv.t, d, a) === 0 ? 0 : 1 };
   let stage = (["ピントレンズ","するどいツメ"].includes(a.p.item) ? 1 : 0) + a.critUp + (mv.fx.crit || 0) + (A(a) === "きょううん" ? 1 : 0) + (A(a) === "かたいツメ" ? 1 : 0) + a.crit;
   let crit = opt.crit ?? (mv.fx.crit === 9 || Math.random() < critRate(stage));
   if (["カブトアーマー","シェルアーマー","マルチスケイル","プリズムアーマー","ぼうだんアーマー"].includes(A(d)) || BT.sideOfMon(d).lucky > 0) crit = false;
@@ -216,8 +217,9 @@ function calc(a, d, mv, opt = {}){
   if (crit) dmg = Math.floor(dmg * (ab === "スナイパー" ? 3 : 2));
   const r = opt.roll ?? (85 + Math.floor(Math.random() * 16));
   dmg = Math.floor(dmg * r / 100);
-  if (T(a).includes(mt)) dmg = Math.floor(dmg * (ab === "てきおうりょく" ? 2 : 1.5));
+  if (T(a).includes(mt) || (mv.t2 && T(a).includes(mv.t2))) dmg = Math.floor(dmg * (ab === "てきおうりょく" ? 2 : 1.5));
   let e = effOf(mt, d, a);
+  if (mv.t2) { const e2 = effOf(mv.t2, d, a); if (e2 > e) { e = e2; mt = mv.t2; } } // 2つのタイプを持つ技は、有利な方で判定
   if (mv.fx.tags.has("freezedry") && T(d).includes("みず")) e *= 4;
   dmg = Math.floor(dmg * e);
   if (a.p.status === "brn" && mv.c === "ph" && ab !== "こんじょう") dmg = Math.floor(dmg / 2);
