@@ -45,8 +45,10 @@ def hp_value(cell):
     cell = cell.replace('*', '')
     m = re.match(r'\s*(\d+)', cell)
     if m: return int(m.group(1)), cell
-    m = re.match(r'\s*(' + RANK + r')（(\d+)〜(\d+)', cell)
-    if m: return (int(m.group(2)) + int(m.group(3))) // 2, cell
+    m = re.search(r'（(\d+)〜(\d+)', cell)          # 「C+〜A（85〜120）」「B（90〜105）」→ 幅の真ん中
+    if m and re.match(r'\s*' + RANK, cell): return (int(m.group(1)) + int(m.group(2))) // 2, cell
+    m = re.search(r'（(\d+)〜）', cell)              # 「A〜（127〜）」→ 下限から少し上
+    if m and re.match(r'\s*' + RANK, cell): return int(m.group(1)) + 10, cell
     m = re.match(r'\s*(' + RANK + ')', cell)
     if m: return m.group(1), cell
     return None, cell
