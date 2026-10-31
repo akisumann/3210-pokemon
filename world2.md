@@ -16,6 +16,7 @@
 
 - トレーナーの資質 → [world2/trainer-stats.md](world2/trainer-stats.md)
 - 体力の推測 → [world2/hp-estimates.md](world2/hp-estimates.md)（根拠は [-notes](world2/hp-estimates-notes.md)）
+- 第一部と第二部の同じ種族の比較（古代種は実機の種族値で固定、現代種は個体差があるがなんとなく似かよる） → [world2/同じ種族の比較.md](world2/同じ種族の比較.md)
 
 ## 地理
 
