@@ -145,6 +145,16 @@ for f in sorted(glob.glob('source/*.txt')):
 moves.get('おそいかかる', {}).update(t='あく', c='ph', p=130, a=85, src='thread')
 moves.get('ねこかぶり', {}).update(t='フェアリー', c='sp', p=70, a=100, src='thread')
 
+# 種族の傾向の表（world/species-trends/）の体力の列も見る（体力の表にない個体の見立てがあることがある）
+for f in glob.glob('world/species-trends/*.md'):
+    for line in open(f, encoding='utf-8'):
+        c = [x.strip() for x in line.strip().strip('|').split('|')]
+        if len(c) < 6 or c[0] in ('種族', '個体', '---') or '不明' in ' '.join(c[3:6]): continue
+        nm = re.sub(r'[（(].*', '', c[0]).strip('* ')
+        if nm in hp: continue
+        for cell in c[3:6]:
+            v, raw = hp_value(cell)
+            if v is not None and re.search(r'[◎○△]', cell): hp[nm] = dict(v=v, raw=raw[:40], conf='傾向の表'); break
 # 図鑑の名前と体力の表の名前が違うもの（表は短い名前・メガシンカ前の名前のことがある）をつなぐ
 for n, apps in species.items():
     if n in hp: continue
