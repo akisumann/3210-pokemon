@@ -673,6 +673,7 @@ function faintCheck(){
 function doTurn(choice){
   if (BT.over) return;
   BT.turn++; say("turn", `T${BT.turn}`);
+  if (BT.turn > 100) { sys("お互いに 決め手がなく、勝負は 引き分けになった。"); BT.end("draw"); return; }
   for (const s of [BT.P, BT.E]) { const m = act(s); m.flinch = false; m.movedThisTurn = false; }
   const eKey = aiChoice(BT.E);
   const acts = [];

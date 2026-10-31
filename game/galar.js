@@ -335,7 +335,7 @@ function afterBattle(res, ctx){
     lines.push(`${LOCS[G.loc].name}で 手持ちを回復した。`);
     if (!ctx.wild && ctx.o.always) { ctx.o.always = false; if (ctx.o.key) G.beaten[ctx.o.key] = 1; }
   }
-  if (res === "ran" || res === "fled") lines.push("戦いは 終わった。");
+  if (res === "ran" || res === "fled" || res === "draw") lines.push("戦いは 終わった。");
   save();
   showAfter(lines, travel);
 }
