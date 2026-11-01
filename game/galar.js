@@ -273,7 +273,8 @@ function after(){
 }
 function runBattle(opts, done){
   battleScreen();
-  BUI = { dex:false, done };
+  // もちものセットの持ち物は、戦闘で使っても・倒れても・負けても、戦闘のあとに元に戻す（スレでも試合ごとに持たせ直す）
+  BUI = { dex:false, done, items:G.party.map(m => [m, m.item]) };
   const ui = { say:bsay, throwBall };
   startBattleCore(Object.assign({ player:G.party, playerName:G.name, ui }, opts));
   brender(); bmenu();
@@ -330,6 +331,7 @@ function battleTrainer(o){
 }
 function afterBattle(res, ctx){
   clearVolatile();
+  for (const [m, it] of BUI.items) m.item = it;
   const lines = [];
   const defeated = res === "caught" ? ctx.foes : ctx.foes.filter(f => f.hp <= 0);
   if (res === "win" || res === "caught" || defeated.length) for (const f of defeated) lines.push(...giveExp(f, !ctx.wild));
