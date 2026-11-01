@@ -1,6 +1,6 @@
 "use strict";
 // ガラル: バトルの仕組み。data.js（GDATA）と items.js を先に読み込む。
-// 能力値はスレの決まり: 体力以外は種族値＋5、体力は種族値＋60。レベル差は高い側の5つの能力に1につき1%（体力は持ち越すので掛けない）。
+// 能力値はスレの決まり: 体力以外は種族値＋5、体力は種族値＋60。レベル差は高い側の全能力に1につき1%（体力は持ち越すので、受けるダメージを割って同じにする）。
 // ダメージの式は第五世代、レベルの項は22、乱数0.85〜1.00、急所は2倍。
 
 // ================= ランクと種族値 =================
@@ -133,6 +133,8 @@ const sys = t => say("sys", t), talk = t => say("talk", t);
 const mult = s => s >= 0 ? (2 + s) / 2 : 2 / (2 - s);
 const STN = { atk:"攻撃", def:"防御", spa:"特攻", spd:"特防", spe:"素早さ", acc:"命中", eva:"回避" };
 function lvMul(m, foe){ return foe && m.p.lv > foe.p.lv ? 1 + (m.p.lv - foe.p.lv) / 100 : 1; }
+// 体力のレベル差: スレでは高い側の体力にも1につき1%掛かる。体力は戦闘のあとも持ち越すので、最大体力は変えずに、受けるダメージを同じ倍率で割る（割合で見れば同じ）
+const lvHp = (dmg, a, d) => d.p.lv > a.p.lv ? Math.max(1, Math.floor(dmg / (1 + (d.p.lv - a.p.lv) / 100))) : dmg;
 function foeOf(m){ return act(m === act(BT.P) ? BT.E : BT.P); }
 function grounded(m){ return !T(m).includes("ひこう") && !["ふゆう","おおきなつばさ","あくまのつばさ"].includes(A(m)) && m.p.item !== "ふうせん"; }
 function stepUp(v){ const i = STEP.indexOf(rankOf(v)); return Math.max(v, rankMid(STEP[Math.min(STEP.length - 1, i + 1)])); }
@@ -205,8 +207,8 @@ const DOUBLE_T = { とうこん:"かくとう", てっけつ:"はがね", せい
 function critRate(stage){ return [1/16, 1/8, 1/4, 1/3, 1/2][Math.max(0, Math.min(4, stage))]; }
 function calc(a, d, mv, opt = {}){
   const real = opt.real !== false;
-  if (mv.fx.fixed) return { dmg:mv.fx.fixed, crit:false, e:1 };
-  if (mv.fx.tags.has("fixedlv")) return { dmg:a.p.lv, crit:false, e:effOf(mv.t, d, a) === 0 ? 0 : 1 };
+  if (mv.fx.fixed) return { dmg:lvHp(mv.fx.fixed, a, d), crit:false, e:1 };
+  if (mv.fx.tags.has("fixedlv")) return { dmg:lvHp(a.p.lv, a, d), crit:false, e:effOf(mv.t, d, a) === 0 ? 0 : 1 };
   if (mv.fx.tags.has("halfhp")) return { dmg:Math.max(1, d.p.hp >> 1), crit:false, e:effOf(mv.t, d, a) === 0 ? 0 : 1 };
   if (mv.fx.tags.has("quarterhp")) return { dmg:Math.max(1, d.p.hp >> 2), crit:false, e:effOf(mv.t, d, a) === 0 ? 0 : 1 };
   let stage = (["ピントレンズ","するどいツメ"].includes(a.p.item) ? 1 : 0) + a.critUp + (mv.fx.crit || 0) + (A(a) === "きょううん" ? 1 : 0) + (A(a) === "かたいツメ" ? 1 : 0) + a.crit;
@@ -312,7 +314,7 @@ function calc(a, d, mv, opt = {}){
   if (nervous(d)) {}
   else if (RESIST[d.p.item] === mt && (e > 1 || mt === "ノーマル") && e > 0) { dmg = Math.floor(dmg / 2); resist = d.p.item; }
   else if (((d.p.item === "ボコのみ" && mv.c === "ph") || (d.p.item === "マジュのみ" && mv.c === "sp")) && d.p.hp === d.p.max && e > 0) { dmg = Math.floor(dmg / 2); resist = d.p.item; }
-  return { dmg: e === 0 ? 0 : Math.max(1, dmg), crit, e, jewel, resist, mt };
+  return { dmg: e === 0 ? 0 : lvHp(Math.max(1, dmg), a, d), crit, e, jewel, resist, mt };
 }
 
 // ================= 状態の変化 =================
