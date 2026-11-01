@@ -241,7 +241,7 @@ function bmenu(){
   if (BT.awaiting) {
     bsay("sys", "次に出すポケモンを選んでください。");
     BT.P.team.forEach((m, i) => { if (m.p.hp > 0) list.push({ label:`${esc(NM(m))}を出す`, small:`体力 ${m.p.hp}/${m.p.max}`, cls:"wide",
-      fn:() => { BT.awaiting = false; BT.P.active = i; sys(`◎${BT.P.who}は「${NM(m)}」を繰り出した！`); BT.participants.add(m.p); onEnter(BT.P, m); after(); } }); });
+      fn:() => { BT.awaiting = false; replaceFainted(BT.P, i); after(); } }); });
   } else {
     const p = act(BT.P);
     if (p.rampMove || p.chargingMove) { const k = p.rampMove || p.chargingMove; list.push({ label:esc(k), small:"続けて出す", cls:"wide", fn:() => turn({ move:k }) }); }
@@ -250,7 +250,7 @@ function bmenu(){
       if (!usable.length) list.push({ label:"わるあがき", small:"出せる技がない", cls:"wide", fn:() => turn({ move:"わるあがき" }) });
       for (const k of p.p.moves) if (MOVES[k]) list.push({ label:`${chip(MOVES[k].t)}${esc(k)}`, small:moveBtnInfo(p, k), dis:!usable.includes(k), fn:() => turn({ move:k }) });
       BT.P.team.forEach((m, i) => { if (i !== BT.P.active && m.p.hp > 0) list.push({ label:`${esc(NM(m))}に交代`, small:`体力 ${m.p.hp}/${m.p.max}`,
-        dis:p.meanLooked && p.p.item !== "きれいなぬけがら", fn:() => turn({ switchTo:i }) }); });
+        dis:trapped(p), fn:() => turn({ switchTo:i }) }); });
       list.push({ label:`ポケモン図鑑 ＠${BUI.dex ? 0 : 1}/1`, small:"相手の場のポケモンを解析（指示の前、1試合1回）", dis:BUI.dex, fn:() => { BUI.dex = true; showDex(act(BT.E)); bmenu(); } });
       if (BT.wild) {
         for (const [b, n] of Object.entries(G.balls)) if (n > 0) list.push({ label:`${b}を投げる`, small:`残り ${n}`, fn:() => turn({ ball:b }) });
