@@ -437,12 +437,30 @@ function replaceFainted(side, idx){
   if (side === BT.P) BT.participants.add(m.p);
   if (rawA(m) === "かがくのちから" && prev) { m.abilityNow = prev.p.ability; sys(`◎${NM(m)}の特性「かがくのちから」！ 特性が「${m.abilityNow}」になった！`); }
   onEnter(side, m, false);
-  // 相手のしゃかりき: もう一度動く
-  const o = otherSide(side);
-  // （こちらのしゃかりきは、次のターンに相手が動けない形で doTurn が扱う。技はプレイヤーが選ぶ）
-  if (o === BT.E && BT.extraFor === o && !BT.over) { BT.extraFor = null; const om = act(o);
-    if (om.p.hp > 0 && m.p.hp > 0) { sys(`◎${NM(om)}の特性「しゃかりき」！ もう一度 動く！`); const k = aiChoice(o);
-      om.pending = k; om.pendingDone = false; useMove(o, side, k, true); om.pendingDone = true; faintCheck(); } }
+}
+// しゃかりき: 相手を倒したその足で、もう一度動く（相手はもう場にいないので、自分にかける変化技だけ。スレ747の楯無の「わるだくみ」）
+function extraMoves(m){ return m.p.moves.filter(k => { const mv = MOVES[k]; return mv && mv.c === "st" && !targetsFoe(mv) && !mv.fx.tags.has("protect") && !mv.fx.tags.has("endure")
+  && m.disabled !== k && !(m.lock && m.lock !== k) && !(m.taunt > 0) && m.p.item !== "とつげきチョッキ"; }); }
+function aiExtra(m){
+  let best = null, bs = 0;
+  for (const k of extraMoves(m)) { const fx = MOVES[k].fx; let sc = 0;
+    const up = fx.self.filter(x => x[1] > 0 && m.st[x[0]] < 6).reduce((a, x) => a + x[1], 0); if (up) sc = up * 10;
+    if (fx.tags.has("heal50") && m.p.hp < m.p.max * .7) sc = Math.max(sc, 25);
+    if (fx.screen && !(BT.sideOfMon(m).screen?.[fx.screen] > 0)) sc = Math.max(sc, 15);
+    if (fx.weather && FIELD.weather !== fx.weather) sc = Math.max(sc, 12);
+    if (fx.terrain && FIELD.terrain !== fx.terrain) sc = Math.max(sc, 12);
+    if (fx.tags.has("tailwind") && !(BT.sideOfMon(m).tail > 0)) sc = Math.max(sc, 14);
+    if (fx.tags.has("sub") && !m.sub && m.p.hp > m.p.max / 2) sc = Math.max(sc, 11);
+    if (sc > bs) { bs = sc; best = k; } }
+  return best;
+}
+function extraAction(key){
+  const x = BT.extra; BT.extra = null; BT.awaitExtra = false;
+  if (!x || BT.over) return;
+  const m = x.mon; if (act(x.side) !== m || m.p.hp <= 0) return;
+  if (!key) { sys(`${NM(m)}は「しゃかりき」で 動けたが、何もしなかった。`); return; }
+  sys(`◎${NM(m)}は 特性「しゃかりき」により、相手を倒したその足で 動く！`);
+  BT.freeMove = true; try { useMove(x.side, otherSide(x.side), key, true); } finally { BT.freeMove = false; }
 }
 // 交代できない（かげふみ・ありじごく・じりょく）
 function trapped(m){
@@ -531,7 +549,7 @@ function useMove(aSide, dSide, key, movedFirst){
 function useMoveInner(aSide, dSide, key, movedFirst){
   const a = act(aSide), d = act(dSide), mv = MOVES[key];
   a.protect = false; a.endure = false;
-  if (!canMove(a)) { a.rampage = 0; a.chargingMove = null; a.protectN = 0; return; }
+  if (!BT.freeMove && !canMove(a)) { a.rampage = 0; a.chargingMove = null; a.protectN = 0; return; }
   a.moved++; a.lastMove = key;
   if (a.p.item && a.p.item.startsWith("こだわり") && !a.lock) a.lock = key;
   sys(`◎${NM(a)}の「${mv.n}」！`);
@@ -731,7 +749,7 @@ function attackMove(aSide, dSide, a, d, mv, key){
     if (A(d) === "とびだすなかみ" && a.p.hp > 0) hpLoss(a, lastBefore, `${NM(d)}の特性「とびだすなかみ」！ `);
     if (A(d) === "どくのたいえき" && a.p.hp > 0) { sys(`◎${NM(d)}の特性「どくのたいえき」！`); setStatus(a, "tox", d); }
     if (A(a) === "ビーストブースト" && a.p.hp > 0) { const k = ["atk","def","spa","spd","spe"].reduce((x, y) => statOf(a, y, false, false, true) > statOf(a, x, false, false, true) ? y : x); raise(a, k, 2, "特性「ビーストブースト」！ "); }
-    if (A(a) === "しゃかりき" && a.p.hp > 0 && benchOf(dSide).length) BT.extraFor = aSide;
+    if (A(a) === "しゃかりき" && a.p.hp > 0 && benchOf(dSide).length && !BT.freeMove) BT.extra = { side:aSide, mon:a };
   }
   // もちものを奪う特性
   if (hitOnce && A(d) === "わるいてぐせ" && d.p.hp > 0 && !d.p.item && a.p.item && !sticky(a)) { d.p.item = a.p.item; a.p.item = null; a.lock = null; sys(`◎${NM(d)}の特性「わるいてぐせ」！ ${NM(a)}の「${d.p.item}」を 奪った！`); }
@@ -878,7 +896,7 @@ function startBattleCore(opts){
   const firstAlive = team => Math.max(0, team.findIndex(m => m.hp > 0));
   BT = { P:{ team:opts.player.map(wrapIn), active:firstAlive(opts.player), who:opts.playerName || "あなた" },
          E:{ team:opts.enemy.map(wrapIn), active:0, who:opts.who }, wild:!!opts.wild, ui:opts.ui, turn:0, over:false, aiSmart:opts.aiSmart,
-         participants:new Set(), awaiting:false, result:null, extraFor:null };
+         participants:new Set(), awaiting:false, result:null, extra:null, awaitExtra:false };
   BT.sideOfMon = m => BT.P.team.includes(m) ? BT.P : BT.E;
   BT.end = r => { BT.over = true; BT.result = r; };
   BT.pivot = side => forceOut(side, false);
@@ -909,9 +927,7 @@ function doTurn(choice){
   else if (choice.ball) { if (BT.ui.throwBall(choice.ball)) return; }
   else if (choice.run) { if (trapped(act(BT.P))) sys("逃げられない！"); else if (Math.random() < .5 + (speedOf(act(BT.P)) > speedOf(act(BT.E)) ? .4 : 0)) { sys("うまく 逃げ切れた！"); BT.end("ran"); return; } else sys("逃げられない！"); }
   else acts.push({ side:BT.P, other:BT.E, key:choice.move });
-  const skipE = BT.extraFor === BT.P; BT.extraFor = null;
-  if (skipE) sys(`◎${NM(act(BT.P))}の特性「しゃかりき」！ 勢いのまま もう一度 動く！（${NM(act(BT.E))}は 動けない）`);
-  else acts.push({ side:BT.E, other:BT.P, key:eKey });
+  acts.push({ side:BT.E, other:BT.P, key:eKey });
   for (const x of acts) { x.mon = act(x.side); x.claw = x.mon.p.item === "せんせいのツメ" && Math.random() < .2; x.quick = A(x.mon) === "クイックドロウ" && Math.random() < .3; x.mon.pending = x.key; x.mon.pendingDone = false; }
   acts.sort((x, y) => {
     const px = prioOf(x.mon, x.key), py = prioOf(y.mon, y.key);
@@ -936,6 +952,17 @@ function doTurn(choice){
     if (BT.over) return;
     if (faintCheck()) return;
   }
+  // しゃかりき: 相手の分はその場で、こちらの分はプレイヤーが選ぶ（BT.awaitExtra の間は止まり、画面から extraAction → finishTurn）
+  if (BT.extra) {
+    if (act(BT.extra.side) !== BT.extra.mon || BT.extra.mon.p.hp <= 0) BT.extra = null;
+    else if (BT.extra.side === BT.E) extraAction(aiExtra(BT.extra.mon));
+    else if (extraMoves(BT.extra.mon).length) { BT.awaitExtra = true; return; }
+    else { sys(`${NM(BT.extra.mon)}は「しゃかりき」で 動けるが、自分にかける技がない。`); BT.extra = null; }
+    if (BT.over || faintCheck()) return;
+  }
+  finishTurn();
+}
+function finishTurn(){
   endOfTurn();
   if (faintCheck()) return;
   // 倒れた側の入れ替え

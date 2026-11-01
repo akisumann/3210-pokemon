@@ -238,7 +238,12 @@ function moveBtnInfo(m, k){
 function bmenu(){
   const box = $("cmds"); const list = [];
   if (BT.over) return;
-  if (BT.awaiting) {
+  if (BT.awaitExtra) {
+    const m = BT.extra.mon;
+    bsay("sys", `${NM(m)}は 特性「しゃかりき」で、相手を倒したその足で もう一度動ける。自分にかける技を選んでください。`);
+    for (const k of extraMoves(m)) list.push({ label:esc(k), small:moveBtnInfo(m, k), fn:() => { extraAction(k); if (!BT.over && !faintCheck()) finishTurn(); after(); } });
+    list.push({ label:"何もしない", small:"", fn:() => { extraAction(null); finishTurn(); after(); } });
+  } else if (BT.awaiting) {
     bsay("sys", "次に出すポケモンを選んでください。");
     BT.P.team.forEach((m, i) => { if (m.p.hp > 0) list.push({ label:`${esc(NM(m))}を出す`, small:`体力 ${m.p.hp}/${m.p.max}`, cls:"wide",
       fn:() => { BT.awaiting = false; replaceFainted(BT.P, i); after(); } }); });
