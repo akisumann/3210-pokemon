@@ -19,6 +19,8 @@ const LOCS = [
   { id:"motostoke", name:"エンジンシティ", town:true, center:true, shop:true, desc:"蒸気と歯車の大都市。ジムチャレンジの開会式が行われる。" },
   { id:"route3", name:"3ばんどうろ", tier:[40, 250], lv:[10, 14], desc:"工場の煙突が並ぶ、ターフタウンへの道。" },
   { id:"turffield", name:"ターフタウン", town:true, center:true, shop:true, gym:"yarrow", desc:"畑と大きな地上絵の町。最初のジム、ヤローのくさタイプのジムがある。" },
+  { id:"route5", name:"5ばんどうろ", tier:[100, 300], lv:[14, 19], needBadge:"yarrow", desc:"育て屋のある、川沿いの長い道。バウタウンへ続く。" },
+  { id:"hulbury", name:"バウタウン", town:true, center:true, shop:true, gym:"nessa", desc:"灯台と市場の港町。2つ目のジム、ルリナのみずタイプのジムがある。" },
 ];
 const RANKS = ["C","B","A"];
 const STAT_NAMES = { shiji:"指示", ikusei:"育成", touki:"統率", nouryoku:"能力" };
@@ -86,10 +88,10 @@ function rollStats(){
   G.stats = Object.fromEntries(keys.map(k => [k, k === a ? "A" : k === b ? "B" : "C"]));
   const type = STAT_NAMES[a] + "型";
   const eff = {
-    shiji:"指示…バトル中の判断。バッジ3つから、相手との差で急所に当たりやすくなる（スレの決まり。第1版ではまだ届かない）",
+    shiji:"指示…バトル中の判断。バッジ3つから、相手との差で急所に当たりやすくなる（スレの決まり。この版ではまだ届かない）",
     ikusei:"育成…レベルが上がるたびの育成ポイント（C:1、B:2、A:3）。ポイントで能力のランクを上げられる",
     touki:"統率…ポケモンを捕まえやすくなる（C:1倍、B:1.15倍、A:1.3倍）",
-    nouryoku:"能力…『固有』のポテンシャル（第1版ではまだない）" };
+    nouryoku:"能力…『固有』のポテンシャル（この版ではまだない）" };
   const html = `<div class="panel"><h2>資質のダイス</h2>
     <p>【1D4:${d1}】→ Aの資質は「${STAT_NAMES[a]}」<br>【1D3:${d2}】→ Bの資質は「${STAT_NAMES[b]}」<br>残りの2つはC。</p>
     <p><b>${esc(G.name)}</b>は <b>${type}</b> のトレーナー。</p>
@@ -143,16 +145,18 @@ function takeStarter(n){
 function travel(){
   const L = LOCS[G.loc];
   if (L.id === "motostoke" && !G.flags.opening) return openingCeremony();
+  if (L.id === "hulbury" && !G.flags.hop2) return hopAtHulbury();
   const list = [];
   if (!L.town) list.push({ label:"草むらを歩く", small:"野生のポケモンかトレーナーと出会う", fn:walk, cls:"primary" });
   if (L.home) list.push({ label:"家で休む", small:"手持ちが全回復する", fn:() => healAll("家に帰って ひと休みした。") });
   if (L.center) list.push({ label:"ポケモンセンター", small:"手持ちが全回復する", fn:() => { G.lastCenter = G.loc; healAll("ポケモンたちは 元気になった！"); } });
   if (L.shop) list.push({ label:"フレンドリィショップ", small:"ボールを買う", fn:shop });
-  if (L.gym && !G.badges.includes(L.gym)) list.push({ label:"ジムに挑戦する", small:"ヤロー（くさタイプ）", fn:gym, cls:"primary" });
+  if (L.gym && !G.badges.includes(L.gym)) list.push({ label:"ジムに挑戦する", small:GYMS[L.gym].label, fn:() => gym(L.gym), cls:"primary" });
   list.push({ label:"手持ち", small:`${G.party.length}体`, fn:party });
   list.push({ label:"ポケモン図鑑", small:`見つけた ${Object.keys(G.seen).length}　捕まえた ${Object.keys(G.caught).length}`, fn:dexScreen });
   if (G.loc > 0) list.push({ label:`← ${LOCS[G.loc - 1].name}へ戻る`, fn:() => move(-1) });
-  if (G.loc < LOCS.length - 1) list.push({ label:`${LOCS[G.loc + 1].name}へ進む →`, fn:() => move(1) });
+  if (G.loc < LOCS.length - 1) { const nx = LOCS[G.loc + 1]; const lock = nx.needBadge && !G.badges.includes(nx.needBadge);
+    list.push({ label:`${nx.name}へ進む →`, small:lock ? `${GYMS[nx.needBadge].badge}が要る` : "", dis:lock, fn:() => move(1) }); }
   list.push({ label:"タイトルへ", small:"進み具合は自動で保存される", fn:title, cls:"wide" });
   save();
   screen(`<div class="panel"><h2>${esc(L.name)}</h2><p class="sub">${esc(L.desc)}</p>${partyStrip()}</div>` + buttons(list));
@@ -365,17 +369,36 @@ function openingCeremony(){
     ["ホップ", `${G.name}、どっちが先にバッジを取るか競争だぞ！`],
   ], travel);
 }
-const YARROW_TEAM = [["ピーチ", 15], ["ふなっしー", 16], ["ドダイトス", 18]];
-function gym(){
-  story([
-    ["", "ターフスタジアム。ジムミッションの羊追いを終えて、バトルコートに立った。"],
-    ["ヤロー", "よう来たね。くさタイプはのんびりに見えて、しぶといけんね。……どげん育てたか、見せてもらうよ。"],
-  ], () => battleTrainer({ who:"ジムリーダーのヤロー", key:"yarrow", smart:.9, money:2400,
-    team:YARROW_TEAM.map(([n, lv]) => makeMon(n, lv)),
-    intro:[["talk", "ヤロー「さあ、根比べといこうか！」"]],
-    win:["ヤロー", "いやあ、まいった。ええ根っこしとる。このくさバッジ、持っていきんしゃい。"], lose:["ヤロー", "まだ根が浅いね。しっかり育ててから、また来んしゃい。"],
-    onWin:() => { G.badges.push("yarrow"); save();
-      story([["", "くさバッジを手に入れた！"], ["", "（第1版はここまで。旅はこのまま続けられます。次のジムは作っている途中です）"]], travel); } }));
+const GYMS = {
+  yarrow:{ label:"ヤロー（くさタイプ）", badge:"くさバッジ", leader:"ヤロー", money:2400,
+    team:[["ピーチ", 15], ["ふなっしー", 16], ["ドダイトス", 18]],
+    before:[["", "ターフスタジアム。ジムミッションの羊追いを終えて、バトルコートに立った。"],
+            ["ヤロー", "よう来たね。くさタイプはのんびりに見えて、しぶといけんね。……どげん育てたか、見せてもらうよ。"]],
+    intro:"さあ、根比べといこうか！", win:"いやあ、まいった。ええ根っこしとる。このくさバッジ、持っていきんしゃい。", lose:"まだ根が浅いね。しっかり育ててから、また来んしゃい。",
+    after:[["", "くさバッジを手に入れた！"], ["ヤロー", "次はバウタウンのルリナさんじゃね。5ばんどうろを抜けた先の港町たい。"]] },
+  nessa:{ label:"ルリナ（みずタイプ）", badge:"みずバッジ", leader:"ルリナ", money:3000,
+    team:[["マリルリ", 21], ["ゲッコウガ", 22], ["ジョナサン・ジョーンズ", 24]], aceItem:"オボンのみ",
+    before:[["", "バウスタジアム。水門を切り替えるジムミッションを抜けて、バトルコートに出た。"],
+            ["ルリナ", "モデルの仕事の合間にジムリーダーをやってる、なんて思われてたら心外ね。波に飲まれる覚悟はできてる？"]],
+    intro:"押し寄せる波みたいに、休ませてあげないから！", win:"……悔しいけど、きれいに乗りこなされたわ。みずバッジ、受け取って。", lose:"波に飲まれちゃったわね。流れを読んでから、出直してらっしゃい。",
+    after:[["", "みずバッジを手に入れた！"], ["", "（第2版はここまで。旅はこのまま続けられます。3つ目のジムは作っている途中です）"]] },
+};
+function gym(id){
+  const g = GYMS[id];
+  story(g.before, () => battleTrainer({ who:`ジムリーダーの${g.leader}`, key:id, smart:.9, money:g.money,
+    team:g.team.map(([n, lv], i) => makeMon(n, lv, { item:i === g.team.length - 1 ? g.aceItem : null })),
+    intro:[["talk", `${g.leader}「${g.intro}」`]],
+    win:[g.leader, g.win], lose:[g.leader, g.lose],
+    onWin:() => { G.badges.push(id); save(); story(g.after, travel); } }));
+}
+function hopAtHulbury(){
+  G.flags.hop2 = true;
+  const second = pick(wildPool(LOCS[G.loc - 1]));
+  story([["", "バウタウンの入口で、ホップが手を振っている。"],
+         ["ホップ", `${G.name}！ オレもくさバッジ取ったぞ！ 次のルリナさんの前に、腕試しといこうぜ！`]],
+    () => battleTrainer({ who:"ホップ", team:[makeMon(G.hopStarter, 20), makeMon(second, 19)], money:1500, smart:.75, noPenalty:true,
+      intro:[["talk", "ホップ「アニキの背中に追いつくには、まずお前に勝たないとな！」"]],
+      win:["ホップ", "くっそー、また負けた！ でもルリナさんには、オレが先に勝つぞ！"], lose:["ホップ", "よっしゃ！ この調子でジムも突破だ！"] }));
 }
 
 // ================= 手持ち =================
